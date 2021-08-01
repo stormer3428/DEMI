@@ -36,6 +36,7 @@ public class IO {
 		this.printStackTrace = printStackTrace;
 		this.file = file;
 		this.fileName = file.getName();
+		DemiConsole.ok("IO interface for file " + fileName + " successfully created!");
 	}
 
 	public IO(File file, List<String> commentLinesHeaders) {
@@ -130,13 +131,46 @@ public class IO {
 		}
 		List<String> keys = new ArrayList<>();
 		for(String line : lines){
-			if(line.startsWith("#") || line.startsWith("//")) continue;
+			if(isCommentLine(line)) continue;
 			if(!line.contains(":")) continue;
 			keys.add(line.split(":",2)[1].replace("\"", ""));
 		}
 		return keys;
 	}
 
+	public final String get(String key){
+		if(file == null) {
+			DemiConsole.cancelled("Attempted to retrieve value " + key + " of null file, returning null");
+			return null;
+		}
+		if(!fileCheck()) {
+			DemiConsole.error("Failed retrieval of value for file " + fileName);
+			DemiConsole.warning("retuning an null");
+			return null;
+		}
+
+		List<String> lines;
+		try {
+			lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
+		} catch (IOException e) {
+			DemiConsole.error("Caught an IO exception, returning null");
+			if(printStackTrace) {
+				DemiConsole.info("Printing stack trace");
+				e.printStackTrace();
+			}else DemiConsole.cancelled(fileName + " IO set to not print stack trace");
+			return null;
+		}
+		for(String line : lines){
+			if(isCommentLine(line)) continue;
+			if(!line.startsWith(key + ":")) continue;
+			String s = line.substring(key.length() + 1);
+			s = s.replace("\"", "");
+			return s;
+
+		}
+		return "";
+	}
+	
 	public final HashMap<String, String> getAll(){
 		if(file == null) {
 			DemiConsole.cancelled("Attempted to retrieve entirety of null file, returning null");
