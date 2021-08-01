@@ -15,7 +15,7 @@ import java.util.List;
 public class IO {
 
 	public static List<String> defaultHeaders = new ArrayList<>();
-	private List<String> defaultKeys = new ArrayList<>();
+	private List<Key> defaultKeys = new ArrayList<>();
 
 	static {
 		defaultHeaders.add("#");
@@ -27,7 +27,7 @@ public class IO {
 	private List<String> commentLinesHeaders = new ArrayList<>();
 	private boolean printStackTrace;
 
-	public IO(File file, List<String> defaultKeys, boolean printStackTrace, List<String> commentLinesHeaders) {
+	public IO(File file, List<Key> defaultKeys, boolean printStackTrace, List<String> commentLinesHeaders) {
 		if(file == null) {
 			DemiConsole.error("Attempted to create an IO interface for a null file!");
 			DemiConsole.warning("Cancelled messages will be thrown whenever this IO is called");
@@ -59,11 +59,11 @@ public class IO {
 			DemiConsole.ok("Created file " + fileName + "successfully !");
 		}
 		List<String> keys = getKeys();
-		for(String defaultKey : defaultKeys) {
-			if(keys.contains(defaultKey)) continue;
+		for(Key defaultKey : defaultKeys) {
+			if(keys.contains(defaultKey.name())) continue;
 			DemiConsole.info("File " + fileName + " is missing the key " + defaultKey);
 			DemiConsole.action("Adding the missing key at the end of file");
-			addParameter(defaultKey, "Automatically added");
+			addParameter(defaultKey.name(), defaultKey.defaultValue());
 		}
 		return true;
 	}
@@ -135,6 +135,23 @@ public class IO {
 		return keys;
 	}
 
+	public final List<String> getList(String key){
+		String arrayString = get(key);
+		if(arrayString.isEmpty()) {
+			DemiConsole.warning("Unable to retrieve list " + key + " from file " + fileName);
+			DemiConsole.info("Returned an empty list, if it is intentional, ignore this message");
+			return new ArrayList<String>();
+		}
+
+		arrayString = arrayString.replace("[", "");
+		arrayString = arrayString.replace("]", "");
+
+		List<String> array = new ArrayList<String>();
+
+		for(String string : arrayString.split(",")) array.add(string);
+		return array;
+	}
+	
 	public final String get(String key){
 		if(file == null) {
 			DemiConsole.cancelled("Attempted to retrieve value " + key + " of null file, returning null");
