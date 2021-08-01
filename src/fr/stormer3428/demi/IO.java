@@ -14,7 +14,8 @@ import java.util.List;
 
 public class IO {
 
-	public static ArrayList<String> defaultHeaders = new ArrayList<>();
+	public static List<String> defaultHeaders = new ArrayList<>();
+	private List<String> defaultKeys = new ArrayList<>();
 
 	static {
 		defaultHeaders.add("#");
@@ -26,7 +27,7 @@ public class IO {
 	private List<String> commentLinesHeaders = new ArrayList<>();
 	private boolean printStackTrace;
 
-	public IO(File file, List<String> commentLinesHeaders, boolean printStackTrace) {
+	public IO(File file, List<String> defaultKeys, boolean printStackTrace, List<String> commentLinesHeaders) {
 		if(file == null) {
 			DemiConsole.error("Attempted to create an IO interface for a null file!");
 			DemiConsole.warning("Cancelled messages will be thrown whenever this IO is called");
@@ -36,19 +37,8 @@ public class IO {
 		this.printStackTrace = printStackTrace;
 		this.file = file;
 		this.fileName = file.getName();
+		this.defaultKeys = defaultKeys;
 		DemiConsole.ok("IO interface for file " + fileName + " successfully created!");
-	}
-
-	public IO(File file, List<String> commentLinesHeaders) {
-		this(file, commentLinesHeaders, true);
-	}
-
-	public IO(File file, boolean printStackTrace) {
-		this(file, defaultHeaders, printStackTrace);
-	}
-
-	public IO(File file) {
-		this(file, defaultHeaders, true);
 	}
 
 	public final boolean fileCheck() {
@@ -58,7 +48,7 @@ public class IO {
 		}
 		if(!(file.exists() && file.isFile())) {
 			DemiConsole.warning("Missing file " + fileName +" !");
-			DemiConsole.info("Attenpting to create file " + fileName);
+			DemiConsole.action("Attenpting to create file " + fileName);
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
@@ -67,6 +57,13 @@ public class IO {
 				return false;
 			}
 			DemiConsole.ok("Created file " + fileName + "successfully !");
+		}
+		List<String> keys = getKeys();
+		for(String defaultKey : defaultKeys) {
+			if(keys.contains(defaultKey)) continue;
+			DemiConsole.info("File " + fileName + " is missing the key " + defaultKey);
+			DemiConsole.action("Adding the missing key at the end of file");
+			addParameter(defaultKey, "Automatically added");
 		}
 		return true;
 	}
@@ -250,7 +247,7 @@ public class IO {
 			return true;
 		}
 		DemiConsole.warning("Attempted to set unset parameter " + key + " in file " + fileName);
-		DemiConsole.info("Creating parameter at the end of file...");
+		DemiConsole.action("Creating parameter at the end of file...");
 		if(!addParameter(key, value)) {
 			DemiConsole.error("Failed to add parameter " + key + " in file " + file.getName());
 			return false;
