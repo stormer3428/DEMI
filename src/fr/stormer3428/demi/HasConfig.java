@@ -11,9 +11,12 @@ public class HasConfig {
 	protected IO CONFIG;
 	private File file;
 	protected List<Key> CONFIG_KEYS = new ArrayList<>();
+
+	public boolean PRINT_STACK_TRACE;
 	
 	public HasConfig(File file) {
 		this.file = file;
+		CONFIG_KEYS.add(new Key("printStackTrace", "true"));
 	}
 	
 	protected boolean initialConfigIOCreation() {
@@ -27,19 +30,23 @@ public class HasConfig {
 				} catch (InterruptedException e) {
 					DemiConsole.error("Thread Interrupted!");
 				}
-			}else return true;
+			}else break;
 		}
-		if(!refreshConfigIO()) {
+		
+		if(CONFIG == null) {
 			DemiConsole.error("Failed to create main config IO");
 			DemiConsole.error("The main config IO is essential to allow DEMI to work, process will terminate");
 			return false;
 		}
+		
+		PRINT_STACK_TRACE = CONFIG.get("printStackTrace").equalsIgnoreCase("true");
+		DemiConsole.ok("successfully created " + file.getName() + " IO");
 		return true;
 	}
 
 	protected boolean refreshConfigIO() {
 		DemiConsole.action("Creating Config IO...");
-		CONFIG = new IO(file, CONFIG_KEYS, true, IO.defaultHeaders);
+		CONFIG = new IO(file, CONFIG_KEYS, PRINT_STACK_TRACE, IO.defaultHeaders);
 		if(CONFIG == null) {
 			DemiConsole.error("Failed to create Main Config IO!");
 			return false;
