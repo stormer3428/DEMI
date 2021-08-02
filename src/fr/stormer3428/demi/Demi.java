@@ -1,6 +1,7 @@
 package fr.stormer3428.demi;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.dv8tion.jda.api.JDA;
@@ -18,6 +19,52 @@ public class Demi extends HasConfig{
 	static boolean DEBUG_MODE;
 	static List<String> DEBUG_ID;
 
+	private List<Module> MODULES = new ArrayList<>();
+	private List<Module> ACTIVE_MODULES = new ArrayList<>();
+	
+	public static void registerModule(Module module) {
+		i.MODULES.add(module);
+	}
+	
+	public void reloadModules() {
+		DemiConsole.action("Reloading Modules...");
+		for(Module module : ACTIVE_MODULES) {
+			DemiConsole.action("Deactivating module " + module.getName());
+			module.onDisable();
+		}
+		ACTIVE_MODULES.clear();
+		DemiConsole.ok("Successfully deactivated all modules");
+		
+		//==//
+		DemiConsole.action("Checking for duplicate modules registered...");
+		List<String> moduleNames = new ArrayList<>();
+		boolean hasDuplicates = false;
+		for(Module module : MODULES) {
+			if(moduleNames.contains(module.getName())) {
+				DemiConsole.warning("Found duplicate module ! (" + module.getName() + ")");
+				hasDuplicates = true;
+			}
+		}
+		if(!hasDuplicates) DemiConsole.ok("Found no duplicate modules registered");
+		else {
+			DemiConsole.warning("Found duplicate modules, listing...");
+			for(Module module : MODULES) DemiConsole.info(module.getName());
+		}
+		
+		//==//
+		DemiConsole.action("Reactivating modules...");
+		for(Module module : MODULES) {
+			if(module.enabled()) {
+				DemiConsole.action("Activating module " + module.getName());
+				ACTIVE_MODULES.add(module);
+				module.onEnable();
+			}else {
+				DemiConsole.cancelled("Module " + module.getName() + " is disabled in the config");
+			}
+		}
+		DemiConsole.ok("Successfully activated all enabled modules");
+		DemiConsole.ok("Successfully reloaded modules!");
+	}
 	
 	public Demi() {
 		super(new File("config.cfg"));
@@ -35,9 +82,17 @@ public class Demi extends HasConfig{
 		
 		if(!initialConfigIOCreation()) return;
 		if(!initialJDACreation()) return;
-		setDebugMode(CONFIG.get("debugMode"), CONFIG.getList("debugIDs"));
+		setDebugMode(CONFIG.get("debugMode"), debugIDs());
 		
-		//Modules Here
+		reloadModules();
+	}
+	
+	private List<String> debugIDs(){
+		return CONFIG.getList("debugIDs");
+	}
+	
+	private String discordBotToken() {
+		return CONFIG.get("discordBotToken");
 	}
 	
 	private static boolean initialJDACreation() {
@@ -64,7 +119,7 @@ public class Demi extends HasConfig{
 	public boolean refreshJDA() {
 		DemiConsole.action("Creating new JDA instance...");
 		
-		JDABuilder builder = JDABuilder.createDefault(CONFIG.get("discordBotToken"));
+		JDABuilder builder = JDABuilder.createDefault(discordBotToken());
 		builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
 		builder.setRequestTimeoutRetry(true);
 
