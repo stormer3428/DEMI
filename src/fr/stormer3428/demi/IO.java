@@ -52,8 +52,8 @@ public class IO {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				e.printStackTrace();
 				DemiConsole.error("Failed to create file " + fileName);
+				handleTrace(e);
 				return false;
 			}
 			DemiConsole.ok("Created file " + fileName + "successfully !");
@@ -83,11 +83,8 @@ public class IO {
 		try {
 			lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception, returning empty list");
-			if(printStackTrace) {
-				DemiConsole.info("Printing stack trace");
-				e.printStackTrace();
-			}else DemiConsole.cancelled(fileName + " IO set to not print stack trace");
+			DemiConsole.error("Caught an IO exception while attempting to retrieve keySet from file ("+file.getName()+"), returning empty list");
+			handleTrace(e);
 			return new ArrayList<>();
 		}
 		List<String> keys = new ArrayList<>();
@@ -119,11 +116,8 @@ public class IO {
 		try {
 			lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception, returning null");
-			if(printStackTrace) {
-				DemiConsole.info("Printing stack trace");
-				e.printStackTrace();
-			}else DemiConsole.cancelled(fileName + " IO set to not print stack trace");
+			DemiConsole.error("Caught an IO exception while attempting to retrieve all values from file ("+file.getName()+"), returning null");
+			handleTrace(e);
 			return null;
 		}
 		List<String> keys = new ArrayList<>();
@@ -167,11 +161,8 @@ public class IO {
 		try {
 			lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception, returning null");
-			if(printStackTrace) {
-				DemiConsole.info("Printing stack trace");
-				e.printStackTrace();
-			}else DemiConsole.cancelled(fileName + " IO set to not print stack trace");
+			DemiConsole.error("Caught an IO exception while attempting to retrieve parameter ("+key+") from file ("+file.getName()+"), returning null");
+			handleTrace(e);
 			return null;
 		}
 		for(String line : lines){
@@ -200,11 +191,8 @@ public class IO {
 		try {
 			lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception, returning null");
-			if(printStackTrace) {
-				DemiConsole.info("Printing stack trace");
-				e.printStackTrace();
-			}else DemiConsole.cancelled(fileName + " IO set to not print stack trace");
+			DemiConsole.error("Caught an IO exception while attempting to retrieve hashMap of file ("+file.getName()+"), returning null");
+			handleTrace(e);
 			return null;
 		}
 		HashMap<String, String> keys = new HashMap<String, String>();
@@ -232,11 +220,8 @@ public class IO {
 		try {
 			lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception, returning null");
-			if(printStackTrace) {
-				DemiConsole.info("Printing stack trace");
-				e.printStackTrace();
-			}else DemiConsole.cancelled(fileName + " IO set to not print stack trace");
+			DemiConsole.error("Caught an IO exception while attemting to raw version of file ("+file.getName()+"), returning null");
+			handleTrace(e);
 			return null;
 		}
 		ArrayList<String> keys = new ArrayList<String>();
@@ -289,11 +274,8 @@ public class IO {
 			inputFile.delete();
 			return tempFile.renameTo(inputFile);
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception, returning false");
-			if(printStackTrace) {
-				DemiConsole.info("Printing stack trace");
-				e.printStackTrace();
-			}else DemiConsole.cancelled(fileName + " IO set to not print stack trace");
+			DemiConsole.error("Caught an IO exception while attempting to add parameter ("+key+") in file ("+file.getName()+"), returning false");
+			handleTrace(e);
 			return false;
 		}
 	}
@@ -317,11 +299,8 @@ public class IO {
 			inputFile.delete();
 			return tempFile.renameTo(inputFile);
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception, returning false");
-			if(printStackTrace) {
-				DemiConsole.info("Printing stack trace");
-				e.printStackTrace();
-			}else DemiConsole.cancelled(fileName + " IO set to not stack trace");
+			DemiConsole.error("Caught an IO exception while attempting to edit parameter ("+key+") in file ("+file.getName()+"), returning false");
+			handleTrace(e);
 			return false;
 		}
 
@@ -341,11 +320,8 @@ public class IO {
 			}
 			return tempFile.renameTo(inputFile);
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception, returning false");
-			if(printStackTrace) {
-				DemiConsole.info("Printing stack trace");
-				e.printStackTrace();
-			}else DemiConsole.cancelled(fileName + " IO set to not stack trace");
+			DemiConsole.error("Caught an IO exception while attempting to remove parameter ("+key+") in file ("+file.getName()+"), returning false");
+			handleTrace(e);
 			return false;
 		}
 	}
@@ -353,6 +329,13 @@ public class IO {
 	public void setPrintStackTrace(boolean printStackTrace) {
 		this.printStackTrace = printStackTrace;
 		DemiConsole.ok(fileName + " IO now set to " + (printStackTrace ? "" : "not") +" print stack trace");
+	}
+
+	private void handleTrace(IOException e) {
+		if(printStackTrace) {
+			DemiConsole.info("Printing stack trace");
+			e.printStackTrace();
+		}else DemiConsole.cancelled(fileName + " IO set to not print stack trace");
 	}
 
 }
