@@ -27,10 +27,15 @@ public class Autorole extends HasConfig implements Module{
 	private Set<Long> cooldownSet = new HashSet<>();
 	private long lastWiped = System.currentTimeMillis();
 
-
-	public Autorole(String name, String description) {
+	static {
+		new Autorole();
+	}
+	
+	public Autorole() {
 		super(new File("autorole.cfg"));
 
+		Demi.registerModule(this);
+		
 		CONFIG_KEYS.add(new Key("enabled", "false"));
 		CONFIG_KEYS.add(new Key("cooldown", "300000"));
 		CONFIG_KEYS.add(new Key("roles", "[]"));
