@@ -17,7 +17,9 @@ public class Demi extends HasConfig{
 
 
 	static boolean DEBUG_MODE;
-	static List<String> DEBUG_ID;
+	static List<Long> DEBUG_IDS;
+
+	static String SERVER_ID;
 
 	private List<Module> MODULES = new ArrayList<>();
 	private List<Module> ACTIVE_MODULES = new ArrayList<>();
@@ -25,13 +27,22 @@ public class Demi extends HasConfig{
 	public List<Module> getActiveModules(){
 		return ACTIVE_MODULES;
 	}
-	
+
 	public List<Module> getRegisteredModules(){
 		return MODULES;
 	}
-	
+
+	public String getServerID(){
+		return SERVER_ID;
+	}
+
 	public static void registerModule(Module module) {
 		i.MODULES.add(module);
+	}
+
+	public static void disableModule(Module module) {
+		i.ACTIVE_MODULES.remove(module);
+		module.onDisable();
 	}
 
 	public void reloadModules() {
@@ -80,29 +91,61 @@ public class Demi extends HasConfig{
 		}
 	}
 
-	public Demi() {
-		super(new File("config.cfg"));
-		i = this;
-	}
-
 	public static final void main(String[] args){
 		i.DEMI();
 	}
 
-	public void DEMI() {
+	public Demi() {
+		super(new File("config.cfg"));
+		i = this;
 		CONFIG_KEYS.add(new Key("discordBotToken", "TOKEN_HERE"));
 		CONFIG_KEYS.add(new Key("debugMode", "false"));
 		CONFIG_KEYS.add(new Key("debugIDs", "[]"));
+		CONFIG_KEYS.add(new Key("serverId", "DISCORD_SERVER_ID_HERE"));
+	}
 
+	public void DEMI() {
+		/*
+		Returning at this stage will kill DEMI as no module has been activated yet
+		*/
 		if(!initialConfigIOCreation()) return;
-		if(!initialJDACreation()) return;
+		
 		setDebugMode(CONFIG.get("debugMode"), debugIDs());
+		
+		DEBUG_IDS = debugIDs();
+		if(DEBUG_IDS == null) return;
+		
+		if(!initialJDACreation()) return;
+		
+		SERVER_ID = CONFIG.get("serverId");
+		if(jda.getGuildById(SERVER_ID) == null) {
+			DemiConsole.error("Invalid Server ID given, stopping DEMI");
+			jda.shutdown();
+			jda = null;
+			return;
+		}
 
 		reloadModules();
 	}
 
-	private List<String> debugIDs(){
-		return CONFIG.getList("debugIDs");
+	private List<Long> debugIDs(){
+		List<Long> list = new ArrayList<>();
+		List<String> stringList = CONFIG.getList("debugIDs");
+		try {
+			for(String debugID : stringList) list.add(Long.parseLong(debugID));
+			return list;
+		}catch (NumberFormatException e) {
+			DemiConsole.error("Failed to retrieve parameter (debugIDs) in main config file ");
+			DemiConsole.warning("Retrieved value : " + CONFIG.getList("debugIDs"));
+			DemiConsole.warning("Expected an array of user IDs");
+
+			if(DEBUG_MODE) {
+				DemiConsole.error("Debug Mode is active, stopping DEMI");
+				return null;
+			}
+			DemiConsole.cancelled("Debug Mode is not active, skipping...");
+			return new ArrayList<>();
+		}
 	}
 
 	private String discordBotToken() {
@@ -150,17 +193,26 @@ public class Demi extends HasConfig{
 		}
 	}
 
-	private static void setDebugMode(String debugMode, List<String> debugIDs) {
-		setDebugMode(debugMode.equalsIgnoreCase("true"), debugIDs);
+	private void setDebugMode(String debugMode, List<Long> list) {
+		setDebugMode(debugMode.equalsIgnoreCase("true"), list);
 	}
 
-	public static void setDebugMode(boolean debugMode, List<String> debugIDs) {
+	public void setDebugMode(boolean debugMode, List<Long> debugIDs) {
 		if(debugMode) {
 			DemiConsole.info("Demi is in debug mode, will only respond to following members id :");
-			for(String debugID : debugIDs) DemiConsole.info(debugID);
+			for(Long debugID : debugIDs) DemiConsole.info(debugID + "");
 			return;
 		}
 		DemiConsole.info("Debug mode is off, DEMI will perform normal actions");
+		DEBUG_MODE = debugMode;
+	}
+
+	public boolean getDebugMode() {
+		return DEBUG_MODE;
+	}
+
+	public boolean isDebugger(Long userId) {
+		return DEBUG_IDS.contains(userId);
 	}
 }
 
