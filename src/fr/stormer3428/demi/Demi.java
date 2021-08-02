@@ -1,64 +1,45 @@
 package fr.stormer3428.demi;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
-public class Demi {
+public class Demi extends HasConfig{
 
-	static final int CONFIGIORETRY = 5;
 	static final int JDARETRY = 5;
 	
 	public static Demi i;
 	static JDA jda;
 	
-	static IO CONFIG;
-	static List<Key> CONFIG_KEYS = new ArrayList<>();
 
 	static boolean DEBUG_MODE;
 	static List<String> DEBUG_ID;
-	
-	static {
-		CONFIG_KEYS.add(new Key("discordBotToken", "TOKEN_HERE"));
-	}
+
 	
 	public Demi() {
+		super(new File("config.cfg"));
 		i = this;
 	}
 
 	public static final void main(String[] args){
+		i.DEMI();
+	}
+	
+	public void DEMI() {
+		CONFIG_KEYS.add(new Key("discordBotToken", "TOKEN_HERE"));
+		CONFIG_KEYS.add(new Key("debugMode", "false"));
+		CONFIG_KEYS.add(new Key("debugIDs", "[]"));
+		
 		if(!initialConfigIOCreation()) return;
 		if(!initialJDACreation()) return;
 		setDebugMode(CONFIG.get("debugMode"), CONFIG.getList("debugIDs"));
 		
 		//Modules Here
 	}
-
-	private static boolean initialConfigIOCreation() {
-		int configIoRetry = 0;
-		while (configIoRetry < CONFIGIORETRY) {
-			if(!i.refreshConfigIO()) {
-				DemiConsole.error("Failed to create main config IO");
-				DemiConsole.info("Retrying...");
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					DemiConsole.error("Thread Interrupted!");
-				}
-			}else return true;
-		}
-		if(!i.refreshConfigIO()) {
-			DemiConsole.error("Failed to create main config IO");
-			DemiConsole.error("The main config IO is essential to allow DEMI to work, process will terminate");
-			return false;
-		}
-		return true;
-	}
-
+	
 	private static boolean initialJDACreation() {
 		int configIoRetry = 0;
 		while (configIoRetry < CONFIGIORETRY) {
@@ -80,17 +61,6 @@ public class Demi {
 		return true;
 	}
 
-	public boolean refreshConfigIO() {
-		DemiConsole.action("Creating Config IO...");
-		CONFIG = new IO(new File("config.cfg"), CONFIG_KEYS, true, IO.defaultHeaders);
-		if(CONFIG == null) {
-			DemiConsole.error("Failed to create Main Config IO!");
-			return false;
-		}
-		DemiConsole.ok("Main Config IO created");
-		return true;
-	}
-	
 	public boolean refreshJDA() {
 		DemiConsole.action("Creating new JDA instance...");
 		
