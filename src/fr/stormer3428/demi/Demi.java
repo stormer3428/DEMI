@@ -13,7 +13,7 @@ public class Demi extends HasConfig{
 	static final int JDARETRY = 5;
 
 	public static Demi i;
-	static JDA jda;
+	public static JDA jda;
 
 
 	static boolean DEBUG_MODE;
@@ -138,7 +138,8 @@ public class Demi extends HasConfig{
 			DemiConsole.error("Failed to retrieve parameter (debugIDs) in main config file ");
 			DemiConsole.warning("Retrieved value : " + CONFIG.getList("debugIDs"));
 			DemiConsole.warning("Expected an array of user IDs");
-
+			handleTrace(e);
+			
 			if(DEBUG_MODE) {
 				DemiConsole.error("Debug Mode is active, stopping DEMI");
 				return null;
@@ -152,7 +153,7 @@ public class Demi extends HasConfig{
 		return CONFIG.get("discordBotToken");
 	}
 
-	private static boolean initialJDACreation() {
+	private boolean initialJDACreation() {
 		int configIoRetry = 0;
 		while (configIoRetry < CONFIGIORETRY) {
 			if(!i.refreshJDA()) {
@@ -162,6 +163,7 @@ public class Demi extends HasConfig{
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					DemiConsole.error("Thread Interrupted!");
+					handleTrace(e);
 				}
 			}else return true;
 		}
@@ -189,6 +191,7 @@ public class Demi extends HasConfig{
 			DemiConsole.error("Error");
 			DemiConsole.error("Login Crash");
 			DemiConsole.error("something went wrong while logging into JDA");
+			handleTrace(e);
 			return false;
 		}
 	}
@@ -213,6 +216,13 @@ public class Demi extends HasConfig{
 
 	public boolean isDebugger(Long userId) {
 		return DEBUG_IDS.contains(userId);
+	}
+
+	private void handleTrace(Exception e) {
+		if(PRINT_STACK_TRACE) {
+			DemiConsole.info("Printing stack trace");
+			e.printStackTrace();
+		}else DemiConsole.cancelled("Core module set to not print stack trace");
 	}
 }
 
