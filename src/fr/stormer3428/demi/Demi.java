@@ -22,6 +22,14 @@ public class Demi extends HasConfig{
 	private List<Module> MODULES = new ArrayList<>();
 	private List<Module> ACTIVE_MODULES = new ArrayList<>();
 
+	public List<Module> getActiveModules(){
+		return ACTIVE_MODULES;
+	}
+	
+	public List<Module> getRegisteredModules(){
+		return MODULES;
+	}
+	
 	public static void registerModule(Module module) {
 		i.MODULES.add(module);
 	}
