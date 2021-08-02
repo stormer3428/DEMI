@@ -21,8 +21,8 @@ public class Demi extends HasConfig{
 
 	static String SERVER_ID;
 
-	private List<Module> MODULES = new ArrayList<>();
-	private List<Module> ACTIVE_MODULES = new ArrayList<>();
+	static private List<Module> MODULES = new ArrayList<>();
+	static private List<Module> ACTIVE_MODULES = new ArrayList<>();
 
 	public List<Module> getActiveModules(){
 		return ACTIVE_MODULES;
@@ -37,11 +37,11 @@ public class Demi extends HasConfig{
 	}
 
 	public static void registerModule(Module module) {
-		i.MODULES.add(module);
+		Demi.MODULES.add(module);
 	}
 
 	public static void disableModule(Module module) {
-		i.ACTIVE_MODULES.remove(module);
+		Demi.ACTIVE_MODULES.remove(module);
 		module.onDisable();
 	}
 
