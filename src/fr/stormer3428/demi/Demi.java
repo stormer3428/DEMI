@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class Demi extends HasConfig{
@@ -124,10 +125,10 @@ public class Demi extends HasConfig{
 		/*
 		Returning at this stage will kill DEMI as no module has been activated yet
 		*/
-		
-		setDebugMode(CONFIG.get("debugMode"), debugIDs());
-		
+
 		DEBUG_IDS = debugIDs();
+		setDebugMode(CONFIG.get("debugMode"), DEBUG_IDS);
+		
 		if(DEBUG_IDS == null) return;
 		
 		if(!initialJDACreation()) return;
@@ -139,13 +140,14 @@ public class Demi extends HasConfig{
 			jda = null;
 			return;
 		}
+		
+		
 
 		reloadModules();
 	}
 	
 	public Demi() {
 		super(new File("config.cfg"));
-		i = this;
 		CONFIG_KEYS.add(new Key("discordBotToken", "TOKEN_HERE"));
 		CONFIG_KEYS.add(new Key("debugMode", "false"));
 		CONFIG_KEYS.add(new Key("debugIDs", "[]"));
@@ -190,6 +192,7 @@ public class Demi extends HasConfig{
 					DemiConsole.error("Thread Interrupted!");
 					handleTrace(e);
 				}
+				configIoRetry ++;
 			}else return true;
 		}
 		if(!i.refreshJDA()) {
@@ -208,7 +211,7 @@ public class Demi extends HasConfig{
 		builder.setRequestTimeoutRetry(true);
 
 		try{
-			jda = builder.build();
+			jda = builder.build().awaitReady();
 			jda.addEventListener(new RawListener());
 			DemiConsole.ok("JDA instance created");
 			return true;
@@ -248,5 +251,9 @@ public class Demi extends HasConfig{
 			DemiConsole.info("Printing stack trace");
 			e.printStackTrace();
 		}else DemiConsole.cancelled("Core module set to not print stack trace");
+	}
+
+	protected Guild getGuild() {
+		return jda.getGuildById(SERVER_ID);
 	}
 }
