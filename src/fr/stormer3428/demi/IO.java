@@ -39,9 +39,16 @@ public class IO {
 		this.fileName = file.getName();
 		this.defaultKeys = defaultKeys;
 		DemiConsole.ok("IO interface for file " + fileName + " successfully created!");
+		DemiConsole.action("Checking File...");
+		if(fileCheck(true)) DemiConsole.ok("File check successful");
+		else DemiConsole.error("Failed to pass file check");
 	}
 
 	public final boolean fileCheck() {
+		return fileCheck(false);
+	}
+	
+	public final boolean fileCheck(boolean checkKeys) {
 		if(file == null) {
 			DemiConsole.cancelled("Attempted to check integrity of null file, returning false");
 			return false;
@@ -56,14 +63,16 @@ public class IO {
 				handleTrace(e);
 				return false;
 			}
-			DemiConsole.ok("Created file " + fileName + "successfully !");
+			DemiConsole.ok("Created file " + fileName + " successfully !");
 		}
-		List<String> keys = getKeys();
-		for(Key defaultKey : defaultKeys) {
-			if(keys.contains(defaultKey.name())) continue;
-			DemiConsole.info("File " + fileName + " is missing the key " + defaultKey);
-			DemiConsole.action("Adding the missing key at the end of file");
-			addParameter(defaultKey.name(), defaultKey.defaultValue());
+		if(checkKeys) {
+			List<String> keys = getKeys();
+			for(Key defaultKey : defaultKeys) {
+				if(keys.contains(defaultKey.name())) continue;
+				DemiConsole.info("File " + fileName + " is missing the key " + defaultKey);
+				DemiConsole.action("Adding the missing key at the end of file");
+				addParameter(defaultKey.name(), defaultKey.defaultValue());
+			}
 		}
 		return true;
 	}
@@ -145,7 +154,7 @@ public class IO {
 		for(String string : arrayString.split(",")) array.add(string);
 		return array;
 	}
-	
+
 	public final String get(String key){
 		if(file == null) {
 			DemiConsole.cancelled("Attempted to retrieve value " + key + " of null file, returning null");
@@ -175,7 +184,7 @@ public class IO {
 		}
 		return "";
 	}
-	
+
 	public final HashMap<String, String> getAll(){
 		if(file == null) {
 			DemiConsole.cancelled("Attempted to retrieve entirety of null file, returning null");
