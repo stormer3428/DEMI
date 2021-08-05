@@ -69,7 +69,7 @@ public class IO {
 			List<String> keys = getKeys();
 			for(Key defaultKey : defaultKeys) {
 				if(keys.contains(defaultKey.name())) continue;
-				DemiConsole.info("File " + fileName + " is missing the key " + defaultKey);
+				DemiConsole.info("File " + fileName + " is missing the key " + defaultKey.name());
 				DemiConsole.action("Adding the missing key at the end of file");
 				addParameter(defaultKey.name(), defaultKey.defaultValue());
 			}
