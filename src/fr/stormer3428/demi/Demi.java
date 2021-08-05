@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.stormer3428.demi.module.Autorole;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -25,6 +26,10 @@ public class Demi extends HasConfig{
 	static private List<Module> MODULES = new ArrayList<>();
 	static protected List<Module> ACTIVE_MODULES = new ArrayList<>();
 
+	static {
+		registerModule(new Autorole()); //TODO make modules implement themselves
+	}
+	
 	public List<Module> getActiveModules(){
 		return ACTIVE_MODULES;
 	}

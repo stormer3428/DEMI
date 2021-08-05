@@ -26,10 +26,6 @@ public class Autorole extends Module{
 	private Set<Long> cooldownSet = new HashSet<>();
 	private long lastWiped = System.currentTimeMillis();
 
-	static {
-		Demi.registerModule(new Autorole());
-	}
-	
 	public Autorole() {
 		super(new File("autorole.cfg"));
 		
