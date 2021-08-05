@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.dv8tion.jda.api.entities.TextChannel;
+
 public abstract class HasConfig {
 
 	static final int CONFIGIORETRY = 5;
@@ -11,6 +13,8 @@ public abstract class HasConfig {
 	protected IO CONFIG;
 	private File file;
 	protected List<Key> CONFIG_KEYS = new ArrayList<>();
+	protected String LOGGING_CHANNEL_ID;
+	protected boolean LOG_TO_CHANNEL = false;
 
 	public boolean PRINT_STACK_TRACE;
 	
@@ -31,7 +35,9 @@ public abstract class HasConfig {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					DemiConsole.error("Thread Interrupted!");
+					break;
 				}
+				configIoRetry++;
 			}else break;
 		}
 		
@@ -42,6 +48,13 @@ public abstract class HasConfig {
 		}
 		
 		PRINT_STACK_TRACE = CONFIG.get("printStackTrace").equalsIgnoreCase("true");
+		LOGGING_CHANNEL_ID = CONFIG.get("loggingChannelID");
+		TextChannel channel = Demi.i.getGuild().getTextChannelById(LOGGING_CHANNEL_ID);
+		if(channel == null) {
+			DemiConsole.warning("");
+		}
+		
+		LOG_TO_CHANNEL = CONFIG.get("logToChannel").equalsIgnoreCase("true");
 		DemiConsole.ok("successfully created " + file.getName() + " IO");
 		return true;
 	}

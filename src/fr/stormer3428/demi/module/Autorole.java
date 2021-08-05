@@ -8,7 +8,6 @@ import java.util.Set;
 
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.DemiConsole;
-import fr.stormer3428.demi.HasConfig;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -19,7 +18,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class Autorole extends HasConfig implements Module{
+public class Autorole extends Module{
 
 	private int COOLDOWN;
 	private List<Long> ROLES = new ArrayList<>();
@@ -28,15 +27,12 @@ public class Autorole extends HasConfig implements Module{
 	private long lastWiped = System.currentTimeMillis();
 
 	static {
-		new Autorole();
+		Demi.registerModule(new Autorole());
 	}
 	
 	public Autorole() {
 		super(new File("autorole.cfg"));
 		
-		Demi.registerModule(this);
-		
-		CONFIG_KEYS.add(new Key("enabled", "false"));
 		CONFIG_KEYS.add(new Key("cooldown", "300000"));
 		CONFIG_KEYS.add(new Key("roles", "[]"));
 		CONFIG_KEYS.add(new Key("listensToBots", "false"));
@@ -54,10 +50,10 @@ public class Autorole extends HasConfig implements Module{
 				+ "This can be used as a mean to check whether a member has a verified account as having a role bypasses the requirement for having a verified account."
 				+ "Auto roles may be roles such as category roles or something like a member role.";
 	}
-
+	
 	@Override
-	public boolean enabled() {
-		return CONFIG.get("enabled").equalsIgnoreCase("true");
+	public List<String> getDependencies() {
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -168,17 +164,5 @@ public class Autorole extends HasConfig implements Module{
 			Demi.disableModule(this);
 			return null;
 		}
-	}
-
-	protected void handleTrace(Exception e) {
-		if(PRINT_STACK_TRACE) {
-			DemiConsole.info("printing stack trace");
-			e.printStackTrace();
-		}else DemiConsole.cancelled(getName() + " module set to not print stack trace");
-	}
-
-	@Override
-	public List<String> getDependencies() {
-		return new ArrayList<>();
 	}
 }
