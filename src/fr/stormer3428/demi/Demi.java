@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class Demi extends HasConfig{
-
+	
 	static final int JDARETRY = 5;
 
 	public static Demi i;
@@ -22,7 +22,7 @@ public class Demi extends HasConfig{
 	static String SERVER_ID;
 
 	static private List<Module> MODULES = new ArrayList<>();
-	static private List<Module> ACTIVE_MODULES = new ArrayList<>();
+	static protected List<Module> ACTIVE_MODULES = new ArrayList<>();
 
 	public List<Module> getActiveModules(){
 		return ACTIVE_MODULES;
@@ -75,15 +75,39 @@ public class Demi extends HasConfig{
 
 			//==//
 			DemiConsole.action("Reactivating modules...");
-			for(Module module : MODULES) {
-				if(module.enabled()) {
-					DemiConsole.action("Activating module " + module.getName());
-					ACTIVE_MODULES.add(module);
-					module.onEnable();
-				}else {
-					DemiConsole.cancelled("Module " + module.getName() + " is disabled in the config");
+			List<Module> toEnable = new ArrayList<>();
+			
+			for(Module module : MODULES) 
+				if(module.enabled()) toEnable.add(module);
+				else DemiConsole.cancelled("Module " + module.getName() + " is disabled in it's config");
+			
+			int oldSize = toEnable.size();
+			while(toEnable.size() > 0) {
+				for(Module module : toEnable) {
+					if(module.canBeLoaded()) {
+						DemiConsole.action("Activating module " + module.getName());
+						ACTIVE_MODULES.add(module);
+						module.onEnable();
+					}
+				}
+				toEnable.removeAll(ACTIVE_MODULES);
+				if(oldSize == toEnable.size()) break;
+				oldSize = toEnable.size();
+			}
+			for(Module notLoaded : toEnable) {
+				DemiConsole.warning("Module " + notLoaded.getName() + " could not be loaded due to missing dependencies : ");
+				for(String dependency : notLoaded.getDependencies()) {
+					boolean dependencyLoaded = false;
+					for(Module module : ACTIVE_MODULES) {
+						if(module.getName().equalsIgnoreCase(dependency)) {
+							dependencyLoaded = true;
+							break;
+						}
+						if(!dependencyLoaded) DemiConsole.warning(dependency);
+					}
 				}
 			}
+			
 			DemiConsole.ok("Successfully activated all enabled modules");
 			DemiConsole.ok("Successfully reloaded modules!");
 		}else {
@@ -226,9 +250,3 @@ public class Demi extends HasConfig{
 		}else DemiConsole.cancelled("Core module set to not print stack trace");
 	}
 }
-
-
-
-
-
-

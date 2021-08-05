@@ -181,10 +181,4 @@ public class Autorole extends HasConfig implements Module{
 	public List<String> getDependencies() {
 		return new ArrayList<>();
 	}
-
-	@Override
-	public boolean canBeLoaded() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

@@ -1,5 +1,6 @@
 package fr.stormer3428.demi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.dv8tion.jda.api.events.DisconnectEvent;
@@ -186,7 +187,11 @@ import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
 public interface Module {
 	
 	public List<String> getDependencies();
-	public boolean canBeLoaded();
+	public default boolean canBeLoaded() {
+		List<String> activeModules = new ArrayList<>();
+		for(Module module : Demi.ACTIVE_MODULES) activeModules.add(module.getName());
+		return activeModules.containsAll(getDependencies());
+	}
 	
 	public String getName();
 	public String getDescription();
@@ -194,8 +199,6 @@ public interface Module {
 
 	public void onDisable();
 	public void onEnable();
-	
-	
 	
 	public default void onCategoryCreate(CategoryCreateEvent event) {}
 	public default void onCategoryDelete(CategoryDeleteEvent event){}
