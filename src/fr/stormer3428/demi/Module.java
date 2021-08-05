@@ -1,5 +1,7 @@
 package fr.stormer3428.demi;
 
+import java.util.List;
+
 import net.dv8tion.jda.api.events.DisconnectEvent;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.GatewayPingEvent;
@@ -182,6 +184,9 @@ import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
 
 @SuppressWarnings({"deprecation", "rawtypes"})
 public interface Module {
+	
+	public List<String> getDependencies();
+	public boolean canBeLoaded();
 	
 	public String getName();
 	public String getDescription();

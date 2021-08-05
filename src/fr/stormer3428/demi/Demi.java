@@ -92,23 +92,14 @@ public class Demi extends HasConfig{
 	}
 
 	public static final void main(String[] args){
-		i.DEMI();
+		i = new Demi();
+		i.main();
 	}
-
-	public Demi() {
-		super(new File("config.cfg"));
-		i = this;
-		CONFIG_KEYS.add(new Key("discordBotToken", "TOKEN_HERE"));
-		CONFIG_KEYS.add(new Key("debugMode", "false"));
-		CONFIG_KEYS.add(new Key("debugIDs", "[]"));
-		CONFIG_KEYS.add(new Key("serverId", "DISCORD_SERVER_ID_HERE"));
-	}
-
-	public void DEMI() {
+	
+	public void main() {
 		/*
 		Returning at this stage will kill DEMI as no module has been activated yet
 		*/
-		if(!initialConfigIOCreation()) return;
 		
 		setDebugMode(CONFIG.get("debugMode"), debugIDs());
 		
@@ -126,6 +117,16 @@ public class Demi extends HasConfig{
 		}
 
 		reloadModules();
+	}
+	
+	public Demi() {
+		super(new File("config.cfg"));
+		i = this;
+		CONFIG_KEYS.add(new Key("discordBotToken", "TOKEN_HERE"));
+		CONFIG_KEYS.add(new Key("debugMode", "false"));
+		CONFIG_KEYS.add(new Key("debugIDs", "[]"));
+		CONFIG_KEYS.add(new Key("serverId", "DISCORD_SERVER_ID_HERE"));
+		if(!initialConfigIOCreation()) return;
 	}
 
 	private List<Long> debugIDs(){
@@ -218,7 +219,7 @@ public class Demi extends HasConfig{
 		return DEBUG_IDS.contains(userId);
 	}
 
-	private void handleTrace(Exception e) {
+	protected void handleTrace(Exception e) {
 		if(PRINT_STACK_TRACE) {
 			DemiConsole.info("Printing stack trace");
 			e.printStackTrace();

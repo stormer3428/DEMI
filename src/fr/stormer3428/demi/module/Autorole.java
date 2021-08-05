@@ -33,13 +33,14 @@ public class Autorole extends HasConfig implements Module{
 	
 	public Autorole() {
 		super(new File("autorole.cfg"));
-
+		
 		Demi.registerModule(this);
 		
 		CONFIG_KEYS.add(new Key("enabled", "false"));
 		CONFIG_KEYS.add(new Key("cooldown", "300000"));
 		CONFIG_KEYS.add(new Key("roles", "[]"));
 		CONFIG_KEYS.add(new Key("listensToBots", "false"));
+		if(!initialConfigIOCreation()) return;
 	}
 
 	@Override
@@ -169,10 +170,21 @@ public class Autorole extends HasConfig implements Module{
 		}
 	}
 
-	public void handleTrace(Exception e) {
+	protected void handleTrace(Exception e) {
 		if(PRINT_STACK_TRACE) {
 			DemiConsole.info("printing stack trace");
 			e.printStackTrace();
 		}else DemiConsole.cancelled(getName() + " module set to not print stack trace");
+	}
+
+	@Override
+	public List<String> getDependencies() {
+		return new ArrayList<>();
+	}
+
+	@Override
+	public boolean canBeLoaded() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

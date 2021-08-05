@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HasConfig {
+public abstract class HasConfig {
 
 	static final int CONFIGIORETRY = 5;
 
@@ -17,6 +17,8 @@ public class HasConfig {
 	public HasConfig(File file) {
 		this.file = file;
 		CONFIG_KEYS.add(new Key("printStackTrace", "true"));
+		CONFIG_KEYS.add(new Key("logToChannel", "false"));
+		CONFIG_KEYS.add(new Key("loggingChannelID", "ID HERE"));
 	}
 	
 	protected boolean initialConfigIOCreation() {
@@ -55,6 +57,6 @@ public class HasConfig {
 		return true;
 	}
 	
-	
+	protected abstract void handleTrace(Exception e);
 	
 }
