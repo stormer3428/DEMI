@@ -101,7 +101,8 @@ public class Demi extends HasConfig{
 				oldSize = toEnable.size();
 			}
 			for(Module notLoaded : toEnable) {
-				DemiConsole.warning("Module " + notLoaded.getName() + " could not be loaded due to missing dependencies : ");
+				DemiConsole.warning("Module " + notLoaded.getName() + " could not be loaded");
+				boolean header = true;
 				for(String dependency : notLoaded.getDependencies()) {
 					boolean dependencyLoaded = false;
 					for(Module module : ACTIVE_MODULES) {
@@ -109,7 +110,13 @@ public class Demi extends HasConfig{
 							dependencyLoaded = true;
 							break;
 						}
-						if(!dependencyLoaded) DemiConsole.warning(dependency);
+						if(!dependencyLoaded) {
+							if(header) {
+								header = false;
+								DemiConsole.warning("missing dependencies : ");
+							}
+							DemiConsole.warning(dependency);
+						}
 					}
 				}
 			}
