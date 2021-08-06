@@ -151,7 +151,8 @@ public class IO {
 
 		List<String> array = new ArrayList<String>();
 
-		for(String string : arrayString.split(",")) array.add(string);
+		for(String string : arrayString.split(",")) if(!string.isBlank() && !string.isEmpty()) array.add(string);
+		
 		return array;
 	}
 
