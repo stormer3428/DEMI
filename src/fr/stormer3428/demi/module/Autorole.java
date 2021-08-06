@@ -31,7 +31,9 @@ public class Autorole extends Module{
 		CONFIG_KEYS.add(new Key("cooldown", "300000"));
 		CONFIG_KEYS.add(new Key("roles", "[]"));
 		CONFIG_KEYS.add(new Key("listensToBots", "false"));
-		if(!initialConfigIOCreation()) return;
+		if(initialConfigIOCreation()) return;
+		OUTPUT.warning("Disabling module to prevent errors");
+		Demi.disableModule(this);
 	}
 
 	@Override
