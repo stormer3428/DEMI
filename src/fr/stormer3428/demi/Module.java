@@ -401,4 +401,5 @@ public abstract class Module extends HasConfig{
 	public void onVoiceChannelUpdatePermissions(VoiceChannelUpdatePermissionsEvent event){}
 	public void onVoiceChannelUpdatePosition(VoiceChannelUpdatePositionEvent event){}
 	public void onVoiceChannelUpdateUserLimit(VoiceChannelUpdateUserLimitEvent event){}
+	public boolean onCommand(DemiCommandReceiveEvent event){return false;}
 }

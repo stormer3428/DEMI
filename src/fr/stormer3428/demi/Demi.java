@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.stormer3428.demi.module.Autorole;
+import fr.stormer3428.demi.module.CommandDispatcher;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -30,6 +31,7 @@ public class Demi extends HasConfig{
 
 	static {
 		registerModule(new Autorole()); //TODO make modules implement themselves
+		registerModule(new CommandDispatcher()); //TODO make modules implement themselves
 	}
 	
 	public List<Module> getActiveModules(){
@@ -125,6 +127,10 @@ public class Demi extends HasConfig{
 			
 			OUTPUT.ok("Successfully activated all enabled modules");
 			OUTPUT.ok("Successfully reloaded modules!");
+			OUTPUT.info("Enabled modules : ");
+			for(Module module : ACTIVE_MODULES) {
+				OUTPUT.info(module.getName());
+			}
 		}else {
 			OUTPUT.warning("No modules registered.");
 		}
