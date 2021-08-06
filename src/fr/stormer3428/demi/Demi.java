@@ -12,6 +12,8 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class Demi extends HasConfig{
 	
+	protected MixedOutput OUTPUT;
+	
 	static final int JDARETRY = 5;
 
 	public static Demi i;
@@ -52,46 +54,46 @@ public class Demi extends HasConfig{
 	}
 
 	public void reloadModules() {
-		DemiConsole.action("Reloading Modules...");
+		OUTPUT.action("Reloading Modules...");
 		if(!ACTIVE_MODULES.isEmpty()) {
 			for(Module module : ACTIVE_MODULES) {
-				DemiConsole.action("Deactivating module " + module.getName());
+				OUTPUT.action("Deactivating module " + module.getName());
 				module.onDisable();
 			}
 			ACTIVE_MODULES.clear();
-			DemiConsole.ok("Successfully deactivated all modules");
+			OUTPUT.ok("Successfully deactivated all modules");
 		}
 
 		if(!MODULES.isEmpty()) {
 			//==//
-			DemiConsole.action("Checking for duplicate modules registered...");
+			OUTPUT.action("Checking for duplicate modules registered...");
 			List<String> moduleNames = new ArrayList<>();
 			boolean hasDuplicates = false;
 			for(Module module : MODULES) {
 				if(moduleNames.contains(module.getName())) {
-					DemiConsole.warning("Found duplicate module ! (" + module.getName() + ")");
+					OUTPUT.warning("Found duplicate module ! (" + module.getName() + ")");
 					hasDuplicates = true;
 				}
 			}
-			if(!hasDuplicates) DemiConsole.ok("Found no duplicate modules registered");
+			if(!hasDuplicates) OUTPUT.ok("Found no duplicate modules registered");
 			else {
-				DemiConsole.warning("Found duplicate modules, listing...");
-				for(Module module : MODULES) DemiConsole.info(module.getName());
+				OUTPUT.warning("Found duplicate modules, listing...");
+				for(Module module : MODULES) OUTPUT.info(module.getName());
 			}
 
 			//==//
-			DemiConsole.action("Reactivating modules...");
+			OUTPUT.action("Reactivating modules...");
 			List<Module> toEnable = new ArrayList<>();
 			
 			for(Module module : MODULES) 
 				if(module.enabled()) toEnable.add(module);
-				else DemiConsole.cancelled("Module " + module.getName() + " is disabled in it's config");
+				else OUTPUT.cancelled("Module " + module.getName() + " is disabled in it's config");
 			
 			int oldSize = toEnable.size();
 			while(toEnable.size() > 0) {
 				for(Module module : toEnable) {
 					if(module.canBeLoaded()) {
-						DemiConsole.action("Activating module " + module.getName());
+						OUTPUT.action("Activating module " + module.getName());
 						ACTIVE_MODULES.add(module);
 						module.onEnable();
 					}
@@ -101,7 +103,7 @@ public class Demi extends HasConfig{
 				oldSize = toEnable.size();
 			}
 			for(Module notLoaded : toEnable) {
-				DemiConsole.warning("Module " + notLoaded.getName() + " could not be loaded");
+				OUTPUT.warning("Module " + notLoaded.getName() + " could not be loaded");
 				boolean header = true;
 				for(String dependency : notLoaded.getDependencies()) {
 					boolean dependencyLoaded = false;
@@ -113,18 +115,18 @@ public class Demi extends HasConfig{
 						if(!dependencyLoaded) {
 							if(header) {
 								header = false;
-								DemiConsole.warning("missing dependencies : ");
+								OUTPUT.warning("missing dependencies : ");
 							}
-							DemiConsole.warning(dependency);
+							OUTPUT.warning(dependency);
 						}
 					}
 				}
 			}
 			
-			DemiConsole.ok("Successfully activated all enabled modules");
-			DemiConsole.ok("Successfully reloaded modules!");
+			OUTPUT.ok("Successfully activated all enabled modules");
+			OUTPUT.ok("Successfully reloaded modules!");
 		}else {
-			DemiConsole.warning("No modules registered.");
+			OUTPUT.warning("No modules registered.");
 		}
 	}
 
@@ -138,6 +140,8 @@ public class Demi extends HasConfig{
 		Returning at this stage will kill DEMI as no module has been activated yet
 		*/
 
+		OUTPUT = new MixedOutput(CONFIG.get("loggingChannelID"), CONFIG.get("logToChannel").equalsIgnoreCase("true"), CONFIG.get("logToConsole").equalsIgnoreCase("true"), "Core");
+		
 		DEBUG_IDS = debugIDs();
 		setDebugMode(CONFIG.get("debugMode"), DEBUG_IDS);
 		
@@ -147,14 +151,11 @@ public class Demi extends HasConfig{
 		
 		SERVER_ID = CONFIG.get("serverId");
 		if(jda.getGuildById(SERVER_ID) == null) {
-			DemiConsole.error("Invalid Server ID given, stopping DEMI");
+			OUTPUT.error("Invalid Server ID given, stopping DEMI");
 			jda.shutdown();
 			jda = null;
 			return;
 		}
-		
-		
-
 		reloadModules();
 	}
 	
@@ -174,16 +175,16 @@ public class Demi extends HasConfig{
 			for(String debugID : stringList) list.add(Long.parseLong(debugID));
 			return list;
 		}catch (NumberFormatException e) {
-			DemiConsole.error("Failed to retrieve parameter (debugIDs) in main config file ");
-			DemiConsole.warning("Retrieved value : " + CONFIG.getList("debugIDs"));
-			DemiConsole.warning("Expected an array of user IDs");
+			OUTPUT.error("Failed to retrieve parameter (debugIDs) in main config file ");
+			OUTPUT.warning("Retrieved value : " + CONFIG.getList("debugIDs"));
+			OUTPUT.warning("Expected an array of user IDs");
 			handleTrace(e);
 			
 			if(DEBUG_MODE) {
-				DemiConsole.error("Debug Mode is active, stopping DEMI");
+				OUTPUT.error("Debug Mode is active, stopping DEMI");
 				return null;
 			}
-			DemiConsole.cancelled("Debug Mode is not active, skipping...");
+			OUTPUT.cancelled("Debug Mode is not active, skipping...");
 			return new ArrayList<>();
 		}
 	}
@@ -196,27 +197,27 @@ public class Demi extends HasConfig{
 		int configIoRetry = 0;
 		while (configIoRetry < CONFIGIORETRY) {
 			if(!i.refreshJDA()) {
-				DemiConsole.error("Failed to create JDA instance");
-				DemiConsole.info("Retrying...");
+				OUTPUT.error("Failed to create JDA instance");
+				OUTPUT.info("Retrying...");
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					DemiConsole.error("Thread Interrupted!");
+					OUTPUT.error("Thread Interrupted!");
 					handleTrace(e);
 				}
 				configIoRetry ++;
 			}else return true;
 		}
 		if(!i.refreshJDA()) {
-			DemiConsole.error("Failed to create the JDA instance");
-			DemiConsole.error("JDA is essential for DEMI to work properly, it allows it to interact with the Discord Bot");
+			OUTPUT.error("Failed to create the JDA instance");
+			OUTPUT.error("JDA is essential for DEMI to work properly, it allows it to interact with the Discord Bot");
 			return false;
 		}
 		return true;
 	}
 
 	public boolean refreshJDA() {
-		DemiConsole.action("Creating new JDA instance...");
+		OUTPUT.action("Creating new JDA instance...");
 
 		JDABuilder builder = JDABuilder.createDefault(discordBotToken());
 		builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
@@ -225,12 +226,12 @@ public class Demi extends HasConfig{
 		try{
 			jda = builder.build().awaitReady();
 			jda.addEventListener(new RawListener());
-			DemiConsole.ok("JDA instance created");
+			OUTPUT.ok("JDA instance created");
 			return true;
 		}catch(Exception e){
-			DemiConsole.error("Error");
-			DemiConsole.error("Login Crash");
-			DemiConsole.error("something went wrong while logging into JDA");
+			OUTPUT.error("Error");
+			OUTPUT.error("Login Crash");
+			OUTPUT.error("something went wrong while logging into JDA");
 			handleTrace(e);
 			return false;
 		}
@@ -242,11 +243,11 @@ public class Demi extends HasConfig{
 
 	public void setDebugMode(boolean debugMode, List<Long> debugIDs) {
 		if(debugMode) {
-			DemiConsole.info("Demi is in debug mode, will only respond to following members id :");
-			for(Long debugID : debugIDs) DemiConsole.info(debugID + "");
+			OUTPUT.info("Demi is in debug mode, will only respond to following members id :");
+			for(Long debugID : debugIDs) OUTPUT.info(debugID + "");
 			return;
 		}
-		DemiConsole.info("Debug mode is off, DEMI will perform normal actions");
+		OUTPUT.info("Debug mode is off, DEMI will perform normal actions");
 		DEBUG_MODE = debugMode;
 	}
 
@@ -260,9 +261,9 @@ public class Demi extends HasConfig{
 
 	protected void handleTrace(Exception e) {
 		if(PRINT_STACK_TRACE) {
-			DemiConsole.info("Printing stack trace");
+			OUTPUT.info("Printing stack trace");
 			e.printStackTrace();
-		}else DemiConsole.cancelled("Core module set to not print stack trace");
+		}else OUTPUT.cancelled("Core module set to not print stack trace");
 	}
 
 	protected Guild getGuild() {

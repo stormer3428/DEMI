@@ -187,6 +187,8 @@ import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
 @SuppressWarnings({"deprecation", "rawtypes"})
 public abstract class Module extends HasConfig{
 	
+	protected MixedOutput OUTPUT;
+	
 	public Module(File file) {
 		super(file);
 		CONFIG_KEYS.add(new Key("enabled", "false"));
@@ -214,7 +216,9 @@ public abstract class Module extends HasConfig{
 	}
 
 	public abstract void onDisable();
-	public abstract void onEnable();
+	public void onEnable() {
+		OUTPUT = new MixedOutput(CONFIG.get("loggingChannelID"), CONFIG.get("logToChannel").equalsIgnoreCase("true"), CONFIG.get("logToConsole").equalsIgnoreCase("true"), getName());
+	}
 	
 	public void onCategoryCreate(CategoryCreateEvent event) {}
 	public void onCategoryDelete(CategoryDeleteEvent event){}

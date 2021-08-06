@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import fr.stormer3428.demi.Demi;
-import fr.stormer3428.demi.DemiConsole;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -57,16 +56,17 @@ public class Autorole extends Module{
 
 	@Override
 	public void onEnable() {
+		super.onEnable();
 		COOLDOWN = cooldown();
 		if(COOLDOWN == -1) return;
-		DemiConsole.info("cooldown : " + COOLDOWN);
+		OUTPUT.info("cooldown : " + COOLDOWN);
 		LISTENSTOBOT = listensToBots();
-		DemiConsole.info("listensToBots : " + (LISTENSTOBOT ? "true" : "false"));
+		OUTPUT.info("listensToBots : " + (LISTENSTOBOT ? "true" : "false"));
 		ROLES = roles();
 		if(ROLES == null) return;
-		DemiConsole.info("roles :");
-		for(Long role : ROLES) DemiConsole.info(role + "");
-		DemiConsole.ok("Successfully loaded all config parameters");
+		OUTPUT.info("roles :");
+		for(Long role : ROLES) OUTPUT.info(role + "");
+		OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class Autorole extends Module{
 
 		if(Demi.i.getDebugMode() && !Demi.i.isDebugger(member.getIdLong())) return;
 
-		DemiConsole.info("Message received from member " + member.getEffectiveName());
+		OUTPUT.info("Message received from member " + member.getEffectiveName());
 		
 		if(cooldownSet.contains(member.getIdLong())) return;
 		
@@ -106,15 +106,15 @@ public class Autorole extends Module{
 		for(Thread thread : threads) try {
 			thread.wait();
 		} catch (InterruptedException e) {
-			DemiConsole.error(getName() + " caught an error while multithreading");
+			OUTPUT.error(getName() + " caught an error while multithreading");
 			handleTrace(e);
 		}
 		
 		for(Role role : autoRoles) {
 			if(memberRoles != null && !memberRoles.isEmpty() &&  memberRoles.contains(role)) continue;
-			DemiConsole.info("Member " + member.getEffectiveName() + " is missing role " + role.getName());
+			OUTPUT.info("Member " + member.getEffectiveName() + " is missing role " + role.getName());
 			member.getGuild().addRoleToMember(member, role).complete();
-			DemiConsole.ok("Role " + role.getName() + " added!");
+			OUTPUT.ok("Role " + role.getName() + " added!");
 		}
 	}	
 
@@ -130,10 +130,10 @@ public class Autorole extends Module{
 			handleTrace(e);
 		}
 		if(i > 0) return i;
-		DemiConsole.error("Failed to retrieve parameter (cooldown) in config file " + getName());
-		DemiConsole.warning("Retrieved value : " + CONFIG.get("cooldown"));
-		DemiConsole.warning("Expected a strictly positive number");
-		DemiConsole.warning("Disabling module to prevent errors");
+		OUTPUT.error("Failed to retrieve parameter (cooldown) in config file " + getName());
+		OUTPUT.warning("Retrieved value : " + CONFIG.get("cooldown"));
+		OUTPUT.warning("Expected a strictly positive number");
+		OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
 		return -1;
 	}
@@ -145,18 +145,18 @@ public class Autorole extends Module{
 			for(String role : stringList) list.add(Long.parseLong(role));
 			if(!list.isEmpty()) return list;
 			else {
-				DemiConsole.warning("Parameter (roles) in config file " + getName() + " was found to be empty, disabling module");
+				OUTPUT.warning("Parameter (roles) in config file " + getName() + " was found to be empty, disabling module");
 				Demi.disableModule(this);
 				return null;
 			}
 		}catch (NumberFormatException e) {
-			DemiConsole.error("Failed to retrieve parameter (roles) in config file " + getName());
-			DemiConsole.warning("Retrieved value : " + CONFIG.getList("roles"));
-			DemiConsole.warning("Expected an array of role IDs");
+			OUTPUT.error("Failed to retrieve parameter (roles) in config file " + getName());
+			OUTPUT.warning("Retrieved value : " + CONFIG.getList("roles"));
+			OUTPUT.warning("Expected an array of role IDs");
 			
 			handleTrace(e);
 			
-			DemiConsole.warning("Disabling module to prevent errors");
+			OUTPUT.warning("Disabling module to prevent errors");
 			Demi.disableModule(this);
 			return null;
 		}

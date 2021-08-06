@@ -19,6 +19,7 @@ public abstract class HasConfig {
 	public HasConfig(File file) {
 		this.file = file;
 		CONFIG_KEYS.add(new Key("printStackTrace", "true"));
+		CONFIG_KEYS.add(new Key("logToConsole", "true"));
 		CONFIG_KEYS.add(new Key("logToChannel", "false"));
 		CONFIG_KEYS.add(new Key("loggingChannelID", "ID HERE"));
 	}
