@@ -127,20 +127,11 @@ public abstract class CommandModule extends Module{
 
 	public boolean canUseCommand(Member member) {
 		if(whitelistEnabled && !whitelist.contains(member.getIdLong())) return false;
+		if(requireAdminPerms && !member.hasPermission(Permission.ADMINISTRATOR)) return false;
 		if(requireRoles) {
 			List<Long> rolesLong = new ArrayList<>();
 			for(Role role : member.getRoles()) rolesLong.add(role.getIdLong());
 			if(!rolesLong.containsAll(requiredRoles)) return false;
-		}
-		if(requireAdminPerms) {
-			boolean hasAdminPerms = false;
-			for(Role role : member.getRoles()) {
-				if(role.hasPermission(Permission.ADMINISTRATOR)){
-					hasAdminPerms = true;
-					break;
-				}
-			}
-			return hasAdminPerms;
 		}
 		return true;
 	}
