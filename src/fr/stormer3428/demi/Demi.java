@@ -320,7 +320,7 @@ public class Demi extends HasConfig{
 				@SuppressWarnings("resource")
 				Scanner console = new Scanner(System.in);
 				while (true) {
-					String line = console.next();
+					String line = console.nextLine();
 
 					if(line.isEmpty()) continue;
 

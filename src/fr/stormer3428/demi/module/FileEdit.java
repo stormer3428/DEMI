@@ -101,30 +101,30 @@ public class FileEdit extends CommandModule{
 
 	private void showHelpParamList(MixedOutput OUTPUT) {
 		// TODO Auto-generated method stub
-		OUTPUT.info("showHelp");
+		OUTPUT.info("showHelpParamList");
 	}
 
 	private void showHelpParamEdit(MixedOutput OUTPUT) {
 		// TODO Auto-generated method stub
-		OUTPUT.info("showHelp");
+		OUTPUT.info("showHelpParamEdit");
 		
 	}
 
 	private void showHelpParam(MixedOutput OUTPUT) {
 		// TODO Auto-generated method stub
-		OUTPUT.info("showHelp");
+		OUTPUT.info("showHelpParam");
 
 	}
 
 	private void listParams(MixedOutput OUTPUT, File foundFile) {
 		// TODO Auto-generated method stub
-		OUTPUT.info("showHelp");
+		OUTPUT.info("listParams");
 
 	}
 
 	private void showAvailableFiles(MixedOutput OUTPUT) {
 		// TODO Auto-generated method stub
-		OUTPUT.info("showHelp");
+		OUTPUT.info("showAvailableFiles");
 
 	}
 
