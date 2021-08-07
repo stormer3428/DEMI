@@ -9,10 +9,11 @@ import fr.stormer3428.demi.DemiCommandReceiveEvent;
 
 public class Reload extends CommandModule{
 
-
 	public Reload() {
 		super("Reload");
 
+		aliases.add("rl");
+		
 		if(initialConfigIOCreation()) return;
 		OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);

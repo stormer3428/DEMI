@@ -16,6 +16,7 @@ public abstract class CommandModule extends Module{
 	private boolean whitelistEnabled;
 	private List<Long> whitelist = new ArrayList<>();
 
+	protected List<String> aliases = new ArrayList<>();
 	protected String commandName;
 
 	public CommandModule(String string) {
@@ -115,6 +116,10 @@ public abstract class CommandModule extends Module{
 	public String getName() {
 		return commandName;
 	}
+	
+	public List<String> getAliases(){
+		return aliases;
+	}
 
 	public boolean canUseCommand(Member member) {
 		if(whitelistEnabled && !whitelist.contains(member.getIdLong())) return false;
@@ -129,7 +134,7 @@ public abstract class CommandModule extends Module{
 	
 	@Override
 	public boolean onCommand(DemiCommandReceiveEvent event) {
-		if(!event.getCommand().equalsIgnoreCase(getName())) return false;
+		if(!event.getCommand().equalsIgnoreCase(getName()) && !getAliases().contains(event.getCommand().toLowerCase())) return false;
 		if(event.getMessageReceivedEvent() == null) {
 			runCommand(event);
 			return true;
