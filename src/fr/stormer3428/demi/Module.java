@@ -186,28 +186,34 @@ import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
 
 @SuppressWarnings({"deprecation", "rawtypes"})
 public abstract class Module extends HasConfig{
-	
+
 	protected MixedOutput OUTPUT;
-	
+
 	public Module(File file) {
 		super(file);
 		CONFIG_KEYS.add(new Key("enabled", "false"));
 	}
-	
+
 	public abstract List<String> getDependencies();
 	public boolean canBeLoaded() {
 		List<String> activeModules = new ArrayList<>();
 		for(Module module : Demi.ACTIVE_MODULES) activeModules.add(module.getName());
 		return activeModules.containsAll(getDependencies());
 	}
-	
+
 	public abstract String getName();
 	public abstract String getDescription();
 
 	public boolean enabled() {
-		return CONFIG.get("enabled").equalsIgnoreCase("true");
+		try {
+			return CONFIG.get("enabled").equalsIgnoreCase("true");
+		}catch (Exception e) {
+			DemiConsole.error("Caught an error while attempting to get module state of module "+getName()+", returning false");
+			handleTrace(e);
+			return false;
+		}
 	}
-	
+
 	protected void handleTrace(Exception e) {
 		if(PRINT_STACK_TRACE) {
 			DemiConsole.info("printing stack trace");
@@ -219,7 +225,7 @@ public abstract class Module extends HasConfig{
 	public void onEnable() {
 		OUTPUT = new MixedOutput(CONFIG.get("loggingChannelID"), CONFIG.get("logToChannel").equalsIgnoreCase("true"), CONFIG.get("logToConsole").equalsIgnoreCase("true"), getName());
 	}
-	
+
 	public void onCategoryCreate(CategoryCreateEvent event) {}
 	public void onCategoryDelete(CategoryDeleteEvent event){}
 	public void onCategoryUpdateName(CategoryUpdateNameEvent event){}
