@@ -151,6 +151,10 @@ public class FileEdit extends CommandModule{
 					listParams(OUTPUT, foundFile);
 					return;
 				}
+				if(foundKey.equalsIgnoreCase("discordBotToken")) {
+					OUTPUT.error("Sorry! i am not able to show you this...");
+					return;
+				}
 				showParam(OUTPUT, io, foundKey);
 				return;
 			}
