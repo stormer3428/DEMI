@@ -78,7 +78,7 @@ public class MixedOutput {
 		if(outputToConsole)
 			System.out.println("\033[38;5;226m"+"[" + mixedOutputHead + "] " + message);
 		if(!outputToChannel) return;
-		textChannel.sendMessage("[" + mixedOutputHead + "] " + message + ".").queue();
+		textChannel.sendMessage("```[" + mixedOutputHead + "] " + message + "```").queue();
 	}
 	
 	public void embed(MessageEmbed embed, List<String> embedReplacement) {
