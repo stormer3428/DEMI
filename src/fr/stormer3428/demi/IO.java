@@ -46,6 +46,10 @@ public class IO {
 		else DemiConsole.error("Failed to pass file check");
 	}
 
+	public IO(File file, ArrayList<Key> arrayList, boolean printStackTrace) {
+		this(file, arrayList, printStackTrace, defaultHeaders);
+	}
+
 	public final boolean fileCheck() {
 		return fileCheck(false);
 	}
@@ -356,10 +360,12 @@ public class IO {
 	}
 
 	public static IO findIOByFileName(String fileName2) {
-		for(IO io : IO.all) {
-			if(!io.getFileName().equalsIgnoreCase(fileName2 + ".cfg")) continue;
-			return io;
-		}
+		for(IO io : IO.all)	if(io.getFileName().equalsIgnoreCase(fileName2.replace(".cfg", "") + ".cfg")) return io;
+		return null;
+	}
+
+	public static IO findIOByFile(File file) {
+		for(IO io : IO.all) if(io.getFile().equals(file)) return io;
 		return null;
 	}
 
