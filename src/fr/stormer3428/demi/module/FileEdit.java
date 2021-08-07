@@ -64,7 +64,10 @@ public class FileEdit extends CommandModule{
 			}
 			String paramType = args.remove(0).toLowerCase();
 			if(paramType.equalsIgnoreCase("edit") || paramType.equalsIgnoreCase("edt") || paramType.equalsIgnoreCase("ed") || paramType.equalsIgnoreCase("e")) {
-
+				if(args.isEmpty()) {
+					showHelpParamEdit(OUTPUT);
+					return;
+				}
 				String fileName = args.remove(0).toLowerCase().replace(".cfg", "");
 				File foundFile = Demi.i.findConfigFileByName(fileName);
 				if(foundFile != null) {
