@@ -1,12 +1,12 @@
 package fr.stormer3428.demi;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import fr.stormer3428.demi.module.Autorole;
-import fr.stormer3428.demi.module.CommandDispatcher;
+import fr.stormer3428.demi.module.DiscordCommandDispatcher;
 import fr.stormer3428.demi.module.commands.Reload;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class Demi extends HasConfig{
 
-	public InputStream SystemIn = System.in;
+	public Thread consoleThread;
 	protected MixedOutput OUTPUT;
 
 	static final int JDARETRY = 5;
@@ -36,7 +36,7 @@ public class Demi extends HasConfig{
 
 	static {
 		registerModule(new Autorole()); //TODO make modules implement themselves
-		registerModule(new CommandDispatcher()); //TODO make modules implement themselves
+		registerModule(new DiscordCommandDispatcher()); //TODO make modules implement themselves
 		registerModule(new Reload()); //TODO make modules implement themselves
 	}
 
@@ -182,6 +182,7 @@ public class Demi extends HasConfig{
 			jda = null;
 			return;
 		}
+		startConsoleInputReader();
 		reloadModules();
 		if(ACTIVE_MODULES.isEmpty()) {
 			jda.shutdown();
@@ -306,4 +307,46 @@ public class Demi extends HasConfig{
 	protected Guild getGuild() {
 		return jda.getGuildById(SERVER_ID);
 	}
+	
+	private void startConsoleInputReader() {
+		OUTPUT.action("Starting console input stream reader");
+		consoleThread = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				OUTPUT.ok("Console reader Thread started");
+				@SuppressWarnings("resource")
+				Scanner console = new Scanner(System.in);
+				while (true) {
+					String line = console.next();
+
+					if(line.isEmpty()) continue;
+
+					String raw = line;
+					String cmd = raw.split(" ", 2)[0].toLowerCase();
+					String[] argsArray = raw.replaceFirst(cmd, "").split(" ");
+					ArrayList<String> args = new ArrayList<String>();
+
+					OUTPUT.info("Command received from console : ");
+					OUTPUT.info(cmd);
+					for(String s : argsArray) if(!s.isEmpty()) args.add(s);
+					for(String s : args) OUTPUT.info("- " + s);
+					for(Module module : Demi.i.getActiveModules()) {
+						new Thread(new Runnable() {
+							@Override public void run() {
+								module.onCommand(new DemiCommandReceiveEvent(null, cmd, args, OUTPUT));
+							}
+						}).start();
+					}
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						handleTrace(e);
+					}
+				}
+			}
+		});
+		consoleThread.start();
+	}
+
 }
