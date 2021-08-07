@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import fr.stormer3428.demi.module.Autorole;
 import fr.stormer3428.demi.module.DiscordCommandDispatcher;
-import fr.stormer3428.demi.module.FileEdit;
+import fr.stormer3428.demi.module.commands.FileEdit;
 import fr.stormer3428.demi.module.commands.Reload;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;

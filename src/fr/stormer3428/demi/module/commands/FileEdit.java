@@ -1,4 +1,4 @@
-package fr.stormer3428.demi.module;
+package fr.stormer3428.demi.module.commands;
 
 import java.io.File;
 import java.util.ArrayList;
