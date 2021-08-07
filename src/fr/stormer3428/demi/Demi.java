@@ -348,5 +348,37 @@ public class Demi extends HasConfig{
 		});
 		consoleThread.start();
 	}
+	
+
+	public File findConfigFileByName(String fileName) {
+		fileName = fileName.replace(".cfg", "");
+		File parentFolder = Demi.i.CONFIG.getFile().getAbsoluteFile().getParentFile();
+		List<File> files = recursiveFileSearch(parentFolder, 5);
+		for(File configFile : files) {
+			if(configFile.getName().replace(".cfg", "").equals(fileName)) return configFile;
+		}
+		for(File configFile : files) {
+			if(configFile.getName().replace(".cfg", "").equalsIgnoreCase(fileName)) return configFile;
+		}
+		return null;
+	}
+
+	public List<File> recursiveFileSearch(File parentFolder, int i) {
+		return recursiveFileSearch(new ArrayList<>(), parentFolder, i);
+	}
+
+	public List<File> recursiveFileSearch(ArrayList<File> files, File folder, int i) {
+		if(i == 0) return files;
+		File[] folderFiles = folder.listFiles();
+		for(File file : folderFiles) {
+			if(file.isDirectory()) {
+				recursiveFileSearch(files, folder, i - 1);
+				continue;
+			}
+			if(file.getName().endsWith(".cfg")) files.add(file);
+		}
+		return files;
+	}
+
 
 }
