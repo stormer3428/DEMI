@@ -374,13 +374,17 @@ public class Demi extends HasConfig{
 		File[] folderFiles = folder.listFiles();
 		for(File file : folderFiles) {
 			if(file.isDirectory()) {
-				recursiveFileSearch(files, folder, i - 1);
+				recursiveFileSearch(files, file, i - 1);
 				continue;
 			}
 			if(file.getName().endsWith(".cfg")) files.add(file);
 		}
 		return files;
 	}
-
+	
+	public List<File> getAllConfigFiles(){
+		File parentFolder = Demi.i.CONFIG.getFile().getAbsoluteFile().getParentFile();
+		return Demi.i.recursiveFileSearch(parentFolder, 5);
+	}
 
 }
