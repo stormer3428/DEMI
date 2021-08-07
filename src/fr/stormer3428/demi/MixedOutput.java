@@ -1,5 +1,8 @@
 package fr.stormer3428.demi;
 
+import java.util.List;
+
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 public class MixedOutput {
@@ -33,42 +36,57 @@ public class MixedOutput {
 		if(outputToConsole)
 			System.err.println("\033[38;5;196m"+"[" + mixedOutputHead + "][📕Error] " + message+"\033[38;5;7m");
 		if(!outputToChannel) return;
-		textChannel.sendMessage("[" + mixedOutputHead + "] **📕ERROR " + message + ".**");
+		textChannel.sendMessage("[" + mixedOutputHead + "] **📕ERROR " + message + ".**").queue();
 	}
 
 	public final void warning(String message) {
 		if(outputToConsole)
 			System.out.println("\033[38;5;208m"+"[" + mixedOutputHead + "][📙Warning] "+"\033[38;5;7m" + message);
 		if(!outputToChannel) return;
-		textChannel.sendMessage("[\" + mixedOutputHead + \"][" + mixedOutputHead + "] ***📙WARNING " + message + ".***");
+		textChannel.sendMessage("[\" + mixedOutputHead + \"][" + mixedOutputHead + "] ***📙WARNING " + message + ".***").queue();
 	}
 
 	public final void ok(String message) {
 		if(outputToConsole)
 			System.out.println("\033[38;5;118m"+"[" + mixedOutputHead + "][📗Ok] " + message + "\033[38;5;7m");
 		if(!outputToChannel) return;
-		textChannel.sendMessage("[" + mixedOutputHead + "] 📗Ok " + message + ".");
+		textChannel.sendMessage("[" + mixedOutputHead + "] 📗Ok " + message + ".").queue();
 	}
 
 	public final void action(String message) {
 		if(outputToConsole)
 			System.out.println("\033[38;5;123m"+"[" + mixedOutputHead + "][📘Action] "+"\033[38;5;7m" + message);
 		if(!outputToChannel) return;
-		textChannel.sendMessage("[" + mixedOutputHead + "] 📘Action " + message + ".");
+		textChannel.sendMessage("[" + mixedOutputHead + "] 📘Action " + message + ".").queue();
 	}
 
 	public final void cancelled(String message) {
 		if(outputToConsole)
 			System.out.println("\033[38;5;245m"+"[" + mixedOutputHead + "][📓Cancelled] " + message + "\033[38;5;7m");
 		if(!outputToChannel) return;
-		textChannel.sendMessage("[" + mixedOutputHead + "] *📓Cancelled " + message + ".*");
+		textChannel.sendMessage("[" + mixedOutputHead + "] *📓Cancelled " + message + ".*").queue();
 	}
 
 	public final void info(String message) {
 		if(outputToConsole)
 			System.out.println("\033[38;5;226m"+"[" + mixedOutputHead + "][Info] "+"\033[38;5;7m" + message);
 		if(!outputToChannel) return;
-		textChannel.sendMessage("[" + mixedOutputHead + "] Info " + message + ".");
+		textChannel.sendMessage("[" + mixedOutputHead + "] Info " + message + ".").queue();
+	}
+
+	public void command(String message) {
+		if(outputToConsole)
+			System.out.println("\033[38;5;226m"+"[" + mixedOutputHead + "] " + message);
+		if(!outputToChannel) return;
+		textChannel.sendMessage("[" + mixedOutputHead + "] " + message + ".").queue();
+	}
+	
+	public void embed(MessageEmbed embed, List<String> embedReplacement) {
+		if(outputToChannel)
+			textChannel.sendMessage(embed).queue();
+		if(!outputToConsole) return;
+		for(String line : embedReplacement)
+			System.out.println("\033[38;5;226m"+"[" + mixedOutputHead + "] " + line);
 	}
 
 
