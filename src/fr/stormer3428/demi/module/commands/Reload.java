@@ -1,9 +1,11 @@
 package fr.stormer3428.demi.module.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.stormer3428.demi.CommandModule;
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.DemiCommandReceiveEvent;
-import fr.stormer3428.demi.module.CommandModule;
-import net.dv8tion.jda.api.entities.Member;
 
 public class Reload extends CommandModule{
 
@@ -22,6 +24,11 @@ public class Reload extends CommandModule{
 	}
 
 	@Override
+	public List<String> getDependencies() {
+		return new ArrayList<>();
+	}
+
+	@Override
 	public void onDisable() {}
 
 	@Override
@@ -29,20 +36,9 @@ public class Reload extends CommandModule{
 		super.onEnable();
 		OUTPUT.ok("Successfully loaded all config parameters");
 	}
-	
-	@Override
-	public boolean onCommand(DemiCommandReceiveEvent event) {
-		if(!event.getCommand().equalsIgnoreCase(getName())) return false;
-		if(event.getMessageReceivedEvent() == null) {
-			Demi.i.reloadModules();
-			return true;
-		}
-		Member member = event.getMessageReceivedEvent().getMember();
-		if(canUseCommand(member)) {
-			Demi.i.reloadModules();
-		}
-		return true;
 
+	protected void runCommand(DemiCommandReceiveEvent event) {
+		Demi.i.reloadModules();
 	}
 
 }

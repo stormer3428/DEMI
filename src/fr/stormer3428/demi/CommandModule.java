@@ -1,12 +1,9 @@
-package fr.stormer3428.demi.module;
+package fr.stormer3428.demi;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.stormer3428.demi.Demi;
-import fr.stormer3428.demi.Key;
-import fr.stormer3428.demi.Module;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -30,13 +27,6 @@ public abstract class CommandModule extends Module{
 		CONFIG_KEYS.add(new Key("requiredRoles", "[]"));
 		CONFIG_KEYS.add(new Key("whitelistEnabled", "false"));
 		CONFIG_KEYS.add(new Key("whitelist", "[]"));
-	}
-
-	@Override
-	public List<String> getDependencies() {
-		ArrayList<String> dependencies = new ArrayList<>();
-		dependencies.add("CommandDispatcher");
-		return dependencies;
 	}
 
 	@Override
@@ -136,4 +126,21 @@ public abstract class CommandModule extends Module{
 		}
 		return true;
 	}
+	
+	@Override
+	public boolean onCommand(DemiCommandReceiveEvent event) {
+		if(!event.getCommand().equalsIgnoreCase(getName())) return false;
+		if(event.getMessageReceivedEvent() == null) {
+			runCommand(event);
+			return true;
+		}
+		Member member = event.getMessageReceivedEvent().getMember();
+		if(canUseCommand(member)) {
+			runCommand(event);
+		}
+		return true;
+
+	}
+
+	protected abstract void runCommand(DemiCommandReceiveEvent event);
 }
