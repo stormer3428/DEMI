@@ -8,7 +8,7 @@ public abstract class HasConfig {
 
 	static final int CONFIGIORETRY = 5;
 
-	protected IO CONFIG;
+	public IO CONFIG;
 	private File file;
 	protected List<Key> CONFIG_KEYS = new ArrayList<>();
 	protected String LOGGING_CHANNEL_ID;
