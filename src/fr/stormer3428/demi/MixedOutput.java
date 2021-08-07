@@ -19,11 +19,8 @@ public class MixedOutput {
 		outputToConsole = console;
 		mixedOutputHead = header;
 		if(!outputToChannel) return;
-		this.textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
-		if(textChannel != null) return; 
-		DemiConsole.error("Error while creating mixed output with channel id, id given is invalid ("+outputChannelID+")");	
 	}
-	
+
 	public MixedOutput(String channelID, boolean console, String header) {
 		this(channelID, true, console, header);
 	}
@@ -36,6 +33,10 @@ public class MixedOutput {
 		if(outputToConsole)
 			System.err.println("\033[38;5;196m"+"[" + mixedOutputHead + "][📕Error] " + message+"\033[38;5;7m");
 		if(!outputToChannel) return;
+		if(textChannel == null) {
+			if(Demi.jda == null) return;
+			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
+		}
 		textChannel.sendMessage("[" + mixedOutputHead + "] **📕ERROR " + message + ".**").queue();
 	}
 
@@ -43,6 +44,10 @@ public class MixedOutput {
 		if(outputToConsole)
 			System.out.println("\033[38;5;208m"+"[" + mixedOutputHead + "][📙Warning] "+"\033[38;5;7m" + message);
 		if(!outputToChannel) return;
+		if(textChannel == null) {
+			if(Demi.jda == null) return;
+			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
+		}
 		textChannel.sendMessage("[\" + mixedOutputHead + \"][" + mixedOutputHead + "] ***📙WARNING " + message + ".***").queue();
 	}
 
@@ -50,6 +55,10 @@ public class MixedOutput {
 		if(outputToConsole)
 			System.out.println("\033[38;5;118m"+"[" + mixedOutputHead + "][📗Ok] " + message + "\033[38;5;7m");
 		if(!outputToChannel) return;
+		if(textChannel == null) {
+			if(Demi.jda == null) return;
+			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
+		}
 		textChannel.sendMessage("[" + mixedOutputHead + "] 📗Ok " + message + ".").queue();
 	}
 
@@ -57,6 +66,10 @@ public class MixedOutput {
 		if(outputToConsole)
 			System.out.println("\033[38;5;123m"+"[" + mixedOutputHead + "][📘Action] "+"\033[38;5;7m" + message);
 		if(!outputToChannel) return;
+		if(textChannel == null) {
+			if(Demi.jda == null) return;
+			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
+		}
 		textChannel.sendMessage("[" + mixedOutputHead + "] 📘Action " + message + ".").queue();
 	}
 
@@ -64,6 +77,10 @@ public class MixedOutput {
 		if(outputToConsole)
 			System.out.println("\033[38;5;245m"+"[" + mixedOutputHead + "][📓Cancelled] " + message + "\033[38;5;7m");
 		if(!outputToChannel) return;
+		if(textChannel == null) {
+			if(Demi.jda == null) return;
+			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
+		}
 		textChannel.sendMessage("[" + mixedOutputHead + "] *📓Cancelled " + message + ".*").queue();
 	}
 
@@ -71,6 +88,10 @@ public class MixedOutput {
 		if(outputToConsole)
 			System.out.println("\033[38;5;226m"+"[" + mixedOutputHead + "][Info] "+"\033[38;5;7m" + message);
 		if(!outputToChannel) return;
+		if(textChannel == null) {
+			if(Demi.jda == null) return;
+			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
+		}
 		textChannel.sendMessage("[" + mixedOutputHead + "] Info " + message + ".").queue();
 	}
 
@@ -78,12 +99,21 @@ public class MixedOutput {
 		if(outputToConsole)
 			System.out.println("\033[38;5;226m"+"[" + mixedOutputHead + "] " + message);
 		if(!outputToChannel) return;
+		if(textChannel == null) {
+			if(Demi.jda == null) return;
+			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
+		}
 		textChannel.sendMessage("```[" + mixedOutputHead + "] " + message + "```").queue();
 	}
-	
+
 	public void embed(MessageEmbed embed, List<String> embedReplacement) {
-		if(outputToChannel)
+		if(outputToChannel) {
+			if(textChannel == null) {
+				if(Demi.jda == null) return;
+				textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
+			}
 			textChannel.sendMessage(embed).queue();
+		}
 		if(!outputToConsole) return;
 		for(String line : embedReplacement)
 			System.out.println("\033[38;5;226m"+"[" + mixedOutputHead + "] " + line);
