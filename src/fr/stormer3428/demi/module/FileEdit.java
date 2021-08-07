@@ -8,11 +8,12 @@ import fr.stormer3428.demi.CommandModule;
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.DemiCommandReceiveEvent;
 import fr.stormer3428.demi.MixedOutput;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 public class FileEdit extends CommandModule{
 
 	public FileEdit() {
-		super("fileedit");
+		super("FileEdit");
 
 		aliases.add("fedit");
 		aliases.add("filed");
@@ -53,11 +54,11 @@ public class FileEdit extends CommandModule{
 			showHelp(OUTPUT);
 			return;
 		}
-		if(action.equalsIgnoreCase("listFiles") || action.equalsIgnoreCase("lFiles") || action.equalsIgnoreCase("listF") || action.equalsIgnoreCase("lf")) {
+		if(action.equalsIgnoreCase("listFiles") || action.equalsIgnoreCase("lFiles") || action.equalsIgnoreCase("listF") || action.equalsIgnoreCase("lf") || action.equalsIgnoreCase("l") || action.equalsIgnoreCase("list")) {
 			showAvailableFiles(OUTPUT);
 			return;
 		}
-		if(action.equalsIgnoreCase("param") || action.equalsIgnoreCase("prm") || action.equalsIgnoreCase("p")) {
+		if(action.equalsIgnoreCase("parameter") || action.equalsIgnoreCase("param") || action.equalsIgnoreCase("prm") || action.equalsIgnoreCase("p")) {
 			if(args.isEmpty()) {
 				showHelpParam(OUTPUT);
 				return;
@@ -132,9 +133,17 @@ public class FileEdit extends CommandModule{
 	}
 
 	private void showHelp(MixedOutput OUTPUT) {
-		// TODO Auto-generated method stub
-		OUTPUT.info("showHelp");
+		List<String> embedReplacement = new ArrayList<>();
+		embedReplacement.add("Help for command " + getName() + " :");
+		embedReplacement.add("Usage : " + getName() + " <help;listfiles;parameter>");
+		embedReplacement.add("A command used to directly edit config files");
 
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setAuthor(getName());
+		builder.setTitle("Command help");
+		builder.addField("Usage", getName() + " <help;listfiles;parameter>", false);
+		
+		OUTPUT.embed(builder.build(), embedReplacement);
 	}
 
 
