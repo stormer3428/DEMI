@@ -22,7 +22,7 @@ public class Demi extends HasConfig{
 
 	static final int JDARETRY = 5;
 
-	private static final boolean offlineTestMode = true;
+	private static final boolean offlineTestMode = false;
 
 	public static Demi i;
 	public static JDA jda;
@@ -169,7 +169,8 @@ public class Demi extends HasConfig{
 		 */
 
 		OUTPUT = new MixedOutput(CONFIG.get("loggingChannelID"), CONFIG.get("logToChannel").equalsIgnoreCase("true"), CONFIG.get("logToConsole").equalsIgnoreCase("true"), "Core");
-
+		SERVER_ID = CONFIG.get("serverId");
+		
 		DEBUG_IDS = debugIDs();
 		setDebugMode(CONFIG.get("debugMode"), DEBUG_IDS);
 
@@ -177,7 +178,6 @@ public class Demi extends HasConfig{
 
 		if(!initialJDACreation()) return;
 
-		SERVER_ID = CONFIG.get("serverId");
 		if(offlineTestMode) {
 			OUTPUT.error("Overriden by offline test mode");
 		}else if(jda.getGuildById(SERVER_ID) == null) {
@@ -231,35 +231,35 @@ public class Demi extends HasConfig{
 
 	private boolean initialJDACreation() {
 		if(offlineTestMode) {
-			OUTPUT.error("Overriden by offline test mode");
-			OUTPUT.error("JDA creation skipped for offline testing");
-			OUTPUT.error("DEMI will throw errors related to JDA as it was never initialized");
+			DemiConsole.error("Overriden by offline test mode");
+			DemiConsole.error("JDA creation skipped for offline testing");
+			DemiConsole.error("DEMI will throw errors related to JDA as it was never initialized");
 			return true;
 		}
 		int configIoRetry = 0;
 		while (configIoRetry < CONFIGIORETRY) {
 			if(!i.refreshJDA()) {
-				OUTPUT.error("Failed to create JDA instance");
-				OUTPUT.info("Retrying...");
+				DemiConsole.error("Failed to create JDA instance");
+				DemiConsole.info("Retrying...");
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					OUTPUT.error("Thread Interrupted!");
+					DemiConsole.error("Thread Interrupted!");
 					handleTrace(e);
 				}
 				configIoRetry ++;
 			}else return true;
 		}
 		if(!i.refreshJDA()) {
-			OUTPUT.error("Failed to create the JDA instance");
-			OUTPUT.error("JDA is essential for DEMI to work properly, it allows it to interact with the Discord Bot");
+			DemiConsole.error("Failed to create the JDA instance");
+			DemiConsole.error("JDA is essential for DEMI to work properly, it allows it to interact with the Discord Bot");
 			return false;
 		}
 		return true;
 	}
 
 	public boolean refreshJDA() {
-		OUTPUT.action("Creating new JDA instance...");
+		DemiConsole.action("Creating new JDA instance...");
 
 		JDABuilder builder = JDABuilder.createDefault(discordBotToken());
 		builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
@@ -271,9 +271,9 @@ public class Demi extends HasConfig{
 			OUTPUT.ok("JDA instance created");
 			return true;
 		}catch(Exception e){
-			OUTPUT.error("Error");
-			OUTPUT.error("Login Crash");
-			OUTPUT.error("something went wrong while logging into JDA");
+			DemiConsole.error("Error");
+			DemiConsole.error("Login Crash");
+			DemiConsole.error("something went wrong while logging into JDA");
 			handleTrace(e);
 			return false;
 		}
@@ -303,9 +303,9 @@ public class Demi extends HasConfig{
 
 	protected void handleTrace(Exception e) {
 		if(PRINT_STACK_TRACE) {
-			OUTPUT.info("Printing stack trace");
+			DemiConsole.info("Printing stack trace");
 			e.printStackTrace();
-		}else OUTPUT.cancelled("Core module set to not print stack trace");
+		}else DemiConsole.cancelled("Core module set to not print stack trace");
 	}
 
 	protected Guild getGuild() {
@@ -353,7 +353,6 @@ public class Demi extends HasConfig{
 		consoleThread.start();
 	}
 	
-
 	public File findConfigFileByName(String fileName) {
 		fileName = fileName.replace(".cfg", "");
 		File parentFolder = Demi.i.CONFIG.getFile().getAbsoluteFile().getParentFile();
