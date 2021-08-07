@@ -16,17 +16,17 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandDispatcher extends Module{
 
-	private CommandDispatcher i;
 	private String prefix;
 	private boolean acceptFromConsole;
 	private boolean acceptFromDiscord;
 	private boolean acceptFromDiscordBots;
+	private boolean active = false;
+	private Thread consoleThread;
 
 	Scanner console;
 
 	public CommandDispatcher() {
 		super(new File("commanddispatcher.cfg"));
-		i = this;
 
 		CONFIG_KEYS.add(new Key("prefix", "?"));
 		CONFIG_KEYS.add(new Key("acceptCommandsFromConsole", "true"));
@@ -54,7 +54,19 @@ public class CommandDispatcher extends Module{
 
 	@Override
 	public void onDisable() {
-		console.close();
+		active = false;
+		if(acceptFromConsole) {
+			OUTPUT.action("Waiting for console thread to close...");
+			try {
+				while(consoleThread.isAlive()) {
+					Thread.sleep(100);
+				}
+				OUTPUT.ok("Thread ended successfully");
+			} catch (InterruptedException e) {
+				OUTPUT.error("Caught an error while waiting for the console thread");
+				handleTrace(e);
+			}
+		}
 	}
 
 	@Override
@@ -70,20 +82,33 @@ public class CommandDispatcher extends Module{
 		OUTPUT.info("prefix : " + prefix);
 
 		OUTPUT.ok("Successfully loaded all config parameters");
+		active = true;
 
 		if(!acceptFromConsole) return;
-		console = new Scanner(System.in);
 		startConsoleInputReader();
 	}
 
 	private void startConsoleInputReader() {
 		OUTPUT.action("Starting console input stream reader");
-		new Thread(new Runnable() {
+		consoleThread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				while (Demi.i.getActiveModules().contains(i)) {
-					String line = console.nextLine();
+				OUTPUT.ok("Thread started");
+				console = new Scanner(Demi.i.SystemIn);
+				while (active) {
+					while(active && !console.hasNext()) {
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							handleTrace(e);
+						}
+					}
+
+					if(!active) break;
+					String line = console.next();
+
+					if(line.isEmpty()) continue;
 
 					String raw = line;
 					String cmd = raw.split(" ", 2)[0].toLowerCase();
@@ -97,16 +122,21 @@ public class CommandDispatcher extends Module{
 					for(Module module : Demi.i.getActiveModules()) {
 						new Thread(new Runnable() {
 							@Override public void run() {
-								boolean success = module.onCommand(new DemiCommandReceiveEvent(null, cmd, args, OUTPUT));
-								if(!success) {
-									OUTPUT.warning("Unknow command " + cmd);
-								}
+								module.onCommand(new DemiCommandReceiveEvent(null, cmd, args, OUTPUT));
 							}
 						}).start();
 					}
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						handleTrace(e);
+					}
 				}
+				OUTPUT.info("Console reader thread stopped");
+				console.close();
 			}
-		}).start();
+		});
+		consoleThread.start();
 	}
 
 	@Override

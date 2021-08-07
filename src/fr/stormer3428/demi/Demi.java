@@ -1,21 +1,26 @@
 package fr.stormer3428.demi;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.stormer3428.demi.module.Autorole;
 import fr.stormer3428.demi.module.CommandDispatcher;
+import fr.stormer3428.demi.module.commands.Reload;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class Demi extends HasConfig{
-	
+
+	public InputStream SystemIn = System.in;
 	protected MixedOutput OUTPUT;
-	
+
 	static final int JDARETRY = 5;
+
+	private static final boolean offlineTestMode = true;
 
 	public static Demi i;
 	public static JDA jda;
@@ -32,8 +37,9 @@ public class Demi extends HasConfig{
 	static {
 		registerModule(new Autorole()); //TODO make modules implement themselves
 		registerModule(new CommandDispatcher()); //TODO make modules implement themselves
+		registerModule(new Reload()); //TODO make modules implement themselves
 	}
-	
+
 	public List<Module> getActiveModules(){
 		return ACTIVE_MODULES;
 	}
@@ -86,26 +92,33 @@ public class Demi extends HasConfig{
 			//==//
 			OUTPUT.action("Reactivating modules...");
 			List<Module> toEnable = new ArrayList<>();
-			
+
 			for(Module module : MODULES) 
 				if(module.enabled()) toEnable.add(module);
 				else OUTPUT.cancelled("Module " + module.getName() + " is disabled in it's config");
-			
+
 			int oldSize = toEnable.size();
 			while(toEnable.size() > 0) {
+				List<Module> processedModules = new ArrayList<>();
 				for(Module module : toEnable) {
 					if(module.canBeLoaded()) {
-						OUTPUT.action("Activating module " + module.getName());
-						ACTIVE_MODULES.add(module);
-						module.onEnable();
+						try {
+							OUTPUT.action("Activating module " + module.getName());
+							ACTIVE_MODULES.add(module);
+							module.onEnable();
+							processedModules.add(module);
+						}catch (Exception e) {
+							OUTPUT.error("Caught an error while loading module " + module.getName());
+							handleTrace(e);
+						}
 					}
 				}
-				toEnable.removeAll(ACTIVE_MODULES);
+				toEnable.removeAll(processedModules);
 				if(oldSize == toEnable.size()) break;
 				oldSize = toEnable.size();
 			}
 			for(Module notLoaded : toEnable) {
-				OUTPUT.warning("Module " + notLoaded.getName() + " could not be loaded");
+				OUTPUT.error("Module " + notLoaded.getName() + " could not be loaded");
 				boolean header = true;
 				for(String dependency : notLoaded.getDependencies()) {
 					boolean dependencyLoaded = false;
@@ -114,22 +127,27 @@ public class Demi extends HasConfig{
 							dependencyLoaded = true;
 							break;
 						}
-						if(!dependencyLoaded) {
-							if(header) {
-								header = false;
-								OUTPUT.warning("missing dependencies : ");
-							}
-							OUTPUT.warning(dependency);
+					}
+					if(!dependencyLoaded) {
+						if(header) {
+							header = false;
+							OUTPUT.warning("missing dependencies : ");
 						}
+						OUTPUT.warning(dependency);
 					}
 				}
 			}
-			
-			OUTPUT.ok("Successfully activated all enabled modules");
-			OUTPUT.ok("Successfully reloaded modules!");
-			OUTPUT.info("Enabled modules : ");
-			for(Module module : ACTIVE_MODULES) {
-				OUTPUT.info(module.getName());
+
+			if(!ACTIVE_MODULES.isEmpty()) {
+				OUTPUT.ok("Successfully activated all enabled modules");
+				OUTPUT.ok("Successfully reloaded modules!");
+				OUTPUT.info("Enabled modules : ");
+				for(Module module : ACTIVE_MODULES) {
+					OUTPUT.info(module.getName());
+				}
+			}else {
+				OUTPUT.error("No modules were loaded!");
+				OUTPUT.error("Exiting...");
 			}
 		}else {
 			OUTPUT.warning("No modules registered.");
@@ -140,31 +158,38 @@ public class Demi extends HasConfig{
 		i = new Demi();
 		i.main();
 	}
-	
+
 	public void main() {
 		/*
 		Returning at this stage will kill DEMI as no module has been activated yet
-		*/
+		 */
 
 		OUTPUT = new MixedOutput(CONFIG.get("loggingChannelID"), CONFIG.get("logToChannel").equalsIgnoreCase("true"), CONFIG.get("logToConsole").equalsIgnoreCase("true"), "Core");
-		
+
 		DEBUG_IDS = debugIDs();
 		setDebugMode(CONFIG.get("debugMode"), DEBUG_IDS);
-		
+
 		if(DEBUG_IDS == null) return;
-		
+
 		if(!initialJDACreation()) return;
-		
+
 		SERVER_ID = CONFIG.get("serverId");
-		if(jda.getGuildById(SERVER_ID) == null) {
+		if(offlineTestMode) {
+			OUTPUT.error("Overriden by offline test mode");
+		}else if(jda.getGuildById(SERVER_ID) == null) {
 			OUTPUT.error("Invalid Server ID given, stopping DEMI");
 			jda.shutdown();
 			jda = null;
 			return;
 		}
 		reloadModules();
+		if(ACTIVE_MODULES.isEmpty()) {
+			jda.shutdown();
+			jda = null;
+			return;
+		}
 	}
-	
+
 	public Demi() {
 		super(new File("config.cfg"));
 		CONFIG_KEYS.add(new Key("discordBotToken", "TOKEN_HERE"));
@@ -185,7 +210,7 @@ public class Demi extends HasConfig{
 			OUTPUT.warning("Retrieved value : " + CONFIG.getList("debugIDs"));
 			OUTPUT.warning("Expected an array of user IDs");
 			handleTrace(e);
-			
+
 			if(DEBUG_MODE) {
 				OUTPUT.error("Debug Mode is active, stopping DEMI");
 				return null;
@@ -200,6 +225,12 @@ public class Demi extends HasConfig{
 	}
 
 	private boolean initialJDACreation() {
+		if(offlineTestMode) {
+			OUTPUT.error("Overriden by offline test mode");
+			OUTPUT.error("JDA creation skipped for offline testing");
+			OUTPUT.error("DEMI will throw errors related to JDA as it was never initialized");
+			return true;
+		}
 		int configIoRetry = 0;
 		while (configIoRetry < CONFIGIORETRY) {
 			if(!i.refreshJDA()) {
