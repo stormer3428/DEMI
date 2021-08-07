@@ -167,7 +167,7 @@ public class FileEdit extends CommandModule{
 	private void setParam(MixedOutput OUTPUT, IO io, String foundKey, String newValue) {
 		String oldValue = io.get(foundKey);
 		io.setParameter(foundKey, newValue);
-		OUTPUT.command("Successfully updated the value of " + foundKey + " from ```"+oldValue+"``` to ```"+io.get(foundKey)+"```");
+		OUTPUT.command("Successfully updated the value of " + foundKey + " from "+oldValue+" to "+io.get(foundKey));
 	}
 
 	private void showParam(MixedOutput OUTPUT, IO io, String foundKey) {
