@@ -22,7 +22,7 @@ public abstract class CommandModule extends Module{
 	protected String commandName;
 
 	public CommandModule(String string) {
-		super(new File("commands/" + string));
+		super(new File("commands/" + string + ".cfg"));
 		commandName = string;
 
 		CONFIG_KEYS.add(new Key("requireAdminPerms", "true"));
@@ -41,6 +41,7 @@ public abstract class CommandModule extends Module{
 
 	@Override
 	public void onEnable() {
+		super.onEnable();
 		requireAdminPerms = CONFIG.get("requireAdminPerms").equalsIgnoreCase("true");
 		OUTPUT.info("requireAdminPerms : " + (requireAdminPerms ? "true" : false));
 		requireRoles = CONFIG.get("requireRoles").equalsIgnoreCase("true");

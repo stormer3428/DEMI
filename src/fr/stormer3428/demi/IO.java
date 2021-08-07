@@ -57,6 +57,7 @@ public class IO {
 			DemiConsole.warning("Missing file " + fileName +" !");
 			DemiConsole.action("Attenpting to create file " + fileName);
 			try {
+				file.getAbsoluteFile().getParentFile().mkdir();
 				file.createNewFile();
 			} catch (IOException e) {
 				DemiConsole.error("Failed to create file " + fileName);
