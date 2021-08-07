@@ -14,6 +14,7 @@ import java.util.List;
 
 public class IO {
 
+	public static List<IO> all = new ArrayList<>();
 	public static List<String> defaultHeaders = new ArrayList<>();
 	private List<Key> defaultKeys = new ArrayList<>();
 
@@ -38,7 +39,8 @@ public class IO {
 		this.file = file;
 		this.fileName = file.getName();
 		this.defaultKeys = defaultKeys;
-		DemiConsole.ok("IO interface for file " + fileName + " successfully created!");
+		DemiConsole.ok("IO interface for file " + getFileName() + " successfully created!");
+		all.add(this);
 		DemiConsole.action("Checking File...");
 		if(fileCheck(true)) DemiConsole.ok("File check successful");
 		else DemiConsole.error("Failed to pass file check");
@@ -47,30 +49,30 @@ public class IO {
 	public final boolean fileCheck() {
 		return fileCheck(false);
 	}
-	
+
 	public final boolean fileCheck(boolean checkKeys) {
-		if(file == null) {
+		if(getFile() == null) {
 			DemiConsole.cancelled("Attempted to check integrity of null file, returning false");
 			return false;
 		}
-		if(!(file.exists() && file.isFile())) {
-			DemiConsole.warning("Missing file " + fileName +" !");
-			DemiConsole.action("Attenpting to create file " + fileName);
+		if(!(getFile().exists() && getFile().isFile())) {
+			DemiConsole.warning("Missing file " + getFileName() +" !");
+			DemiConsole.action("Attenpting to create file " + getFileName());
 			try {
-				file.getAbsoluteFile().getParentFile().mkdir();
-				file.createNewFile();
+				getFile().getAbsoluteFile().getParentFile().mkdir();
+				getFile().createNewFile();
 			} catch (IOException e) {
-				DemiConsole.error("Failed to create file " + fileName);
+				DemiConsole.error("Failed to create file " + getFileName());
 				handleTrace(e);
 				return false;
 			}
-			DemiConsole.ok("Created file " + fileName + " successfully !");
+			DemiConsole.ok("Created file " + getFileName() + " successfully !");
 		}
 		if(checkKeys) {
 			List<String> keys = getKeys();
 			for(Key defaultKey : defaultKeys) {
 				if(keys.contains(defaultKey.name())) continue;
-				DemiConsole.info("File " + fileName + " is missing the key " + defaultKey.name());
+				DemiConsole.info("File " + getFileName() + " is missing the key " + defaultKey.name());
 				DemiConsole.action("Adding the missing key at the end of file");
 				addParameter(defaultKey.name(), defaultKey.defaultValue());
 			}
@@ -79,21 +81,21 @@ public class IO {
 	}
 
 	public final List<String> getKeys(){
-		if(file == null) {
+		if(getFile() == null) {
 			DemiConsole.cancelled("Attempted to retrieve keys of null file, returning null");
 			return null;
 		}
 		if(!fileCheck()) {
-			DemiConsole.error("Failed retrieval of keys for file " + fileName);
+			DemiConsole.error("Failed retrieval of keys for file " + getFileName());
 			DemiConsole.warning("retuning an empty list");
 			return new ArrayList<>();
 		}
 
 		List<String> lines;
 		try {
-			lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
+			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception while attempting to retrieve keySet from file ("+file.getName()+"), returning empty list");
+			DemiConsole.error("Caught an IO exception while attempting to retrieve keySet from file ("+getFile().getName()+"), returning empty list");
 			handleTrace(e);
 			return new ArrayList<>();
 		}
@@ -112,21 +114,21 @@ public class IO {
 	}
 
 	public final List<String> getValues(){
-		if(file == null) {
+		if(getFile() == null) {
 			DemiConsole.cancelled("Attempted to retrieve values of null file, returning null");
 			return null;
 		}
 		if(!fileCheck()) {
-			DemiConsole.error("Failed retrieval of keys for file " + fileName);
+			DemiConsole.error("Failed retrieval of keys for file " + getFileName());
 			DemiConsole.warning("retuning an empty list");
 			return new ArrayList<>();
 		}
 
 		List<String> lines;
 		try {
-			lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
+			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception while attempting to retrieve all values from file ("+file.getName()+"), returning null");
+			DemiConsole.error("Caught an IO exception while attempting to retrieve all values from file ("+getFile().getName()+"), returning null");
 			handleTrace(e);
 			return null;
 		}
@@ -142,7 +144,7 @@ public class IO {
 	public final List<String> getList(String key){
 		String arrayString = get(key);
 		if(arrayString.isEmpty()) {
-			DemiConsole.warning("Unable to retrieve list " + key + " from file " + fileName);
+			DemiConsole.warning("Unable to retrieve list " + key + " from file " + getFileName());
 			DemiConsole.info("Returned an empty list, if it is intentional, ignore this message");
 			return new ArrayList<String>();
 		}
@@ -153,26 +155,26 @@ public class IO {
 		List<String> array = new ArrayList<String>();
 
 		for(String string : arrayString.split(",")) if(!string.isBlank() && !string.isEmpty()) array.add(string);
-		
+
 		return array;
 	}
 
 	public final String get(String key){
-		if(file == null) {
+		if(getFile() == null) {
 			DemiConsole.cancelled("Attempted to retrieve value " + key + " of null file, returning null");
 			return null;
 		}
 		if(!fileCheck()) {
-			DemiConsole.error("Failed retrieval of value for file " + fileName);
+			DemiConsole.error("Failed retrieval of value for file " + getFileName());
 			DemiConsole.warning("retuning an null");
 			return null;
 		}
 
 		List<String> lines;
 		try {
-			lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
+			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception while attempting to retrieve parameter ("+key+") from file ("+file.getName()+"), returning null");
+			DemiConsole.error("Caught an IO exception while attempting to retrieve parameter ("+key+") from file ("+getFile().getName()+"), returning null");
 			handleTrace(e);
 			return null;
 		}
@@ -188,21 +190,21 @@ public class IO {
 	}
 
 	public final HashMap<String, String> getAll(){
-		if(file == null) {
+		if(getFile() == null) {
 			DemiConsole.cancelled("Attempted to retrieve entirety of null file, returning null");
 			return null;
 		}
 		if(!fileCheck()) {
-			DemiConsole.error("Failed retrieval of entirety of file " + fileName);
+			DemiConsole.error("Failed retrieval of entirety of file " + getFileName());
 			DemiConsole.warning("retuning an empty hashmap");
 			return new HashMap<>();
 		}
 
 		List<String> lines;
 		try {
-			lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
+			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception while attempting to retrieve hashMap of file ("+file.getName()+"), returning null");
+			DemiConsole.error("Caught an IO exception while attempting to retrieve hashMap of file ("+getFile().getName()+"), returning null");
 			handleTrace(e);
 			return null;
 		}
@@ -217,21 +219,21 @@ public class IO {
 	}
 
 	public final ArrayList<String> getAllRaw(){
-		if(file == null) {
+		if(getFile() == null) {
 			DemiConsole.cancelled("Attempted to retrieve raw version of null file, returning null");
 			return null;
 		}
 		if(!fileCheck()) {
-			DemiConsole.error("Failed retrieval of raw file " + fileName);
+			DemiConsole.error("Failed retrieval of raw file " + getFileName());
 			DemiConsole.warning("retuning an empty list");
 			return new ArrayList<String>();
 		}
 
 		List<String> lines;
 		try {
-			lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
+			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception while attemting to raw version of file ("+file.getName()+"), returning null");
+			DemiConsole.error("Caught an IO exception while attemting to raw version of file ("+getFile().getName()+"), returning null");
 			handleTrace(e);
 			return null;
 		}
@@ -244,25 +246,25 @@ public class IO {
 	}
 
 	public final boolean setParameter(String key, String value) {
-		if(file == null) {
+		if(getFile() == null) {
 			DemiConsole.cancelled("Attempted to edit parameter of null file, returning null");
 			return false;
 		}
 		if(!fileCheck()) {
-			DemiConsole.error("Failed to edit parameter " + key + " of file " + fileName);
+			DemiConsole.error("Failed to edit parameter " + key + " of file " + getFileName());
 			return false;
 		}
 		if(getKeys().contains(key)){
 			if(!editParameter(key, value)) {
-				DemiConsole.error("Failed to edit parameter " + key + " of file " + fileName);
+				DemiConsole.error("Failed to edit parameter " + key + " of file " + getFileName());
 				return false;
 			}
 			return true;
 		}
-		DemiConsole.warning("Attempted to set unset parameter " + key + " in file " + fileName);
+		DemiConsole.warning("Attempted to set unset parameter " + key + " in file " + getFileName());
 		DemiConsole.action("Creating parameter at the end of file...");
 		if(!addParameter(key, value)) {
-			DemiConsole.error("Failed to add parameter " + key + " in file " + file.getName());
+			DemiConsole.error("Failed to add parameter " + key + " in file " + getFile().getName());
 			return false;
 		}
 		DemiConsole.ok("Parameter created !");
@@ -270,8 +272,8 @@ public class IO {
 	}
 
 	public final boolean addParameter(String key, String value) {
-		File inputFile = file;
-		File tempFile = new File(file.getName() + ".temp");
+		File inputFile = getFile();
+		File tempFile = new File(getFile().getName() + ".temp");
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));	BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
 
 			String currentLine;
@@ -285,15 +287,15 @@ public class IO {
 			inputFile.delete();
 			return tempFile.renameTo(inputFile);
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception while attempting to add parameter ("+key+") in file ("+file.getName()+"), returning false");
+			DemiConsole.error("Caught an IO exception while attempting to add parameter ("+key+") in file ("+getFile().getName()+"), returning false");
 			handleTrace(e);
 			return false;
 		}
 	}
 
 	public final boolean editParameter(String key, String value) {
-		File inputFile = file;
-		File tempFile = new File(file.getName() + ".temp");
+		File inputFile = getFile();
+		File tempFile = new File(getFile().getName() + ".temp");
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)); BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
 			String currentLine;
 
@@ -310,7 +312,7 @@ public class IO {
 			inputFile.delete();
 			return tempFile.renameTo(inputFile);
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception while attempting to edit parameter ("+key+") in file ("+file.getName()+"), returning false");
+			DemiConsole.error("Caught an IO exception while attempting to edit parameter ("+key+") in file ("+getFile().getName()+"), returning false");
 			handleTrace(e);
 			return false;
 		}
@@ -339,14 +341,30 @@ public class IO {
 
 	public void setPrintStackTrace(boolean printStackTrace) {
 		this.printStackTrace = printStackTrace;
-		DemiConsole.ok(fileName + " IO now set to " + (printStackTrace ? "" : "not") +" print stack trace");
+		DemiConsole.ok(getFileName() + " IO now set to " + (printStackTrace ? "" : "not") +" print stack trace");
 	}
 
 	private void handleTrace(IOException e) {
 		if(printStackTrace) {
 			DemiConsole.info("Printing stack trace");
 			e.printStackTrace();
-		}else DemiConsole.cancelled(fileName + " IO set to not print stack trace");
+		}else DemiConsole.cancelled(getFileName() + " IO set to not print stack trace");
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public static IO findIOByFileName(String fileName2) {
+		for(IO io : IO.all) {
+			if(!io.getFileName().equalsIgnoreCase(fileName2 + ".cfg")) continue;
+			return io;
+		}
+		return null;
+	}
+
+	public File getFile() {
+		return file;
 	}
 
 }
