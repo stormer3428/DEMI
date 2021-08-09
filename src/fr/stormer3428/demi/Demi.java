@@ -387,7 +387,7 @@ public class Demi extends HasConfig{
 				recursiveFileSearch(files, file, i - 1);
 				continue;
 			}
-			if(file.getName().endsWith(".cfg")) files.add(file);
+			if(file.getName().endsWith(".cfg") || file.getName().endsWith(".demidb")) files.add(file);
 		}
 		return files;
 	}

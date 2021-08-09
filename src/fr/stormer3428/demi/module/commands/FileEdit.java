@@ -70,7 +70,7 @@ public class FileEdit extends CommandModule{
 					showHelpParamEdit(OUTPUT);
 					return;
 				}
-				String fileName = args.remove(0).toLowerCase().replace(".cfg", "");
+				String fileName = args.remove(0).toLowerCase().replace(".cfg", "").replace(".demidb", "");
 				File foundFile = Demi.i.findConfigFileByName(fileName);
 				if(foundFile == null) {
 					OUTPUT.error("No file with such name");
@@ -110,7 +110,7 @@ public class FileEdit extends CommandModule{
 					showHelpParamList(OUTPUT);
 					return;
 				}
-				String fileName = args.remove(0).toLowerCase().replace(".cfg", "");
+				String fileName = args.remove(0).toLowerCase().replace(".cfg", "").replace(".demidb", "");
 
 				File foundFile = Demi.i.findConfigFileByName(fileName);
 				if(foundFile == null) {
@@ -125,7 +125,7 @@ public class FileEdit extends CommandModule{
 					showHelpParamGet(OUTPUT);
 					return;
 				}
-				String fileName = args.remove(0).toLowerCase().replace(".cfg", "");
+				String fileName = args.remove(0).toLowerCase().replace(".cfg", "").replace(".demidb", "");
 				File foundFile = Demi.i.findConfigFileByName(fileName);
 				if(foundFile == null) {
 					OUTPUT.error("No file with such name");
