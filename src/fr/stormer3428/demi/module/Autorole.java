@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Autorole extends Module{
 
@@ -73,7 +73,7 @@ public class Autorole extends Module{
 	}
 
 	@Override
-	public void onMessageReceived(MessageReceivedEvent event){
+	public void onGuildMessageReceived(GuildMessageReceivedEvent event){
 		if(System.currentTimeMillis() - lastWiped > cooldown()){
 			lastWiped = System.currentTimeMillis();
 			cooldownSet.clear();
@@ -82,7 +82,7 @@ public class Autorole extends Module{
 		Message message = event.getMessage();
 		if(message.getChannel().getType() != ChannelType.TEXT) return;
 
-		TextChannel channel = event.getTextChannel();
+		TextChannel channel = event.getChannel();
 		if(channel == null) return;
 		Guild guild = event.getGuild();
 		if(!guild.getId().equals(Demi.i.getServerID())) return;
