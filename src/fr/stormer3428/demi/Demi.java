@@ -170,7 +170,7 @@ public class Demi extends HasConfig{
 
 		OUTPUT = new MixedOutput(CONFIG.get("loggingChannelID"), CONFIG.get("logToChannel").equalsIgnoreCase("true"), CONFIG.get("logToConsole").equalsIgnoreCase("true"), "Core");
 		SERVER_ID = CONFIG.get("serverId");
-		
+
 		DEBUG_IDS = debugIDs();
 		setDebugMode(CONFIG.get("debugMode"), DEBUG_IDS);
 
@@ -311,7 +311,7 @@ public class Demi extends HasConfig{
 	protected Guild getGuild() {
 		return jda.getGuildById(SERVER_ID);
 	}
-	
+
 	private void startConsoleInputReader() {
 		OUTPUT.action("Starting console input stream reader");
 		consoleThread = new Thread(new Runnable() {
@@ -327,18 +327,25 @@ public class Demi extends HasConfig{
 					if(line.isEmpty()) continue;
 
 					String raw = line;
-					String cmd = raw.split(" ", 2)[0].toLowerCase();
-					String[] argsArray = raw.replaceFirst(cmd, "").split(" ");
+					final String command;
+					if(true) {
+						String cmd = "";
+						for(char c : raw.split(" ", 2)[0].toLowerCase().toCharArray()) {
+							cmd = cmd + (Character.isLetter(c) ? "" :"\\") + c;
+						}
+						command = cmd;
+					}
+					String[] argsArray = raw.replaceFirst(command, "").split(" ");
 					ArrayList<String> args = new ArrayList<String>();
-
+					
 					OUTPUT.info("Command received from console : ");
-					OUTPUT.info(cmd);
+					OUTPUT.info(command);
 					for(String s : argsArray) if(!s.isEmpty()) args.add(s);
 					for(String s : args) OUTPUT.info("- " + s);
 					for(Module module : Demi.i.getActiveModules()) {
 						new Thread(new Runnable() {
 							@Override public void run() {
-								module.onCommand(new DemiCommandReceiveEvent(null, cmd, args, OUTPUT));
+								module.onCommand(new DemiCommandReceiveEvent(null, command.replace("\\", ""), args, OUTPUT));
 							}
 						}).start();
 					}
@@ -352,7 +359,7 @@ public class Demi extends HasConfig{
 		});
 		consoleThread.start();
 	}
-	
+
 	public File findConfigFileByName(String fileName) {
 		fileName = fileName.replace(".cfg", "");
 		File parentFolder = Demi.i.CONFIG.getFile().getAbsoluteFile().getParentFile();
@@ -382,7 +389,7 @@ public class Demi extends HasConfig{
 		}
 		return files;
 	}
-	
+
 	public List<File> getAllConfigFiles(){
 		File parentFolder = Demi.i.CONFIG.getFile().getAbsoluteFile().getParentFile();
 		return Demi.i.recursiveFileSearch(parentFolder, 5);
