@@ -236,7 +236,6 @@ public class FileEdit extends CommandModule{
 	}
 
 	private void listParams(MixedOutput OUTPUT, File file) {
-		OUTPUT.command("listParams");
 		IO io = IO.findIOByFile(file);
 		if(io == null) io = new IO(file, new ArrayList<>(), PRINT_STACK_TRACE, new ArrayList<>());
 		List<String> keys = io.getKeys();
