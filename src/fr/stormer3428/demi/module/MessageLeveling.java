@@ -16,7 +16,7 @@ public class MessageLeveling extends Module{
 	private LevelCalculator LEVEL_CALCULATOR;
 
 	public MessageLeveling() {
-		super(new File("MessageLeveling.cfg"));
+		super(new File("level/messageLeveling.cfg"));
 
 		CONFIG_KEYS.add(new Key("expPerMessage", "100"));
 		CONFIG_KEYS.add(new Key("expPerMessageVariation", "100"));

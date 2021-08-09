@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import fr.stormer3428.demi.module.Autorole;
 import fr.stormer3428.demi.module.DiscordCommandDispatcher;
+import fr.stormer3428.demi.module.LevelCalculator;
 import fr.stormer3428.demi.module.commands.FileEdit;
 import fr.stormer3428.demi.module.commands.Help;
 import fr.stormer3428.demi.module.commands.Modules;
@@ -40,6 +41,8 @@ public class Demi extends HasConfig{
 	static {
 		registerModule(new Autorole()); //TODO make modules implement themselves
 		registerModule(new DiscordCommandDispatcher()); //TODO make modules implement themselves
+		registerModule(new LevelCalculator()); //TODO make modules implement themselves
+		
 		registerModule(new Reload()); //TODO make modules implement themselves
 		registerModule(new FileEdit()); //TODO make modules implement themselves
 		registerModule(new Modules()); //TODO make modules implement themselves
