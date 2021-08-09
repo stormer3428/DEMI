@@ -71,7 +71,7 @@ public class DiscordCommandDispatcher extends Module{
 
 			String raw = message.getContentRaw().replace(prefix, "");
 			String cmd = raw.split(" ", 2)[0].toLowerCase();
-			String[] argsArray = raw.replaceFirst(cmd, "").split(" ");
+			String[] argsArray = message.getContentRaw().replace(prefix + cmd, "").split(" ");
 			ArrayList<String> args = new ArrayList<String>();
 
 			OUTPUT.info("Command received from discord : ");
