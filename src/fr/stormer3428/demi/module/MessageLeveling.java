@@ -7,18 +7,20 @@ import java.util.List;
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class Leveling extends Module{
+public class MessageLeveling extends Module{
 
 	private int expPerMessage;
 	private int expPerMessageVariation;
-	
-	public Leveling() {
-		super(new File("Leveling.cfg"));
+	private LevelCalculator LEVEL_CALCULATOR;
+
+	public MessageLeveling() {
+		super(new File("MessageLeveling.cfg"));
 
 		CONFIG_KEYS.add(new Key("expPerMessage", "100"));
 		CONFIG_KEYS.add(new Key("expPerMessageVariation", "100"));
-		
+
 		if(initialConfigIOCreation()) return;
 		OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
@@ -49,6 +51,19 @@ public class Leveling extends Module{
 	public void onEnable() {
 		super.onEnable();
 		try {
+			for(Module module : Demi.i.getActiveModules()) if(module.getName().equals("LevelCalculator")) {
+				LEVEL_CALCULATOR = (LevelCalculator) module;
+				break;
+			}
+		}catch (Exception e) {
+			OUTPUT.error("Error while hooking to dependency LevelCalculator");
+			handleTrace(e);
+			OUTPUT.warning("Disabling module to prevent errors");
+			Demi.disableModule(this);
+			return;
+		}
+
+		try {
 			expPerMessage = Integer.parseInt(CONFIG.get("expPerMessage"));
 		} catch (Exception e) {
 			OUTPUT.error("Error while parsing value of expPerMessage, expected an integer");
@@ -68,9 +83,14 @@ public class Leveling extends Module{
 			return;
 		}
 		OUTPUT.trace("expPerMessageVariation : " + expPerMessageVariation);
-		
+
 		OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
-	
+	@Override
+	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+		// TODO Auto-generated method stub
+		super.onGuildMessageReceived(event);
+	}
+
 }
