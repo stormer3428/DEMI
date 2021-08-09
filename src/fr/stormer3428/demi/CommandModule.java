@@ -122,6 +122,7 @@ public abstract class CommandModule extends Module{
 	}
 
 	public boolean canUseCommand(Member member) {
+		if(member == null) return true;
 		if(whitelistEnabled && !whitelist.contains(member.getIdLong())) return false;
 		if(requireAdminPerms && !member.hasPermission(Permission.ADMINISTRATOR)) return false;
 		if(requireRoles) {
@@ -148,4 +149,6 @@ public abstract class CommandModule extends Module{
 	}
 
 	protected abstract void runCommand(DemiCommandReceiveEvent event);
+
+	public abstract String getUsage();
 }

@@ -185,1087 +185,1088 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class RawListener extends ListenerAdapter{
 
 	@Override
-	public void onCategoryCreate(CategoryCreateEvent event) {
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onCategoryCreate(event);}}).start();}
-	}
+	public void onCategoryCreate(CategoryCreateEvent event) {try {
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onCategoryCreate(event);}}).start();}}catch (Exception e) {}
+	
+		}
 
 	@Override
-	public void onCategoryDelete(CategoryDeleteEvent event) {
+	public void onCategoryDelete(CategoryDeleteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onCategoryDelete(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onCategoryDelete(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onCategoryUpdateName(CategoryUpdateNameEvent event) {
+	public void onCategoryUpdateName(CategoryUpdateNameEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onCategoryUpdateName(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onCategoryUpdateName(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onCategoryUpdatePermissions(CategoryUpdatePermissionsEvent event) {
+	public void onCategoryUpdatePermissions(CategoryUpdatePermissionsEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onCategoryUpdatePermissions(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onCategoryUpdatePermissions(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onCategoryUpdatePosition(CategoryUpdatePositionEvent event) {
+	public void onCategoryUpdatePosition(CategoryUpdatePositionEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onCategoryUpdatePosition(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onCategoryUpdatePosition(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onDisconnect(DisconnectEvent event) {
+	public void onDisconnect(DisconnectEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onDisconnect(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onDisconnect(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onEmoteAdded(EmoteAddedEvent event) {
+	public void onEmoteAdded(EmoteAddedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onEmoteAdded(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onEmoteAdded(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onEmoteRemoved(EmoteRemovedEvent event) {
+	public void onEmoteRemoved(EmoteRemovedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onEmoteRemoved(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onEmoteRemoved(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onEmoteUpdateName(EmoteUpdateNameEvent event) {
+	public void onEmoteUpdateName(EmoteUpdateNameEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onEmoteUpdateName(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onEmoteUpdateName(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onEmoteUpdateRoles(EmoteUpdateRolesEvent event) {
+	public void onEmoteUpdateRoles(EmoteUpdateRolesEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onEmoteUpdateRoles(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onEmoteUpdateRoles(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onException(ExceptionEvent event) {
+	public void onException(ExceptionEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onException(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onException(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGatewayPing(GatewayPingEvent event) {
+	public void onGatewayPing(GatewayPingEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGatewayPing(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGatewayPing(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericCategory(GenericCategoryEvent event) {
+	public void onGenericCategory(GenericCategoryEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericCategory(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericCategory(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericCategoryUpdate(GenericCategoryUpdateEvent event) {
+	public void onGenericCategoryUpdate(GenericCategoryUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericCategoryUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericCategoryUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericEmote(GenericEmoteEvent event) {
+	public void onGenericEmote(GenericEmoteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericEmote(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericEmote(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericEmoteUpdate(GenericEmoteUpdateEvent event) {
+	public void onGenericEmoteUpdate(GenericEmoteUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericEmoteUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericEmoteUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericEvent(GenericEvent event) {
+	public void onGenericEvent(GenericEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericEvent(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericEvent(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericGuild(GenericGuildEvent event) {
+	public void onGenericGuild(GenericGuildEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuild(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuild(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericGuildInvite(GenericGuildInviteEvent event) {
+	public void onGenericGuildInvite(GenericGuildInviteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildInvite(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildInvite(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericGuildMember(GenericGuildMemberEvent event) {
+	public void onGenericGuildMember(GenericGuildMemberEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildMember(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildMember(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericGuildMemberUpdate(GenericGuildMemberUpdateEvent event) {
+	public void onGenericGuildMemberUpdate(GenericGuildMemberUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildMemberUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildMemberUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericGuildMessage(GenericGuildMessageEvent event) {
+	public void onGenericGuildMessage(GenericGuildMessageEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildMessage(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildMessage(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericGuildMessageReaction(GenericGuildMessageReactionEvent event) {
+	public void onGenericGuildMessageReaction(GenericGuildMessageReactionEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildMessageReaction(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildMessageReaction(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericGuildUpdate(GenericGuildUpdateEvent event) {
+	public void onGenericGuildUpdate(GenericGuildUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericGuildVoice(GenericGuildVoiceEvent event) {
+	public void onGenericGuildVoice(GenericGuildVoiceEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildVoice(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildVoice(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericMessage(GenericMessageEvent event) {
+	public void onGenericMessage(GenericMessageEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericMessage(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericMessage(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericMessageReaction(GenericMessageReactionEvent event) {
+	public void onGenericMessageReaction(GenericMessageReactionEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericMessageReaction(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericMessageReaction(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericPermissionOverride(GenericPermissionOverrideEvent event) {
+	public void onGenericPermissionOverride(GenericPermissionOverrideEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericPermissionOverride(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericPermissionOverride(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericPrivateMessage(GenericPrivateMessageEvent event) {
+	public void onGenericPrivateMessage(GenericPrivateMessageEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericPrivateMessage(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericPrivateMessage(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericPrivateMessageReaction(GenericPrivateMessageReactionEvent event) {
+	public void onGenericPrivateMessageReaction(GenericPrivateMessageReactionEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericPrivateMessageReaction(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericPrivateMessageReaction(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericRole(GenericRoleEvent event) {
+	public void onGenericRole(GenericRoleEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericRole(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericRole(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericRoleUpdate(GenericRoleUpdateEvent event) {
+	public void onGenericRoleUpdate(GenericRoleUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericRoleUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericRoleUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericSelfUpdate(GenericSelfUpdateEvent event) {
+	public void onGenericSelfUpdate(GenericSelfUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericSelfUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericSelfUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericStoreChannel(GenericStoreChannelEvent event) {
+	public void onGenericStoreChannel(GenericStoreChannelEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericStoreChannel(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericStoreChannel(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericStoreChannelUpdate(GenericStoreChannelUpdateEvent event) {
+	public void onGenericStoreChannelUpdate(GenericStoreChannelUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericStoreChannelUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericStoreChannelUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericTextChannel(GenericTextChannelEvent event) {
+	public void onGenericTextChannel(GenericTextChannelEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericTextChannel(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericTextChannel(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericTextChannelUpdate(GenericTextChannelUpdateEvent event) {
+	public void onGenericTextChannelUpdate(GenericTextChannelUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericTextChannelUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericTextChannelUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericUpdate(UpdateEvent<?, ?> event) {
+	public void onGenericUpdate(UpdateEvent<?, ?> event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericUser(GenericUserEvent event) {
+	public void onGenericUser(GenericUserEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericUser(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericUser(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericUserPresence(GenericUserPresenceEvent event) {
+	public void onGenericUserPresence(GenericUserPresenceEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericUserPresence(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericUserPresence(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericVoiceChannel(GenericVoiceChannelEvent event) {
+	public void onGenericVoiceChannel(GenericVoiceChannelEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericVoiceChannel(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericVoiceChannel(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGenericVoiceChannelUpdate(GenericVoiceChannelUpdateEvent event) {
+	public void onGenericVoiceChannelUpdate(GenericVoiceChannelUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericVoiceChannelUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericVoiceChannelUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildAvailable(GuildAvailableEvent event) {
+	public void onGuildAvailable(GuildAvailableEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildAvailable(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildAvailable(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildBan(GuildBanEvent event) {
+	public void onGuildBan(GuildBanEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildBan(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildBan(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildInviteCreate(GuildInviteCreateEvent event) {
+	public void onGuildInviteCreate(GuildInviteCreateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildInviteCreate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildInviteCreate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildInviteDelete(GuildInviteDeleteEvent event) {
+	public void onGuildInviteDelete(GuildInviteDeleteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildInviteDelete(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildInviteDelete(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildJoin(GuildJoinEvent event) {
+	public void onGuildJoin(GuildJoinEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildJoin(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildJoin(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildLeave(GuildLeaveEvent event) {
+	public void onGuildLeave(GuildLeaveEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildLeave(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildLeave(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+	public void onGuildMemberJoin(GuildMemberJoinEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberJoin(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberJoin(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
+	public void onGuildMemberLeave(GuildMemberLeaveEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberLeave(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberLeave(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMemberRemove(GuildMemberRemoveEvent event) {
+	public void onGuildMemberRemove(GuildMemberRemoveEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberRemove(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberRemove(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event) {
+	public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberRoleAdd(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberRoleAdd(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event) {
+	public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberRoleRemove(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberRoleRemove(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMemberUpdate(GuildMemberUpdateEvent event) {
+	public void onGuildMemberUpdate(GuildMemberUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMemberUpdateBoostTime(GuildMemberUpdateBoostTimeEvent event) {
+	public void onGuildMemberUpdateBoostTime(GuildMemberUpdateBoostTimeEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberUpdateBoostTime(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberUpdateBoostTime(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMemberUpdateNickname(GuildMemberUpdateNicknameEvent event) {
+	public void onGuildMemberUpdateNickname(GuildMemberUpdateNicknameEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberUpdateNickname(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberUpdateNickname(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMemberUpdatePending(GuildMemberUpdatePendingEvent event) {
+	public void onGuildMemberUpdatePending(GuildMemberUpdatePendingEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberUpdatePending(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMemberUpdatePending(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMessageDelete(GuildMessageDeleteEvent event) {
+	public void onGuildMessageDelete(GuildMessageDeleteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageDelete(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageDelete(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMessageEmbed(GuildMessageEmbedEvent event) {
+	public void onGuildMessageEmbed(GuildMessageEmbedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageEmbed(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageEmbed(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {
+	public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageReactionAdd(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageReactionAdd(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMessageReactionRemove(GuildMessageReactionRemoveEvent event) {
+	public void onGuildMessageReactionRemove(GuildMessageReactionRemoveEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageReactionRemove(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageReactionRemove(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMessageReactionRemoveAll(GuildMessageReactionRemoveAllEvent event) {
+	public void onGuildMessageReactionRemoveAll(GuildMessageReactionRemoveAllEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageReactionRemoveAll(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageReactionRemoveAll(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMessageReactionRemoveEmote(GuildMessageReactionRemoveEmoteEvent event) {
+	public void onGuildMessageReactionRemoveEmote(GuildMessageReactionRemoveEmoteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageReactionRemoveEmote(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageReactionRemoveEmote(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageReceived(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageReceived(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {
+	public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildMessageUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildReady(GuildReadyEvent event) {
+	public void onGuildReady(GuildReadyEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildReady(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildReady(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildTimeout(GuildTimeoutEvent event) {
+	public void onGuildTimeout(GuildTimeoutEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildTimeout(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildTimeout(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUnavailable(GuildUnavailableEvent event) {
+	public void onGuildUnavailable(GuildUnavailableEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUnavailable(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUnavailable(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUnban(GuildUnbanEvent event) {
+	public void onGuildUnban(GuildUnbanEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUnban(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUnban(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateAfkChannel(GuildUpdateAfkChannelEvent event) {
+	public void onGuildUpdateAfkChannel(GuildUpdateAfkChannelEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateAfkChannel(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateAfkChannel(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateAfkTimeout(GuildUpdateAfkTimeoutEvent event) {
+	public void onGuildUpdateAfkTimeout(GuildUpdateAfkTimeoutEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateAfkTimeout(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateAfkTimeout(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateBanner(GuildUpdateBannerEvent event) {
+	public void onGuildUpdateBanner(GuildUpdateBannerEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateBanner(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateBanner(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateBoostCount(GuildUpdateBoostCountEvent event) {
+	public void onGuildUpdateBoostCount(GuildUpdateBoostCountEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateBoostCount(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateBoostCount(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateBoostTier(GuildUpdateBoostTierEvent event) {
+	public void onGuildUpdateBoostTier(GuildUpdateBoostTierEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateBoostTier(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateBoostTier(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateCommunityUpdatesChannel(GuildUpdateCommunityUpdatesChannelEvent event) {
+	public void onGuildUpdateCommunityUpdatesChannel(GuildUpdateCommunityUpdatesChannelEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateCommunityUpdatesChannel(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateCommunityUpdatesChannel(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateDescription(GuildUpdateDescriptionEvent event) {
+	public void onGuildUpdateDescription(GuildUpdateDescriptionEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateDescription(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateDescription(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateExplicitContentLevel(GuildUpdateExplicitContentLevelEvent event) {
+	public void onGuildUpdateExplicitContentLevel(GuildUpdateExplicitContentLevelEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateExplicitContentLevel(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateExplicitContentLevel(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateFeatures(GuildUpdateFeaturesEvent event) {
+	public void onGuildUpdateFeatures(GuildUpdateFeaturesEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateFeatures(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateFeatures(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateIcon(GuildUpdateIconEvent event) {
+	public void onGuildUpdateIcon(GuildUpdateIconEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateIcon(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateIcon(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateLocale(GuildUpdateLocaleEvent event) {
+	public void onGuildUpdateLocale(GuildUpdateLocaleEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateLocale(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateLocale(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateMaxMembers(GuildUpdateMaxMembersEvent event) {
+	public void onGuildUpdateMaxMembers(GuildUpdateMaxMembersEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateMaxMembers(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateMaxMembers(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateMaxPresences(GuildUpdateMaxPresencesEvent event) {
+	public void onGuildUpdateMaxPresences(GuildUpdateMaxPresencesEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateMaxPresences(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateMaxPresences(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateMFALevel(GuildUpdateMFALevelEvent event) {
+	public void onGuildUpdateMFALevel(GuildUpdateMFALevelEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateMFALevel(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateMFALevel(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateName(GuildUpdateNameEvent event) {
+	public void onGuildUpdateName(GuildUpdateNameEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateName(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateName(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateNotificationLevel(GuildUpdateNotificationLevelEvent event) {
+	public void onGuildUpdateNotificationLevel(GuildUpdateNotificationLevelEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateNotificationLevel(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateNotificationLevel(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateOwner(GuildUpdateOwnerEvent event) {
+	public void onGuildUpdateOwner(GuildUpdateOwnerEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateOwner(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateOwner(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateRegion(GuildUpdateRegionEvent event) {
+	public void onGuildUpdateRegion(GuildUpdateRegionEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateRegion(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateRegion(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateRulesChannel(GuildUpdateRulesChannelEvent event) {
+	public void onGuildUpdateRulesChannel(GuildUpdateRulesChannelEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateRulesChannel(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateRulesChannel(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateSplash(GuildUpdateSplashEvent event) {
+	public void onGuildUpdateSplash(GuildUpdateSplashEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateSplash(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateSplash(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateSystemChannel(GuildUpdateSystemChannelEvent event) {
+	public void onGuildUpdateSystemChannel(GuildUpdateSystemChannelEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateSystemChannel(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateSystemChannel(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateVanityCode(GuildUpdateVanityCodeEvent event) {
+	public void onGuildUpdateVanityCode(GuildUpdateVanityCodeEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateVanityCode(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateVanityCode(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildUpdateVerificationLevel(GuildUpdateVerificationLevelEvent event) {
+	public void onGuildUpdateVerificationLevel(GuildUpdateVerificationLevelEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateVerificationLevel(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildUpdateVerificationLevel(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildVoiceDeafen(GuildVoiceDeafenEvent event) {
+	public void onGuildVoiceDeafen(GuildVoiceDeafenEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceDeafen(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceDeafen(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildVoiceGuildDeafen(GuildVoiceGuildDeafenEvent event) {
+	public void onGuildVoiceGuildDeafen(GuildVoiceGuildDeafenEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceGuildDeafen(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceGuildDeafen(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildVoiceGuildMute(GuildVoiceGuildMuteEvent event) {
+	public void onGuildVoiceGuildMute(GuildVoiceGuildMuteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceGuildMute(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceGuildMute(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+	public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceJoin(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceJoin(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceLeave(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceLeave(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
+	public void onGuildVoiceMove(GuildVoiceMoveEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceMove(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceMove(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildVoiceMute(GuildVoiceMuteEvent event) {
+	public void onGuildVoiceMute(GuildVoiceMuteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceMute(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceMute(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildVoiceSelfDeafen(GuildVoiceSelfDeafenEvent event) {
+	public void onGuildVoiceSelfDeafen(GuildVoiceSelfDeafenEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceSelfDeafen(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceSelfDeafen(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildVoiceSelfMute(GuildVoiceSelfMuteEvent event) {
+	public void onGuildVoiceSelfMute(GuildVoiceSelfMuteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceSelfMute(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceSelfMute(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildVoiceStream(GuildVoiceStreamEvent event) {
+	public void onGuildVoiceStream(GuildVoiceStreamEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceStream(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceStream(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildVoiceSuppress(GuildVoiceSuppressEvent event) {
+	public void onGuildVoiceSuppress(GuildVoiceSuppressEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceSuppress(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceSuppress(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event) {
+	public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onHttpRequest(HttpRequestEvent event) {
+	public void onHttpRequest(HttpRequestEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onHttpRequest(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onHttpRequest(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onMessageDelete(MessageDeleteEvent event) {
+	public void onMessageDelete(MessageDeleteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageDelete(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageDelete(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onMessageBulkDelete(MessageBulkDeleteEvent event) {
+	public void onMessageBulkDelete(MessageBulkDeleteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageBulkDelete(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageBulkDelete(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onMessageEmbed(MessageEmbedEvent event) {
+	public void onMessageEmbed(MessageEmbedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageEmbed(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageEmbed(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onMessageReactionAdd(MessageReactionAddEvent event) {
+	public void onMessageReactionAdd(MessageReactionAddEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageReactionAdd(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageReactionAdd(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
+	public void onMessageReactionRemove(MessageReactionRemoveEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageReactionRemove(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageReactionRemove(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onMessageReactionRemoveAll(MessageReactionRemoveAllEvent event) {
+	public void onMessageReactionRemoveAll(MessageReactionRemoveAllEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageReactionRemoveAll(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageReactionRemoveAll(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onMessageReactionRemoveEmote(MessageReactionRemoveEmoteEvent event) {
+	public void onMessageReactionRemoveEmote(MessageReactionRemoveEmoteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageReactionRemoveEmote(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageReactionRemoveEmote(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onMessageReceived(MessageReceivedEvent event) {
+	public void onMessageReceived(MessageReceivedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageReceived(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageReceived(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onMessageUpdate(MessageUpdateEvent event) {
+	public void onMessageUpdate(MessageUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onMessageUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onPermissionOverrideCreate(PermissionOverrideCreateEvent event) {
+	public void onPermissionOverrideCreate(PermissionOverrideCreateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPermissionOverrideCreate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPermissionOverrideCreate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onPermissionOverrideDelete(PermissionOverrideDeleteEvent event) {
+	public void onPermissionOverrideDelete(PermissionOverrideDeleteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPermissionOverrideDelete(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPermissionOverrideDelete(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onPermissionOverrideUpdate(PermissionOverrideUpdateEvent event) {
+	public void onPermissionOverrideUpdate(PermissionOverrideUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPermissionOverrideUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPermissionOverrideUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onPrivateChannelCreate(PrivateChannelCreateEvent event) {
+	public void onPrivateChannelCreate(PrivateChannelCreateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateChannelCreate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateChannelCreate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onPrivateChannelDelete(PrivateChannelDeleteEvent event) {
+	public void onPrivateChannelDelete(PrivateChannelDeleteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateChannelDelete(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateChannelDelete(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onPrivateMessageDelete(PrivateMessageDeleteEvent event) {
+	public void onPrivateMessageDelete(PrivateMessageDeleteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateMessageDelete(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateMessageDelete(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onPrivateMessageEmbed(PrivateMessageEmbedEvent event) {
+	public void onPrivateMessageEmbed(PrivateMessageEmbedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateMessageEmbed(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateMessageEmbed(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onPrivateMessageReactionAdd(PrivateMessageReactionAddEvent event) {
+	public void onPrivateMessageReactionAdd(PrivateMessageReactionAddEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateMessageReactionAdd(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateMessageReactionAdd(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onPrivateMessageReactionRemove(PrivateMessageReactionRemoveEvent event) {
+	public void onPrivateMessageReactionRemove(PrivateMessageReactionRemoveEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateMessageReactionRemove(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateMessageReactionRemove(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
+	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateMessageReceived(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateMessageReceived(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onPrivateMessageUpdate(PrivateMessageUpdateEvent event) {
+	public void onPrivateMessageUpdate(PrivateMessageUpdateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateMessageUpdate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onPrivateMessageUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onRawGateway(RawGatewayEvent event) {
+	public void onRawGateway(RawGatewayEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRawGateway(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRawGateway(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onReady(ReadyEvent event) {
+	public void onReady(ReadyEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onReady(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onReady(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onReconnect(ReconnectedEvent event) {
+	public void onReconnect(ReconnectedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onReconnect(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onReconnect(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onReconnected(ReconnectedEvent event) {
+	public void onReconnected(ReconnectedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onReconnected(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onReconnected(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onResume(ResumedEvent event) {
+	public void onResume(ResumedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onResume(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onResume(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onResumed(ResumedEvent event) {
+	public void onResumed(ResumedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onResumed(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onResumed(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onRoleCreate(RoleCreateEvent event) {
+	public void onRoleCreate(RoleCreateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleCreate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleCreate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onRoleDelete(RoleDeleteEvent event) {
+	public void onRoleDelete(RoleDeleteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleDelete(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleDelete(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onRoleUpdateColor(RoleUpdateColorEvent event) {
+	public void onRoleUpdateColor(RoleUpdateColorEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdateColor(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdateColor(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onRoleUpdateHoisted(RoleUpdateHoistedEvent event) {
+	public void onRoleUpdateHoisted(RoleUpdateHoistedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdateHoisted(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdateHoisted(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onRoleUpdateMentionable(RoleUpdateMentionableEvent event) {
+	public void onRoleUpdateMentionable(RoleUpdateMentionableEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdateMentionable(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdateMentionable(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onRoleUpdateName(RoleUpdateNameEvent event) {
+	public void onRoleUpdateName(RoleUpdateNameEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdateName(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdateName(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onRoleUpdatePermissions(RoleUpdatePermissionsEvent event) {
+	public void onRoleUpdatePermissions(RoleUpdatePermissionsEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdatePermissions(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdatePermissions(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onRoleUpdatePosition(RoleUpdatePositionEvent event) {
+	public void onRoleUpdatePosition(RoleUpdatePositionEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdatePosition(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdatePosition(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onSelfUpdateAvatar(SelfUpdateAvatarEvent event) {
+	public void onSelfUpdateAvatar(SelfUpdateAvatarEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onSelfUpdateAvatar(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onSelfUpdateAvatar(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onSelfUpdateEmail(SelfUpdateEmailEvent event) {
+	public void onSelfUpdateEmail(SelfUpdateEmailEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onSelfUpdateEmail(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onSelfUpdateEmail(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onSelfUpdateMFA(SelfUpdateMFAEvent event) {
+	public void onSelfUpdateMFA(SelfUpdateMFAEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onSelfUpdateMFA(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onSelfUpdateMFA(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onSelfUpdateName(SelfUpdateNameEvent event) {
+	public void onSelfUpdateName(SelfUpdateNameEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onSelfUpdateName(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onSelfUpdateName(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onSelfUpdateVerified(SelfUpdateVerifiedEvent event) {
+	public void onSelfUpdateVerified(SelfUpdateVerifiedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onSelfUpdateVerified(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onSelfUpdateVerified(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onShutdown(ShutdownEvent event) {
+	public void onShutdown(ShutdownEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onShutdown(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onShutdown(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onStatusChange(StatusChangeEvent event) {
+	public void onStatusChange(StatusChangeEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStatusChange(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStatusChange(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onStoreChannelCreate(StoreChannelCreateEvent event) {
+	public void onStoreChannelCreate(StoreChannelCreateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStoreChannelCreate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStoreChannelCreate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onStoreChannelDelete(StoreChannelDeleteEvent event) {
+	public void onStoreChannelDelete(StoreChannelDeleteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStoreChannelDelete(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStoreChannelDelete(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onStoreChannelUpdateName(StoreChannelUpdateNameEvent event) {
+	public void onStoreChannelUpdateName(StoreChannelUpdateNameEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStoreChannelUpdateName(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStoreChannelUpdateName(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onStoreChannelUpdatePermissions(StoreChannelUpdatePermissionsEvent event) {
+	public void onStoreChannelUpdatePermissions(StoreChannelUpdatePermissionsEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStoreChannelUpdatePermissions(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStoreChannelUpdatePermissions(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onStoreChannelUpdatePosition(StoreChannelUpdatePositionEvent event) {
+	public void onStoreChannelUpdatePosition(StoreChannelUpdatePositionEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStoreChannelUpdatePosition(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStoreChannelUpdatePosition(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onTextChannelCreate(TextChannelCreateEvent event) {
+	public void onTextChannelCreate(TextChannelCreateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelCreate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelCreate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onTextChannelDelete(TextChannelDeleteEvent event) {
+	public void onTextChannelDelete(TextChannelDeleteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelDelete(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelDelete(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onTextChannelUpdateName(TextChannelUpdateNameEvent event) {
+	public void onTextChannelUpdateName(TextChannelUpdateNameEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdateName(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdateName(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onTextChannelUpdateNews(TextChannelUpdateNewsEvent event) {
+	public void onTextChannelUpdateNews(TextChannelUpdateNewsEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdateNews(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdateNews(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onTextChannelUpdateNSFW(TextChannelUpdateNSFWEvent event) {
+	public void onTextChannelUpdateNSFW(TextChannelUpdateNSFWEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdateNSFW(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdateNSFW(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onTextChannelUpdateParent(TextChannelUpdateParentEvent event) {
+	public void onTextChannelUpdateParent(TextChannelUpdateParentEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdateParent(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdateParent(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onTextChannelUpdatePermissions(TextChannelUpdatePermissionsEvent event) {
+	public void onTextChannelUpdatePermissions(TextChannelUpdatePermissionsEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdatePermissions(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdatePermissions(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onTextChannelUpdatePosition(TextChannelUpdatePositionEvent event) {
+	public void onTextChannelUpdatePosition(TextChannelUpdatePositionEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdatePosition(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdatePosition(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onTextChannelUpdateSlowmode(TextChannelUpdateSlowmodeEvent event) {
+	public void onTextChannelUpdateSlowmode(TextChannelUpdateSlowmodeEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdateSlowmode(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdateSlowmode(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onTextChannelUpdateTopic(TextChannelUpdateTopicEvent event) {
+	public void onTextChannelUpdateTopic(TextChannelUpdateTopicEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdateTopic(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onTextChannelUpdateTopic(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onUnavailableGuildJoined(UnavailableGuildJoinedEvent event) {
+	public void onUnavailableGuildJoined(UnavailableGuildJoinedEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUnavailableGuildJoined(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUnavailableGuildJoined(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onUnavailableGuildLeave(UnavailableGuildLeaveEvent event) {
+	public void onUnavailableGuildLeave(UnavailableGuildLeaveEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUnavailableGuildLeave(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUnavailableGuildLeave(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onUserActivityEnd(UserActivityEndEvent event) {
+	public void onUserActivityEnd(UserActivityEndEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserActivityEnd(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserActivityEnd(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onUserActivityStart(UserActivityStartEvent event) {
+	public void onUserActivityStart(UserActivityStartEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserActivityStart(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserActivityStart(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onUserTyping(UserTypingEvent event) {
+	public void onUserTyping(UserTypingEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserTyping(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserTyping(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onUserUpdateActivities(UserUpdateActivitiesEvent event) {
+	public void onUserUpdateActivities(UserUpdateActivitiesEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateActivities(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateActivities(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onUserUpdateActivityOrder(UserUpdateActivityOrderEvent event) {
+	public void onUserUpdateActivityOrder(UserUpdateActivityOrderEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateActivityOrder(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateActivityOrder(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onUserUpdateAvatar(UserUpdateAvatarEvent event) {
+	public void onUserUpdateAvatar(UserUpdateAvatarEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateAvatar(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateAvatar(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onUserUpdateDiscriminator(UserUpdateDiscriminatorEvent event) {
+	public void onUserUpdateDiscriminator(UserUpdateDiscriminatorEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateDiscriminator(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateDiscriminator(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onUserUpdateFlags(UserUpdateFlagsEvent event) {
+	public void onUserUpdateFlags(UserUpdateFlagsEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateFlags(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateFlags(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onUserUpdateName(UserUpdateNameEvent event) {
+	public void onUserUpdateName(UserUpdateNameEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateName(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateName(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onUserUpdateOnlineStatus(UserUpdateOnlineStatusEvent event) {
+	public void onUserUpdateOnlineStatus(UserUpdateOnlineStatusEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateOnlineStatus(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onUserUpdateOnlineStatus(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onVoiceChannelCreate(VoiceChannelCreateEvent event) {
+	public void onVoiceChannelCreate(VoiceChannelCreateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelCreate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelCreate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onVoiceChannelDelete(VoiceChannelDeleteEvent event) {
+	public void onVoiceChannelDelete(VoiceChannelDeleteEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelDelete(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelDelete(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onVoiceChannelUpdateBitrate(VoiceChannelUpdateBitrateEvent event) {
+	public void onVoiceChannelUpdateBitrate(VoiceChannelUpdateBitrateEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelUpdateBitrate(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelUpdateBitrate(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onVoiceChannelUpdateName(VoiceChannelUpdateNameEvent event) {
+	public void onVoiceChannelUpdateName(VoiceChannelUpdateNameEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelUpdateName(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelUpdateName(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onVoiceChannelUpdateParent(VoiceChannelUpdateParentEvent event) {
+	public void onVoiceChannelUpdateParent(VoiceChannelUpdateParentEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelUpdateParent(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelUpdateParent(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onVoiceChannelUpdatePermissions(VoiceChannelUpdatePermissionsEvent event) {
+	public void onVoiceChannelUpdatePermissions(VoiceChannelUpdatePermissionsEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelUpdatePermissions(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelUpdatePermissions(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onVoiceChannelUpdatePosition(VoiceChannelUpdatePositionEvent event) {
+	public void onVoiceChannelUpdatePosition(VoiceChannelUpdatePositionEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelUpdatePosition(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelUpdatePosition(event);}}).start();}}catch (Exception e) {}
 	}
 
 	@Override
-	public void onVoiceChannelUpdateUserLimit(VoiceChannelUpdateUserLimitEvent event) {
+	public void onVoiceChannelUpdateUserLimit(VoiceChannelUpdateUserLimitEvent event) {try {
 
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelUpdateUserLimit(event);}}).start();}
+		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onVoiceChannelUpdateUserLimit(event);}}).start();}}catch (Exception e) {}
 	}
 }
