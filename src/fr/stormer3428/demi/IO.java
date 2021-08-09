@@ -46,8 +46,8 @@ public class IO {
 		else DemiConsole.error("Failed to pass file check");
 	}
 
-	public IO(File file, ArrayList<Key> arrayList, boolean printStackTrace) {
-		this(file, arrayList, printStackTrace, defaultHeaders);
+	public IO(File file, List<Key> defaultKeys, boolean printStackTrace) {
+		this(file, defaultKeys, printStackTrace, defaultHeaders);
 	}
 
 	public final boolean fileCheck() {
