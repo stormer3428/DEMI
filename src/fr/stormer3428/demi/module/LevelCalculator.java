@@ -9,6 +9,7 @@ import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.IO;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
+import net.dv8tion.jda.api.entities.Member;
 
 public class LevelCalculator extends Module{
 
@@ -16,6 +17,8 @@ public class LevelCalculator extends Module{
 	private HashMap<Integer, Long> CACHE_expForLevel = new HashMap<>();
 	private HashMap<Integer, Long> CACHE_expToNextLevel = new HashMap<>();
 
+	private LevelRoleCalculator LEVEL_ROLE_CALCULATOR;
+	
 	private float levelIncreasePow;
 	protected int levelBase;
 
@@ -28,11 +31,12 @@ public class LevelCalculator extends Module{
 		CONFIG_KEYS.add(new Key("levelBase", "500"));
 		CONFIG_KEYS.add(new Key("enableCaches", "true"));
 
+		LEVEL_DATABASE = new IO(new File("level/" + Demi.i.getServerID() + ".demidb"), new ArrayList<>(), true);
+		
 		if(initialConfigIOCreation()) return;
 		OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
 
-		LEVEL_DATABASE = new IO(new File("level/" + Demi.i.getServerID() + ".demidb"), new ArrayList<>(), true);
 	}
 
 	@Override
@@ -64,7 +68,7 @@ public class LevelCalculator extends Module{
 		super.onEnable();
 
 		enableCaches = CONFIG.get("enableCaches").equalsIgnoreCase("true");
-
+		
 		OUTPUT.trace("enableCaches : " + enableCaches);
 		try {
 			levelIncreasePow = Float.parseFloat(CONFIG.get("levelIncreasePow"));
@@ -87,10 +91,20 @@ public class LevelCalculator extends Module{
 		}
 		OUTPUT.trace("levelBase : " + levelBase);
 
+		OUTPUT.trace("Attempting to hook into softDependency LevelRoleCalculator...");
+		for(Module module : Demi.i.getActiveModules()) if(module.getName().equals("LevelRoleCalculator")) {
+			LEVEL_ROLE_CALCULATOR = (LevelRoleCalculator) module;
+			break;
+		}
+		
+		if(LEVEL_ROLE_CALCULATOR == null) if(PRINT_STACK_TRACE) OUTPUT.cancelled("Failed to hook");
+		else OUTPUT.ok("Hook into softDependency LevelRoleCalculator successful");
+		
 		OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 	public int getLevelForExp(long givenExp) {
+		if(!enabled()) return -1;
 		double exp = 0;
 		int level = 0;
 		for(; level < 200; level ++) {
@@ -104,6 +118,7 @@ public class LevelCalculator extends Module{
 	}
 
 	public long getExpToNextLevel(int level) {
+		if(!enabled()) return -1;
 		if(enableCaches && CACHE_expToNextLevel.containsKey(level)) return CACHE_expToNextLevel.get(level);
 		long exp = Math.round(levelBase * Math.pow(levelIncreasePow, level));
 		if(enableCaches) {
@@ -114,6 +129,7 @@ public class LevelCalculator extends Module{
 	}
 
 	public long getExpForLevel(int givenLevel) {
+		if(!enabled()) return -1;
 		if(enableCaches && CACHE_expForLevel.containsKey(givenLevel)) return CACHE_expForLevel.get(givenLevel);
 		
 		if(!enableCaches) OUTPUT.trace("New value requiring computing : " + givenLevel);
@@ -131,16 +147,31 @@ public class LevelCalculator extends Module{
 	}
 
 	public long getUserExp(String UID) {
-		try {
+		if(!enabled()) return -1;
+		if(LEVEL_DATABASE.getKeys().contains(UID)) try {
 			return Long.parseLong(LEVEL_DATABASE.get(UID));
 		} catch (NumberFormatException e) {
 			OUTPUT.error("Error while parsing exp for userid " + UID + " it was not an integer");
 			handleTrace(e);
 			return -1;
 		}
+		if(LEVEL_ROLE_CALCULATOR == null) return -1;
+		OUTPUT.trace("New user in database : " + UID);
+		Member member = Demi.jda.getGuildById(Demi.i.getServerID()).getMemberById(UID);
+		if(member == null) return -1;
+		int retrievedLevel = LEVEL_ROLE_CALCULATOR.retrieveLevelFromRoles(UID);
+		if(retrievedLevel == -1) {
+			OUTPUT.error("Module LevelRoleCalculator returned -1 on retrieveLevelFromRoles(), it may be disabled or has encountered an error, skipping writing...");
+			return -1;
+		}
+		OUTPUT.trace("Retrieved level from roles (" + retrievedLevel + ")");
+		long exp = getExpForLevel(retrievedLevel);
+		LEVEL_DATABASE.setParameter(UID, exp + "");
+		return exp;
 	}
 
 	public int getUserLevel(String UID) {
+		if(!enabled()) return -1;
 		return getLevelForExp(getUserExp(UID));
 	}
 }

@@ -30,6 +30,7 @@ public class MessageLeveling extends Module{
 	public List<String> getDependencies() {
 		ArrayList<String> dependencies = new ArrayList<String>();
 		dependencies.add("LevelCalculator");
+		dependencies.add("LevelRoleCalculator");
 		return dependencies;
 	}
 
