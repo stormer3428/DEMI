@@ -42,4 +42,9 @@ public class Reload extends CommandModule{
 		Demi.i.reloadModules();
 	}
 
+	@Override
+	public String getUsage() {
+		return "Usage : reload";
+	}
+
 }

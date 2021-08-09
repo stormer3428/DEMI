@@ -67,4 +67,9 @@ public class Modules extends CommandModule{
 		super.onEnable();
 		OUTPUT.ok("Successfully loaded all config parameters");
 	}
+
+	@Override
+	public String getUsage() {
+		return "Usage : " + getName() + " optional(desc; moduleName)";
+	}
 }

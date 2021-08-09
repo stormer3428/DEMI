@@ -8,6 +8,7 @@ import java.util.Scanner;
 import fr.stormer3428.demi.module.Autorole;
 import fr.stormer3428.demi.module.DiscordCommandDispatcher;
 import fr.stormer3428.demi.module.commands.FileEdit;
+import fr.stormer3428.demi.module.commands.Help;
 import fr.stormer3428.demi.module.commands.Modules;
 import fr.stormer3428.demi.module.commands.Reload;
 import net.dv8tion.jda.api.JDA;
@@ -42,6 +43,7 @@ public class Demi extends HasConfig{
 		registerModule(new Reload()); //TODO make modules implement themselves
 		registerModule(new FileEdit()); //TODO make modules implement themselves
 		registerModule(new Modules()); //TODO make modules implement themselves
+		registerModule(new Help()); //TODO make modules implement themselves
 	}
 
 	public List<Module> getActiveModules(){

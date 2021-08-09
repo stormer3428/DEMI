@@ -290,5 +290,10 @@ public class FileEdit extends CommandModule{
 		OUTPUT.embed(builder.build(), embedReplacement);
 	}
 
+	@Override
+	public String getUsage() {
+		return "Usage : " + getName() + " <help;listfiles;parameter>";
+	}
+
 
 }
