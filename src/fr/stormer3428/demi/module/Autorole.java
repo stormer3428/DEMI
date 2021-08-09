@@ -61,14 +61,14 @@ public class Autorole extends Module{
 		super.onEnable();
 		COOLDOWN = cooldown();
 		if(COOLDOWN == -1) return;
-		OUTPUT.info("cooldown : " + COOLDOWN);
+		if(PRINT_STACK_TRACE) OUTPUT.info("cooldown : " + COOLDOWN);
 		LISTENSTOBOT = listensToBots();
-		OUTPUT.info("listensToBots : " + (LISTENSTOBOT ? "true" : "false"));
+		if(PRINT_STACK_TRACE) OUTPUT.info("listensToBots : " + (LISTENSTOBOT ? "true" : "false"));
 		ROLES = roles();
 		if(ROLES == null) return;
-		OUTPUT.info("roles :");
+		if(PRINT_STACK_TRACE) OUTPUT.info("roles :");
 		for(Long role : ROLES) OUTPUT.info(role + "");
-		OUTPUT.ok("Successfully loaded all config parameters");
+		if(PRINT_STACK_TRACE) OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 	@Override

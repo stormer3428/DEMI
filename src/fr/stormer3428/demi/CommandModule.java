@@ -34,9 +34,9 @@ public abstract class CommandModule extends Module{
 	public void onEnable() {
 		super.onEnable();
 		requireAdminPerms = CONFIG.get("requireAdminPerms").equalsIgnoreCase("true");
-		OUTPUT.info("requireAdminPerms : " + (requireAdminPerms ? "true" : false));
+		if(PRINT_STACK_TRACE) OUTPUT.info("requireAdminPerms : " + (requireAdminPerms ? "true" : false));
 		requireRoles = CONFIG.get("requireRoles").equalsIgnoreCase("true");
-		OUTPUT.info("requireRoles : " + (requireRoles ? "true" : false));
+		if(PRINT_STACK_TRACE) OUTPUT.info("requireRoles : " + (requireRoles ? "true" : false));
 		requiredRoles = roles();
 		if(requiredRoles == null) return;
 		if(requiredRoles.isEmpty()) {
@@ -45,14 +45,14 @@ public abstract class CommandModule extends Module{
 				OUTPUT.cancelled("setting requireRoles to false internally");
 				requireRoles = false;
 			}
-		}else {
+		}else if(PRINT_STACK_TRACE){
 			OUTPUT.info("requireRoles : ");
 			for(Long role : requiredRoles) {
 				OUTPUT.info("- " + role);
 			}
 		}
 		whitelistEnabled = CONFIG.get("whitelistEnabled").equalsIgnoreCase("true");
-		OUTPUT.info("whitelistEnabled : " + (whitelistEnabled ? "true" : false));
+		if(PRINT_STACK_TRACE) OUTPUT.info("whitelistEnabled : " + (whitelistEnabled ? "true" : false));
 		whitelist = whitelist();
 		if(whitelist == null) return;
 		if(whitelist.isEmpty()) {
@@ -63,7 +63,7 @@ public abstract class CommandModule extends Module{
 				Demi.disableModule(this);
 				return;
 			}
-		}else {
+		}else if(PRINT_STACK_TRACE) {
 			OUTPUT.info("whitelist : ");
 			for(Long member : whitelist) {
 				OUTPUT.info("- " + member);

@@ -23,6 +23,7 @@ public class DiscordCommandDispatcher extends Module{
 
 		CONFIG_KEYS.add(new Key("prefix", "?"));
 		CONFIG_KEYS.add(new Key("acceptCommandsFromDiscordBots", "false"));
+		
 		if(initialConfigIOCreation()) return;
 		OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
@@ -50,11 +51,11 @@ public class DiscordCommandDispatcher extends Module{
 	public void onEnable() {
 		super.onEnable();
 		acceptFromDiscordBots = CONFIG.get("acceptCommandsFromDiscordBots").equalsIgnoreCase("true");
-		OUTPUT.info("acceptCommandsFromDiscordBots : " + (acceptFromDiscordBots ? "true" : "false"));
+		if(PRINT_STACK_TRACE) OUTPUT.info("acceptCommandsFromDiscordBots : " + (acceptFromDiscordBots ? "true" : "false"));
 		prefix = CONFIG.get("prefix");
-		OUTPUT.info("prefix : " + prefix);
+		if(PRINT_STACK_TRACE) OUTPUT.info("prefix : " + prefix);
 
-		OUTPUT.ok("Successfully loaded all config parameters");
+		if(PRINT_STACK_TRACE) OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 
