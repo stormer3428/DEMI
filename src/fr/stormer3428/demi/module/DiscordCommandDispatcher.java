@@ -51,11 +51,11 @@ public class DiscordCommandDispatcher extends Module{
 	public void onEnable() {
 		super.onEnable();
 		acceptFromDiscordBots = CONFIG.get("acceptCommandsFromDiscordBots").equalsIgnoreCase("true");
-		if(PRINT_STACK_TRACE) OUTPUT.info("acceptCommandsFromDiscordBots : " + (acceptFromDiscordBots ? "true" : "false"));
+		OUTPUT.trace("acceptCommandsFromDiscordBots : " + (acceptFromDiscordBots ? "true" : "false"));
 		prefix = CONFIG.get("prefix");
-		if(PRINT_STACK_TRACE) OUTPUT.info("prefix : " + prefix);
+		OUTPUT.trace("prefix : " + prefix);
 
-		if(PRINT_STACK_TRACE) OUTPUT.ok("Successfully loaded all config parameters");
+		OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 

@@ -143,6 +143,15 @@ public class MixedOutput {
 		else textChannel.sendMessage("" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " Info " + message + "." + "\n").queue();
 	}
 
+	public final void trace(String message) {
+		if(!PRINT_STACK_TRACE) return;
+		if(outputToConsole) System.out.println("\033[38;5;226m"+"" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " " + message + "\033[38;5;7m");
+		if(!outputToChannel) return;
+		textChannelInit();
+		if(enableBuffer) buffer = (buffer + "" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " " + message + "." + "\n");
+		else textChannel.sendMessage("" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " " + message + "." + "\n").queue();
+	}
+
 	public void command(String message) {
 		if(outputToConsole)  System.out.println("\033[38;5;226m"+"" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " " + message + "\033[38;5;7m");
 		if(!outputToChannel) return;
