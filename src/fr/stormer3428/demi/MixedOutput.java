@@ -1,11 +1,22 @@
 package fr.stormer3428.demi;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 public class MixedOutput {
+
+	private static IO io;
+
+	private static boolean enableBuffer;
+	private static int bufferTimeoutMS;
+	private static String buffer = "";
+	private static Thread bufferThread;
+
+	public boolean PRINT_STACK_TRACE;
 
 	private String outputChannelID;
 	private boolean outputToChannel;
@@ -14,6 +25,24 @@ public class MixedOutput {
 	private String mixedOutputHead;
 
 	public MixedOutput(String channelID, boolean channel, boolean console, String header) {
+		if(io == null) {
+			ArrayList<Key> keys = new ArrayList<>();
+			keys.add(new Key("printStackTrace", "true"));
+			keys.add(new Key("enableBuffer", "true"));
+			keys.add(new Key("bufferTimeoutMS", "2000"));
+			io = new IO(new File("MixedOutput.cfg"), keys, true);
+
+			enableBuffer = io.get("enableBuffer").equalsIgnoreCase("true");
+
+			try {
+				bufferTimeoutMS = Integer.parseInt(io.get("bufferTimeoutMS"));
+			}catch (NumberFormatException e) {
+				bufferTimeoutMS = 2000;
+				Demi.i.OUTPUT.error("Unable to retrieve buffer timeout of MixedOutput, using default value (2000)");
+				handleTrace(e);
+			}
+			if(enableBuffer) startBufferThread();
+		}
 		outputChannelID = channelID;
 		outputToChannel = channel;
 		outputToConsole = console;
@@ -29,95 +58,106 @@ public class MixedOutput {
 		this(null, false, true, "");
 	}
 
-	public final void error(String message) {
-		if(outputToConsole)
-			System.err.println("\033[38;5;196m"+"[" + mixedOutputHead + "][📕Error] " + message+"\033[38;5;7m");
-		if(!outputToChannel) return;
+	protected void handleTrace(Exception e) {
+		if(PRINT_STACK_TRACE) {
+			DemiConsole.info("printing stack trace");
+			e.printStackTrace();
+		}else DemiConsole.cancelled("Mixed Output set to not print stack trace");
+	}
+
+	private void startBufferThread() {
+		if(bufferThread != null) return;
+		DemiConsole.info("Starting up buffer discord console sender");
+		bufferThread = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				while(true) {
+					if(!buffer.isEmpty()) {
+						textChannel.sendMessage(buffer).complete();
+						buffer = "";
+					}
+					try {
+						Thread.sleep(bufferTimeoutMS);
+					} catch (InterruptedException e) {
+						handleTrace(e);
+					}
+				}
+			}
+		});
+		bufferThread.start();
+	}
+
+	private void textChannelInit() {
 		if(textChannel == null) {
 			if(Demi.jda == null) return;
 			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
 		}
-		textChannel.sendMessage("[" + mixedOutputHead + "] **📕ERROR " + message + ".**").queue();
+	}
+
+	public final void error(String message) {
+		if(outputToConsole) System.out.println("\033[38;5;196m" + "[" + mixedOutputHead + "][📕Error] " + message + "\033[38;5;7m");
+		if(!outputToChannel) return;
+		textChannelInit();
+		if(enableBuffer) buffer = (buffer + "[" + mixedOutputHead + "] **📕ERROR " + message + ".**" + "\n");
+		else textChannel.sendMessage("[" + mixedOutputHead + "] **📕ERROR " + message + ".**" + "\n").queue();
 	}
 
 	public final void warning(String message) {
-		if(outputToConsole)
-			System.out.println("\033[38;5;208m"+"[" + mixedOutputHead + "][📙Warning] "+"\033[38;5;7m" + message);
+		if(outputToConsole) System.out.println("\033[38;5;208m" + "[" + mixedOutputHead + "][📙Warning] " + message + "\033[38;5;7m");
 		if(!outputToChannel) return;
-		if(textChannel == null) {
-			if(Demi.jda == null) return;
-			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
-		}
-		textChannel.sendMessage("[\" + mixedOutputHead + \"][" + mixedOutputHead + "] ***📙WARNING " + message + ".***").queue();
+		textChannelInit();
+		if(enableBuffer) buffer = (buffer + "[" + mixedOutputHead + "] ***📙WARNING " + message + ".***" + "\n");
+		else textChannel.sendMessage("[" + mixedOutputHead + "] ***📙WARNING " + message + ".***" + "\n").queue();
 	}
 
 	public final void ok(String message) {
-		if(outputToConsole)
-			System.out.println("\033[38;5;118m"+"[" + mixedOutputHead + "][📗Ok] " + message + "\033[38;5;7m");
+		if(outputToConsole) System.out.println("\033[38;5;118m" + "[" + mixedOutputHead + "][📗Ok] " + message + "\033[38;5;7m");
 		if(!outputToChannel) return;
-		if(textChannel == null) {
-			if(Demi.jda == null) return;
-			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
-		}
-		textChannel.sendMessage("[" + mixedOutputHead + "] 📗Ok " + message + ".").queue();
+		textChannelInit();
+		if(enableBuffer) buffer = (buffer + "[" + mixedOutputHead + "] 📗Ok " + message + "." + "\n");
+		else textChannel.sendMessage("[" + mixedOutputHead + "] 📗Ok " + message + "." + "\n").queue();
 	}
 
 	public final void action(String message) {
-		if(outputToConsole)
-			System.out.println("\033[38;5;123m"+"[" + mixedOutputHead + "][📘Action] "+"\033[38;5;7m" + message);
+		if(outputToConsole) System.out.println("\033[38;5;123m"+"[" + mixedOutputHead + "][📘Action] " + message + "\033[38;5;7m");
 		if(!outputToChannel) return;
-		if(textChannel == null) {
-			if(Demi.jda == null) return;
-			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
-		}
-		textChannel.sendMessage("[" + mixedOutputHead + "] 📘Action " + message + ".").queue();
+		textChannelInit();
+		if(enableBuffer) buffer = (buffer + "[" + mixedOutputHead + "] 📘Action " + message + "." + "\n");
+		else textChannel.sendMessage("[" + mixedOutputHead + "] 📘Action " + message + "." + "\n").queue();
 	}
 
 	public final void cancelled(String message) {
-		if(outputToConsole)
-			System.out.println("\033[38;5;245m"+"[" + mixedOutputHead + "][📓Cancelled] " + message + "\033[38;5;7m");
+		if(outputToConsole) System.out.println("\033[38;5;245m"+"[" + mixedOutputHead + "][📓Cancelled] " + message + "\033[38;5;7m");
 		if(!outputToChannel) return;
-		if(textChannel == null) {
-			if(Demi.jda == null) return;
-			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
-		}
-		textChannel.sendMessage("[" + mixedOutputHead + "] *📓Cancelled " + message + ".*").queue();
+		textChannelInit();
+		if(enableBuffer) buffer = (buffer + "[" + mixedOutputHead + "] *📓Cancelled " + message + ".*" + "\n");
+		else textChannel.sendMessage("[" + mixedOutputHead + "] *📓Cancelled " + message + ".*" + "\n").queue();
 	}
 
 	public final void info(String message) {
-		if(outputToConsole)
-			System.out.println("\033[38;5;226m"+"[" + mixedOutputHead + "][Info] "+"\033[38;5;7m" + message);
+		if(outputToConsole) System.out.println("\033[38;5;226m"+"[" + mixedOutputHead + "][Info] " + message + "\033[38;5;7m");
 		if(!outputToChannel) return;
-		if(textChannel == null) {
-			if(Demi.jda == null) return;
-			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
-		}
-		textChannel.sendMessage("[" + mixedOutputHead + "] Info " + message + ".").queue();
+		textChannelInit();
+		if(enableBuffer) buffer = (buffer + "[" + mixedOutputHead + "] Info " + message + "." + "\n");
+		else textChannel.sendMessage("[" + mixedOutputHead + "] Info " + message + "." + "\n").queue();
 	}
 
 	public void command(String message) {
-		if(outputToConsole)
-			System.out.println("\033[38;5;226m"+"[" + mixedOutputHead + "] " + message);
+		if(outputToConsole)  System.out.println("\033[38;5;226m"+"[" + mixedOutputHead + "] " + message + "\033[38;5;7m");
 		if(!outputToChannel) return;
-		if(textChannel == null) {
-			if(Demi.jda == null) return;
-			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
-		}
-		textChannel.sendMessage("```[" + mixedOutputHead + "] " + message + "```").queue();
+		textChannelInit();
+		if(enableBuffer) buffer = (buffer + "```[" + mixedOutputHead + "] " + message + "```" + "\n");
+		else textChannel.sendMessage("```[" + mixedOutputHead + "] " + message + "```" + "\n").queue();
 	}
 
 	public void embed(MessageEmbed embed, List<String> embedReplacement) {
 		if(outputToChannel) {
-			if(textChannel == null) {
-				if(Demi.jda == null) return;
-				textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
-			}
+			textChannelInit();
 			textChannel.sendMessage(embed).queue();
 		}
 		if(!outputToConsole) return;
 		for(String line : embedReplacement)
 			System.out.println("\033[38;5;226m"+"[" + mixedOutputHead + "] " + line);
 	}
-
-
 }
