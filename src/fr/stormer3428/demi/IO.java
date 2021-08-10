@@ -372,5 +372,29 @@ public class IO {
 	public File getFile() {
 		return file;
 	}
+	
+	public HashMap<String, List<String>> getReversedMap(){
+		HashMap<String, String> all = getAll();
+		HashMap<String, List<String>> reversedMap = new HashMap<String, List<String>>();
+		for(String key : all.keySet()) {
+			String reversedKey = all.get(key);
+			if(!reversedMap.containsKey(reversedKey)) reversedMap.put(reversedKey, new ArrayList<>());
+			reversedMap.get(reversedKey).add(key);
+		}
+		return reversedMap;
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
