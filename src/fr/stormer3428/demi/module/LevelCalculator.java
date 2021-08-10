@@ -31,7 +31,7 @@ public class LevelCalculator extends Module{
 		CONFIG_KEYS.add(new Key("levelBase", "500"));
 		CONFIG_KEYS.add(new Key("enableCaches", "true"));
 
-		LEVEL_DATABASE = new IO(new File("level/" + Demi.i.getServerID() + ".demidb"), new ArrayList<>(), true);
+		LEVEL_DATABASE = new IO(new File("level/leveldb" + Demi.i.getServerID() + ".demidb"), new ArrayList<>(), true);
 		
 		if(initialConfigIOCreation()) return;
 		OUTPUT.warning("Disabling module to prevent errors");
@@ -97,7 +97,11 @@ public class LevelCalculator extends Module{
 			break;
 		}
 		
-		if(LEVEL_ROLE_CALCULATOR == null) if(PRINT_STACK_TRACE) OUTPUT.cancelled("Failed to hook");
+		if(LEVEL_ROLE_CALCULATOR == null) if(PRINT_STACK_TRACE) {
+			OUTPUT.cancelled("Failed to hook");
+			OUTPUT.warning(getName() + " will be unable to retrieve a member's level based from his roles and thus will ignore them, as weel as not making them level up");
+			OUTPUT.warning("Members already in the database will level up normally");
+		}
 		else OUTPUT.ok("Hook into softDependency LevelRoleCalculator successful");
 		
 		OUTPUT.ok("Successfully loaded all config parameters");
@@ -155,7 +159,15 @@ public class LevelCalculator extends Module{
 			handleTrace(e);
 			return -1;
 		}
+		
 		if(LEVEL_ROLE_CALCULATOR == null) return -1;
+		else if(!LEVEL_ROLE_CALCULATOR.enabled()) {
+			OUTPUT.warning("Soft dependency LevelRoleCalculator is no longer loaded!");
+			OUTPUT.warning(getName() + " will now be unable to retrieve a member's level based from his roles and thus will ignore them, as weel as not making them level up");
+			OUTPUT.warning("Members already in the database will level up normally");
+			LEVEL_ROLE_CALCULATOR = null;
+			return -1;
+		}
 		OUTPUT.trace("New user in database : " + UID);
 		Member member = Demi.jda.getGuildById(Demi.i.getServerID()).getMemberById(UID);
 		if(member == null) return -1;
