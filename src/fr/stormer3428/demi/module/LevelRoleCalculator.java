@@ -9,25 +9,29 @@ import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.IO;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 
 public class LevelRoleCalculator extends Module{
 
 	private IO ROLES_DATABASE;
-	
+
 	private boolean enableCache;
 	private HashMap<Integer, Role> cachedLevelRoleMap;
 	private HashMap<Role, Integer> cachedRolelevelMap;
-	
-	
+	private List<Role> cachedLevelRoles;
+
+	private boolean keepOnlyLatestRole;
+
 	public LevelRoleCalculator() {
 		super(new File("level/levelRoleCalculator"));
 
 		CONFIG_KEYS.add(new Key("enableCache", "false"));
-		
+		CONFIG_KEYS.add(new Key("keepOnlyLatestRole", "true"));
+
 		ROLES_DATABASE = new IO(new File("level/rolesdb" + Demi.i.getServerID() + ".demidb"), new ArrayList<>(), true);
-		
+
 		if(initialConfigIOCreation()) return;
 		OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);	
@@ -56,8 +60,10 @@ public class LevelRoleCalculator extends Module{
 		super.onEnable();
 		enableCache = CONFIG.get("enableCache").equalsIgnoreCase("true");
 		OUTPUT.trace("enableCache : " + enableCache);
+		keepOnlyLatestRole = CONFIG.get("keepOnlyLatestRole").equalsIgnoreCase("true");
+		OUTPUT.trace("keepOnlyLatestRole : " + keepOnlyLatestRole);
 	}
-	
+
 	public int retrieveLevelFromRoles(String UID) {
 		if(!enabled()) return -1;
 		Member member = Demi.jda.getGuildById(Demi.i.getServerID()).getMemberById(UID);
@@ -72,15 +78,72 @@ public class LevelRoleCalculator extends Module{
 		if(!enabled()) return -1;
 		List<Role> memberRoles = member.getRoles();
 		if(memberRoles.isEmpty()) return 0;
-		HashMap<Role, Integer> roleLevelMap = computeRoleLevelMap(true);
+		HashMap<Role, Integer> roleLevelMap = roleLevelMap(true);
 		if(roleLevelMap == null) return -1;
 		for(Role levelRole : roleLevelMap.keySet()) if(memberRoles.contains(levelRole)) return roleLevelMap.get(levelRole);
 		return 0;
 	}
 
-	private HashMap<Role, Integer> computeRoleLevelMap(boolean returnNullIfError) {
+	public Role getLatestObtainedRole(int level) {
+		HashMap<Integer, Role> levelRoleMap = levelRoleMap(false);
+		if(levelRoleMap == null) return null;
+		for(int roleLevel : levelRoleMap.keySet()) if(roleLevel <= level) return levelRoleMap.get(roleLevel);
+		return null;
+	}
+
+	public List<Role> getObtainedRoles(int level) {
+		HashMap<Integer, Role> levelRoleMap = levelRoleMap(false);
+		if(levelRoleMap == null) return null;
+		List<Role> obtainedRoles = new ArrayList<>();
+		for(int roleLevel : levelRoleMap.keySet()) if(roleLevel <= level) obtainedRoles.add(levelRoleMap.get(roleLevel));
+		return obtainedRoles;
+	}
+
+	public void applyLevelRole(int level, Member member) {
+		Role latestAttainedRole = getLatestObtainedRole(level);
+		if(latestAttainedRole == null) {
+			removeAllLevelRoles(member);
+			return;
+		}
+		List<Role> rolesToHave = new ArrayList<>();
+		if(keepOnlyLatestRole) rolesToHave.add(latestAttainedRole);
+		else rolesToHave.addAll(getObtainedRoles(level));
+
+		List<Role> memberRoles = member.getRoles();
+		for(Role levelRole : levelRoles(false)) {
+			if(rolesToHave.contains(levelRole) && !memberRoles.contains(levelRole)) {
+				OUTPUT.trace("Member " + member.getEffectiveName() + "(" + member.getId() + ") is missing levelrole " + levelRole.getName());
+				member.getGuild().addRoleToMember(member, levelRole).queue();
+				OUTPUT.trace("levelRole added!");
+			}
+			else if(!rolesToHave.contains(levelRole) && memberRoles.contains(levelRole)) {
+				OUTPUT.trace("Member " + member.getEffectiveName() + "(" + member.getId() + ") has levelrole " + levelRole.getName() + " but is level " + level);
+				member.getGuild().removeRoleFromMember(member, levelRole).queue();
+				OUTPUT.trace("levelRole removed!");
+			}
+		}
+	}
+
+	@SuppressWarnings("unused")
+	private void removeLevelRoles(Member member, Role exception) {
+		List<Role> memberRoles = member.getRoles();
+		for(Role levelRole : levelRoles(false)) if(!levelRole.equals(exception) && memberRoles.contains(levelRole)) member.getGuild().removeRoleFromMember(member, levelRole).queue();
+	}
+
+	@SuppressWarnings("unused")
+	private void removeLevelRoles(Member member, List<Role> exceptions) {
+		List<Role> memberRoles = member.getRoles();
+		for(Role levelRole : levelRoles(false)) if(!exceptions.contains(levelRole) && memberRoles.contains(levelRole)) member.getGuild().removeRoleFromMember(member, levelRole).queue();
+	}
+
+	private void removeAllLevelRoles(Member member) {
+		List<Role> memberRole = member.getRoles();
+		for(Role levelRole : levelRoles(false)) if(memberRole.contains(levelRole)) member.getGuild().removeRoleFromMember(member, levelRole).queue();
+	}
+
+	private HashMap<Role, Integer> roleLevelMap(boolean returnNullIfError) {
 		if(enableCache && cachedRolelevelMap != null) return cachedRolelevelMap;
-		HashMap<Integer, Role> levelRolesIDs = computeLevelRoleMap(returnNullIfError);
+		HashMap<Integer, Role> levelRolesIDs = levelRoleMap(returnNullIfError);
 		if(levelRolesIDs == null) return null;
 		HashMap<Role, List<Integer>> reversedMap = new HashMap<>();
 		HashMap<Role, Integer> roleLevelIDs = new HashMap<>();
@@ -89,7 +152,7 @@ public class LevelRoleCalculator extends Module{
 			if(!reversedMap.containsKey(reversedKey)) reversedMap.put(reversedKey, new ArrayList<>());
 			reversedMap.get(reversedKey).add(key);
 		}
-		
+
 		for(Role key : reversedMap.keySet()) {
 			List<Integer> list = reversedMap.get(key);
 			if(list.size() > 1 && returnNullIfError) return null;
@@ -99,18 +162,16 @@ public class LevelRoleCalculator extends Module{
 		return roleLevelIDs;
 	}
 
-	private HashMap<Integer, Role> computeLevelRoleMap(boolean returnNullIfError) {
+	private HashMap<Integer, Role> levelRoleMap(boolean returnNullIfError) {
 		if(enableCache && cachedLevelRoleMap != null) return cachedLevelRoleMap;
-		HashMap<String, String> levelRolesIDsString = ROLES_DATABASE.getAll();
+		HashMap<String, String> levelRolesIDsString = ROLES_DATABASE.getSortedAll();
 		if(levelRolesIDsString == null) {
 			OUTPUT.error("Error, unable to generate SingleReversedMap for file " + ROLES_DATABASE.getFileName());
 			OUTPUT.error("It is crucial for this module to function properly, deactivating module...");
-			if(returnNullIfError) {
-				Demi.disableModule(this);
-				return null;
-			}
+			Demi.disableModule(this);
+			return null;
 		}
-		HashMap<Integer, Role> levelRolesIDs = new HashMap<>();
+		HashMap<Integer, Role> levelRolesMap = new HashMap<>();
 		for(String levelString : levelRolesIDsString.keySet()) {
 			int level;
 			try {
@@ -125,7 +186,7 @@ public class LevelRoleCalculator extends Module{
 			try {
 				roleId = Long.parseLong(levelRolesIDsString.get(levelString));
 			}catch (NumberFormatException e) {
-				OUTPUT.error("Error while parsing id value for levelrole, expected an integer but got " + levelRolesIDsString.get(levelString));
+				OUTPUT.error("Error while parsing id value for levelRole, expected an integer but got " + levelRolesIDsString.get(levelString));
 				handleTrace(e);
 				if(returnNullIfError) return null;
 				else continue;
@@ -136,10 +197,59 @@ public class LevelRoleCalculator extends Module{
 				if(returnNullIfError) return null;
 				else continue;
 			}
-			levelRolesIDs.put(level, role);
+			levelRolesMap.put(level, role);
 		}
-		if(enableCache) cachedLevelRoleMap = levelRolesIDs;
-		return levelRolesIDs;
+		if(enableCache) cachedLevelRoleMap = levelRolesMap;
+		return levelRolesMap;
+	}
+
+	private List<Role> levelRoles(boolean returnNullIfError){
+		if(enableCache && cachedLevelRoles != null) return cachedLevelRoles;
+		List<String> roleIdsString = ROLES_DATABASE.getValues();
+		if(roleIdsString.isEmpty()) return new ArrayList<>();
+		List<Long> roleIds = new ArrayList<>();
+		for(String roleIdString : roleIdsString) {
+			try {
+				roleIds.add(Long.parseLong(roleIdString));
+			} catch (NumberFormatException e) {
+				OUTPUT.error("Error while parsing id of levelRole, expected an integer but got " + roleIdString);
+				handleTrace(e);
+				if(returnNullIfError) return null;
+			}
+		}
+		if(roleIds.isEmpty()) return new ArrayList<>();
+		List<Role> levelRoles = new ArrayList<>();
+		Guild guild = Demi.jda.getGuildById(Demi.i.getServerID());
+		for(Long roleId : roleIds) {
+			Role role = guild.getRoleById(roleId);
+			if(role == null) {
+				OUTPUT.error("Error while attempting to retrieve level, invalid id " + roleId);
+				if(returnNullIfError) return null;
+				else continue;
+			}
+			levelRoles.add(role);
+		}
+		return levelRoles;
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
