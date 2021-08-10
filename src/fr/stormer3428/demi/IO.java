@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -224,6 +224,17 @@ public class IO {
 		return keys;
 	}
 
+	public final HashMap<String, String> getSortedAll(){
+		HashMap<String, String> unsortedAll = getAll();
+		HashMap<String, String> sortedAll = new HashMap<>();
+		Set<String> keySet = unsortedAll.keySet();
+		List<String> sortedKeySet = new ArrayList<>();
+		sortedKeySet.addAll(keySet);
+		Collections.sort(sortedKeySet);
+		for(String sortedKey : sortedKeySet) sortedAll.put(sortedKey, unsortedAll.get(sortedKey));
+		return sortedAll;
+	}
+
 	public final ArrayList<String> getAllRaw(){
 		if(getFile() == null) {
 			DemiConsole.cancelled("Attempted to retrieve raw version of null file, returning null");
@@ -393,7 +404,7 @@ public class IO {
 		Set<String> keySet = reversedMap.keySet();
 		List<String> sortedKeySet = new ArrayList<>();
 		sortedKeySet.addAll(keySet);
-		sortedKeySet.sort(Comparator.naturalOrder());
+		Collections.sort(sortedKeySet);
 		for(String sortedKey : sortedKeySet) sortedReversedMap.put(sortedKey, reversedMap.get(sortedKey));
 		return sortedReversedMap;
 	}
@@ -417,7 +428,7 @@ public class IO {
 		Set<String> keySet = singleReversedMap.keySet();
 		List<String> sortedKeySet = new ArrayList<>();
 		sortedKeySet.addAll(keySet);
-		sortedKeySet.sort(Comparator.naturalOrder());
+		Collections.sort(sortedKeySet);
 		for(String sortedKey : sortedKeySet) sortedSingleReversedMap.put(sortedKey, singleReversedMap.get(sortedKey));
 		return sortedSingleReversedMap;
 	}
