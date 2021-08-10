@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class IO {
 
@@ -382,6 +384,42 @@ public class IO {
 			reversedMap.get(reversedKey).add(key);
 		}
 		return reversedMap;
+	}
+
+	public HashMap<String, List<String>> getSortedReversedMap() {
+		HashMap<String, List<String>> reversedMap = getReversedMap();
+		if(reversedMap == null) return null;
+		HashMap<String, List<String>> sortedReversedMap = new HashMap<>();
+		Set<String> keySet = reversedMap.keySet();
+		List<String> sortedKeySet = new ArrayList<>();
+		sortedKeySet.addAll(keySet);
+		sortedKeySet.sort(Comparator.naturalOrder());
+		for(String sortedKey : sortedKeySet) sortedReversedMap.put(sortedKey, reversedMap.get(sortedKey));
+		return sortedReversedMap;
+	}
+
+	public HashMap<String, String> getSingleReversedMap(boolean returnNullIfMulti) {
+		HashMap<String, List<String>> reversedMap = getReversedMap();
+		HashMap<String, String> singleReversedMap = new HashMap<String, String>();
+		
+		for(String key : reversedMap.keySet()) {
+			List<String> list = reversedMap.get(key);
+			if(list.size() > 1 && returnNullIfMulti) return null;
+			singleReversedMap.put(key, list.get(0));
+		}
+		return singleReversedMap;
+	}
+
+	public HashMap<String, String> getSortedSingleReversedMap(boolean returnNullIfMulti) {
+		HashMap<String, String> singleReversedMap = getSingleReversedMap(returnNullIfMulti);
+		if(singleReversedMap == null) return null;
+		HashMap<String, String> sortedSingleReversedMap = new HashMap<>();
+		Set<String> keySet = singleReversedMap.keySet();
+		List<String> sortedKeySet = new ArrayList<>();
+		sortedKeySet.addAll(keySet);
+		sortedKeySet.sort(Comparator.naturalOrder());
+		for(String sortedKey : sortedKeySet) sortedSingleReversedMap.put(sortedKey, singleReversedMap.get(sortedKey));
+		return sortedSingleReversedMap;
 	}
 
 }
