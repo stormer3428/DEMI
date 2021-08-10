@@ -25,12 +25,10 @@ public class LevelRoleCalculator extends Module{
 	private boolean keepOnlyLatestRole;
 
 	public LevelRoleCalculator() {
-		super(new File("level/levelRoleCalculator"));
+		super(new File("level/levelRoleCalculator.cfg"));
 
 		CONFIG_KEYS.add(new Key("enableCache", "false"));
 		CONFIG_KEYS.add(new Key("keepOnlyLatestRole", "true"));
-
-		ROLES_DATABASE = new IO(new File("level/rolesdb" + Demi.i.getServerID() + ".demidb"), new ArrayList<>(), true);
 
 		if(initialConfigIOCreation()) return;
 		OUTPUT.warning("Disabling module to prevent errors");
@@ -62,6 +60,10 @@ public class LevelRoleCalculator extends Module{
 		OUTPUT.trace("enableCache : " + enableCache);
 		keepOnlyLatestRole = CONFIG.get("keepOnlyLatestRole").equalsIgnoreCase("true");
 		OUTPUT.trace("keepOnlyLatestRole : " + keepOnlyLatestRole);
+
+		ROLES_DATABASE = new IO(new File("level/rolesdb" + Demi.i.getServerID() + ".cfg"), new ArrayList<>(), true);
+		
+		OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 	public int retrieveLevelFromRoles(String UID) {
@@ -233,23 +235,4 @@ public class LevelRoleCalculator extends Module{
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

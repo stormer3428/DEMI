@@ -30,8 +30,6 @@ public class LevelCalculator extends Module{
 		CONFIG_KEYS.add(new Key("levelIncreasePow", "1.05"));
 		CONFIG_KEYS.add(new Key("levelBase", "500"));
 		CONFIG_KEYS.add(new Key("enableCaches", "true"));
-
-		LEVEL_DATABASE = new IO(new File("level/leveldb" + Demi.i.getServerID() + ".demidb"), new ArrayList<>(), true);
 		
 		if(initialConfigIOCreation()) return;
 		OUTPUT.warning("Disabling module to prevent errors");
@@ -103,6 +101,8 @@ public class LevelCalculator extends Module{
 			OUTPUT.warning("Members already in the database will level up normally");
 		}
 		else OUTPUT.ok("Hook into softDependency LevelRoleCalculator successful");
+
+		LEVEL_DATABASE = new IO(new File("level/leveldb" + Demi.i.getServerID() + ".demidb"), new ArrayList<>(), true);
 		
 		OUTPUT.ok("Successfully loaded all config parameters");
 	}
@@ -186,4 +186,6 @@ public class LevelCalculator extends Module{
 		if(!enabled()) return -1;
 		return getLevelForExp(getUserExp(UID));
 	}
+	
+	//public void increaseExpBy
 }

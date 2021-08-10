@@ -13,6 +13,7 @@ public class MessageLeveling extends Module{
 
 	private int expPerMessage;
 	private int expPerMessageVariation;
+
 	private LevelCalculator LEVEL_CALCULATOR;
 
 	public MessageLeveling() {
