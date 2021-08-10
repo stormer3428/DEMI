@@ -68,6 +68,12 @@ public class Demi extends HasConfig{
 	public static void disableModule(Module module) {
 		Demi.ACTIVE_MODULES.remove(module);
 		module.onDisable();
+		List<Module> modulesToDisable = new ArrayList<>();
+		for(Module activeModule : Demi.ACTIVE_MODULES) if(activeModule.getDependencies().contains(module.getName())) modulesToDisable.add(activeModule);
+		for(Module toDisable : modulesToDisable) {
+			disableModule(toDisable);
+			toDisable.OUTPUT.error("Module was unloaded due to dependency " + module.getName() + " unexpectedly unloading!");
+		}
 	}
 
 	public void reloadModules() {
