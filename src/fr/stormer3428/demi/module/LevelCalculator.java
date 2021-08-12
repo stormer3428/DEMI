@@ -186,6 +186,22 @@ public class LevelCalculator extends Module{
 		if(!enabled()) return -1;
 		return getLevelForExp(getUserExp(UID));
 	}
+
+	public void setUserExp(String UID, Long exp) {
+		LEVEL_DATABASE.setParameter(UID, exp + "");
+	}
+
+	public void setUserLevel(String UID, int level) {
+		setUserExp(UID, getExpForLevel(level));
+	}
 	
-	//public void increaseExpBy
+	public void increaseUserExpBy(String UID, Long expIncrease) {
+		Long currentExp = getUserExp(UID);
+		if(currentExp == -1) {
+			OUTPUT.error("Error while trying to increase exp for user " + UID + " by " + expIncrease + "xp");
+			OUTPUT.error("getUserExp returned -1, signaling an error earlier in the process");
+			return;
+		}
+		setUserExp(UID, currentExp + expIncrease);
+	}
 }
