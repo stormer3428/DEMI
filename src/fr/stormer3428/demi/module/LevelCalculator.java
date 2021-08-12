@@ -188,10 +188,12 @@ public class LevelCalculator extends Module{
 	}
 
 	public void setUserExp(String UID, Long exp) {
+		OUTPUT.trace("Setting exp of user " + UID + " to " + exp);
 		LEVEL_DATABASE.setParameter(UID, exp + "");
 	}
 
 	public void setUserLevel(String UID, int level) {
+		OUTPUT.trace("Setting level of user " + UID + " to " + level);
 		setUserExp(UID, getExpForLevel(level));
 	}
 	
@@ -202,6 +204,7 @@ public class LevelCalculator extends Module{
 			OUTPUT.error("getUserExp returned -1, signaling an error earlier in the process");
 			return;
 		}
+		OUTPUT.trace("Increasing exp of user " + UID + " from " + currentExp + " to " + (currentExp + expIncrease));
 		setUserExp(UID, currentExp + expIncrease);
 	}
 }
