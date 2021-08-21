@@ -181,7 +181,7 @@ import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-@SuppressWarnings({"deprecation", "rawtypes"})
+@SuppressWarnings({"deprecation"})
 public class RawListener extends ListenerAdapter{
 
 	@Override

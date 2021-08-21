@@ -14,19 +14,19 @@ public class Modules extends CommandModule{
 	public Modules() {
 		super("Modules");
 
-		aliases.add("mdls");
-		aliases.add("md");
-		aliases.add("m");
+		this.aliases.add("mdls");
+		this.aliases.add("md");
+		this.aliases.add("m");
 
 		if(initialConfigIOCreation()) return;
-		OUTPUT.warning("Disabling module to prevent errors");
+		this.OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
 	}
 
 	@Override
 	protected void runCommand(DemiCommandReceiveEvent event) {
 		ArrayList<String> args = event.getArgs();
-		MixedOutput OUTPUT = event.getOutput();
+		MixedOutput COMMAND_OUTPUT = event.getOutput();
 
 		if(args.isEmpty()) {
 			String str = "Currently loaded modules : \n";
@@ -35,18 +35,18 @@ public class Modules extends CommandModule{
 				str = str + (first ? "" : ", ") + module.getName();
 				if(first) first = false;
 			}
-			OUTPUT.command(str);
+			COMMAND_OUTPUT.command(str);
 			return;
 		}
 		String subCommand = args.remove(0);
 		for(Module module : Demi.i.getActiveModules()) {
 			if(module.getName().equalsIgnoreCase(subCommand) || (module instanceof CommandModule && ((CommandModule)module).getAliases().contains(subCommand.toLowerCase()) ) || subCommand.equalsIgnoreCase("description") || subCommand.equalsIgnoreCase("desc") || subCommand.equalsIgnoreCase("d")) {
-				OUTPUT.command("Description of module " + module.getName() + " :");
-				OUTPUT.command(module.getDescription());
+				COMMAND_OUTPUT.command("Description of module " + module.getName() + " :");
+				COMMAND_OUTPUT.command(module.getDescription());
 				return;
 			}
 		}
-		OUTPUT.error("No module with such name");
+		COMMAND_OUTPUT.error("No module with such name");
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class Modules extends CommandModule{
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		OUTPUT.ok("Successfully loaded all config parameters");
+		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 	@Override

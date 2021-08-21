@@ -18,10 +18,10 @@ public abstract class HasConfig {
 	
 	public HasConfig(File file) {
 		this.file = file;
-		CONFIG_KEYS.add(new Key("printStackTrace", "true"));
-		CONFIG_KEYS.add(new Key("logToConsole", "true"));
-		CONFIG_KEYS.add(new Key("logToChannel", "false"));
-		CONFIG_KEYS.add(new Key("loggingChannelID", "ID HERE"));
+		this.CONFIG_KEYS.add(new Key("printStackTrace", "true"));
+		this.CONFIG_KEYS.add(new Key("logToConsole", "true"));
+		this.CONFIG_KEYS.add(new Key("logToChannel", "false"));
+		this.CONFIG_KEYS.add(new Key("loggingChannelID", "ID HERE"));
 	}
 	
 	protected boolean initialConfigIOCreation() {
@@ -40,23 +40,23 @@ public abstract class HasConfig {
 			}else break;
 		}
 		
-		if(CONFIG == null) {
+		if(this.CONFIG == null) {
 			DemiConsole.error("Failed to create main config IO");
 			DemiConsole.error("The main config IO is essential to allow DEMI to work, process will terminate");
 			return false;
 		}
 		
-		PRINT_STACK_TRACE = CONFIG.get("printStackTrace").equalsIgnoreCase("true");
-		LOGGING_CHANNEL_ID = CONFIG.get("loggingChannelID");
-		LOG_TO_CHANNEL = CONFIG.get("logToChannel").equalsIgnoreCase("true");
-		DemiConsole.ok("successfully created " + file.getName() + " IO");
+		this.PRINT_STACK_TRACE = this.CONFIG.get("printStackTrace").equalsIgnoreCase("true");
+		this.LOGGING_CHANNEL_ID = this.CONFIG.get("loggingChannelID");
+		this.LOG_TO_CHANNEL = this.CONFIG.get("logToChannel").equalsIgnoreCase("true");
+		DemiConsole.ok("successfully created " + this.file.getName() + " IO");
 		return true;
 	}
 
 	protected boolean refreshConfigIO() {
 		DemiConsole.action("Creating Config IO...");
-		CONFIG = new IO(file, CONFIG_KEYS, PRINT_STACK_TRACE, IO.defaultHeaders);
-		if(CONFIG == null) {
+		this.CONFIG = new IO(this.file, this.CONFIG_KEYS, this.PRINT_STACK_TRACE, IO.defaultHeaders);
+		if(this.CONFIG == null) {
 			DemiConsole.error("Failed to create Main Config IO!");
 			return false;
 		}

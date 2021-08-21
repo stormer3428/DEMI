@@ -21,11 +21,11 @@ public class DiscordCommandDispatcher extends Module{
 	public DiscordCommandDispatcher() {
 		super(new File("discordCommandDispatcher.cfg"));
 
-		CONFIG_KEYS.add(new Key("prefix", "?"));
-		CONFIG_KEYS.add(new Key("acceptCommandsFromDiscordBots", "false"));
+		this.CONFIG_KEYS.add(new Key("prefix", "?"));
+		this.CONFIG_KEYS.add(new Key("acceptCommandsFromDiscordBots", "false"));
 		
 		if(initialConfigIOCreation()) return;
-		OUTPUT.warning("Disabling module to prevent errors");
+		this.OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
 	}
 
@@ -50,34 +50,34 @@ public class DiscordCommandDispatcher extends Module{
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		acceptFromDiscordBots = CONFIG.get("acceptCommandsFromDiscordBots").equalsIgnoreCase("true");
-		OUTPUT.trace("acceptCommandsFromDiscordBots : " + (acceptFromDiscordBots ? "true" : "false"));
-		prefix = CONFIG.get("prefix");
-		OUTPUT.trace("prefix : " + prefix);
+		this.acceptFromDiscordBots = this.CONFIG.get("acceptCommandsFromDiscordBots").equalsIgnoreCase("true");
+		this.OUTPUT.trace("acceptCommandsFromDiscordBots : " + (this.acceptFromDiscordBots ? "true" : "false"));
+		this.prefix = this.CONFIG.get("prefix");
+		this.OUTPUT.trace("prefix : " + this.prefix);
 
-		OUTPUT.ok("Successfully loaded all config parameters");
+		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-		if(!acceptFromDiscordBots && event.getAuthor().isBot()) return;
+		if(!this.acceptFromDiscordBots && event.getAuthor().isBot()) return;
 
 		Message message = event.getMessage();
 		Member member = event.getMember();
 		if(member == null) return;
 
-		if(prefix != null && !prefix.isEmpty() && message.getContentRaw() != null && message.getContentRaw().startsWith(prefix)) {
+		if(this.prefix != null && !this.prefix.isEmpty() && message.getContentRaw() != null && message.getContentRaw().startsWith(this.prefix)) {
 
-			String raw = message.getContentRaw().replace(prefix, "");
+			String raw = message.getContentRaw().replace(this.prefix, "");
 			String cmd = raw.split(" ", 2)[0].toLowerCase();
-			String[] argsArray = message.getContentRaw().replace(prefix + cmd, "").split(" ");
-			ArrayList<String> args = new ArrayList<String>();
+			String[] argsArray = message.getContentRaw().replace(this.prefix + cmd, "").split(" ");
+			ArrayList<String> args = new ArrayList<>();
 
-			OUTPUT.info("Command received from discord : ");
-			OUTPUT.info(cmd);
+			this.OUTPUT.info("Command received from discord : ");
+			this.OUTPUT.info(cmd);
 			for(String s : argsArray) if(!s.isEmpty()) args.add(s);
-			for(String s : args) OUTPUT.info("- " + s);
+			for(String s : args) this.OUTPUT.info("- " + s);
 
 
 			for(Module module : Demi.i.getActiveModules()) {

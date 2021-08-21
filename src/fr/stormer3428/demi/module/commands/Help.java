@@ -16,17 +16,17 @@ public class Help extends CommandModule{
 	public Help() {
 		super("Help");
 
-		aliases.add("?");
-		aliases.add("h");
+		this.aliases.add("?");
+		this.aliases.add("h");
 
 		if(initialConfigIOCreation()) return;
-		OUTPUT.warning("Disabling module to prevent errors");
+		this.OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
 	}
 
 	@Override
 	protected void runCommand(DemiCommandReceiveEvent event) {
-		MixedOutput OUTPUT = event.getOutput();
+		MixedOutput COMMAND_OUTPUT = event.getOutput();
 		ArrayList<String> args = event.getArgs();
 		Member member = null;
 		if(event.getMessageReceivedEvent() != null) member = event.getMessageReceivedEvent().getMember();
@@ -47,22 +47,22 @@ public class Help extends CommandModule{
 					builder.addField(command.getName(), command.getUsage(), false);
 				}
 			}
-			OUTPUT.embed(builder.build(), embedReplacement);
+			COMMAND_OUTPUT.embed(builder.build(), embedReplacement);
 			return;
 		}
-		String commandName = args.remove(0);
+		String typedCommandName = args.remove(0);
 		boolean ModulesCommandLoaded = false;
 		for(Module module : Demi.i.getActiveModules()) if(module.getName().equals("Modules")) {ModulesCommandLoaded = true; break;}
 		for(Module module : Demi.i.getActiveModules()) {
 			if(module instanceof CommandModule) {
 				CommandModule command = (CommandModule) module;
-				if(command.getName().equalsIgnoreCase(commandName) || command.getAliases().contains(commandName.toLowerCase())) {
-					OUTPUT.command("Help for command " + command.getName() + " : \n" + command.getUsage() + (ModulesCommandLoaded ? "\n for more details, try \"Modules " + command.getName() + "\"" : ""));
+				if(command.getName().equalsIgnoreCase(typedCommandName) || command.getAliases().contains(typedCommandName.toLowerCase())) {
+					COMMAND_OUTPUT.command("Help for command " + command.getName() + " : \n" + command.getUsage() + (ModulesCommandLoaded ? "\n for more details, try \"Modules " + command.getName() + "\"" : ""));
 					return;
 				}
 			}
 		}
-		OUTPUT.error("No command with such name");
+		COMMAND_OUTPUT.error("No command with such name");
 	}
 
 	@Override

@@ -21,71 +21,71 @@ public abstract class CommandModule extends Module{
 
 	public CommandModule(String string) {
 		super(new File("commands/" + string + ".cfg"));
-		commandName = string;
+		this.commandName = string;
 
-		CONFIG_KEYS.add(new Key("requireAdminPerms", "true"));
-		CONFIG_KEYS.add(new Key("requireRoles", "false"));
-		CONFIG_KEYS.add(new Key("requiredRoles", "[]"));
-		CONFIG_KEYS.add(new Key("whitelistEnabled", "false"));
-		CONFIG_KEYS.add(new Key("whitelist", "[]"));
+		this.CONFIG_KEYS.add(new Key("requireAdminPerms", "true"));
+		this.CONFIG_KEYS.add(new Key("requireRoles", "false"));
+		this.CONFIG_KEYS.add(new Key("requiredRoles", "[]"));
+		this.CONFIG_KEYS.add(new Key("whitelistEnabled", "false"));
+		this.CONFIG_KEYS.add(new Key("whitelist", "[]"));
 	}
 
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		requireAdminPerms = CONFIG.get("requireAdminPerms").equalsIgnoreCase("true");
-		OUTPUT.trace("requireAdminPerms : " + (requireAdminPerms ? "true" : false));
-		requireRoles = CONFIG.get("requireRoles").equalsIgnoreCase("true");
-		OUTPUT.trace("requireRoles : " + (requireRoles ? "true" : false));
-		requiredRoles = roles();
-		if(requiredRoles == null) return;
-		if(requiredRoles.isEmpty()) {
-			if(requireRoles) {
-				OUTPUT.warning("requireRoles was set to true but no required roles were set");
-				OUTPUT.cancelled("setting requireRoles to false internally");
-				requireRoles = false;
+		this.requireAdminPerms = this.CONFIG.get("requireAdminPerms").equalsIgnoreCase("true");
+		this.OUTPUT.trace("requireAdminPerms : " + (this.requireAdminPerms ? "true" : false));
+		this.requireRoles = this.CONFIG.get("requireRoles").equalsIgnoreCase("true");
+		this.OUTPUT.trace("requireRoles : " + (this.requireRoles ? "true" : false));
+		this.requiredRoles = roles();
+		if(this.requiredRoles == null) return;
+		if(this.requiredRoles.isEmpty()) {
+			if(this.requireRoles) {
+				this.OUTPUT.warning("requireRoles was set to true but no required roles were set");
+				this.OUTPUT.cancelled("setting requireRoles to false internally");
+				this.requireRoles = false;
 			}
 		}else {
-			OUTPUT.trace("requireRoles : ");
-			for(Long role : requiredRoles) {
-				OUTPUT.trace("- " + role);
+			this.OUTPUT.trace("requireRoles : ");
+			for(Long role : this.requiredRoles) {
+				this.OUTPUT.trace("- " + role);
 			}
 		}
-		whitelistEnabled = CONFIG.get("whitelistEnabled").equalsIgnoreCase("true");
-		OUTPUT.trace("whitelistEnabled : " + (whitelistEnabled ? "true" : false));
-		whitelist = whitelist();
-		if(whitelist == null) return;
-		if(whitelist.isEmpty()) {
-			if(whitelistEnabled) {
-				OUTPUT.warning("whitelistEnabled was set to true but no whitelist was set");
-				OUTPUT.cancelled("disabming module");
-				whitelistEnabled = false;
+		this.whitelistEnabled = this.CONFIG.get("whitelistEnabled").equalsIgnoreCase("true");
+		this.OUTPUT.trace("whitelistEnabled : " + (this.whitelistEnabled ? "true" : false));
+		this.whitelist = whitelist();
+		if(this.whitelist == null) return;
+		if(this.whitelist.isEmpty()) {
+			if(this.whitelistEnabled) {
+				this.OUTPUT.warning("whitelistEnabled was set to true but no whitelist was set");
+				this.OUTPUT.cancelled("disabming module");
+				this.whitelistEnabled = false;
 				Demi.disableModule(this);
 				return;
 			}
 		}else {
-			OUTPUT.trace("whitelist : ");
-			for(Long member : whitelist) {
-				OUTPUT.trace("- " + member);
+			this.OUTPUT.trace("whitelist : ");
+			for(Long member : this.whitelist) {
+				this.OUTPUT.trace("- " + member);
 			}
 		}
 	}
 
 	private List<Long> whitelist() {
-		List<String> whitelistString = CONFIG.getList("whitelist");
-		List<Long> whitelist = new ArrayList<>();
+		List<String> whitelistString = this.CONFIG.getList("whitelist");
+		List<Long> returnedWhitelist = new ArrayList<>();
 		try {
-			for(String str : whitelistString) whitelist.add(Long.parseLong(str));
-			return whitelist;
+			for(String str : whitelistString) returnedWhitelist.add(Long.parseLong(str));
+			return returnedWhitelist;
 		} catch (NumberFormatException e) {
-			OUTPUT.error("Error while retrieving whitelist");
-			OUTPUT.error("Expected an array of user ids but got ("+CONFIG.get("whitelist")+")");
+			this.OUTPUT.error("Error while retrieving whitelist");
+			this.OUTPUT.error("Expected an array of user ids but got ("+this.CONFIG.get("whitelist")+")");
 			handleTrace(e);
-			if(whitelistEnabled) {
-				OUTPUT.warning("Disabling module to prevent errors");
+			if(this.whitelistEnabled) {
+				this.OUTPUT.warning("Disabling module to prevent errors");
 				Demi.disableModule(this);
 			}else {
-				OUTPUT.cancelled("whitelistEnabled is set to false, skipping");
+				this.OUTPUT.cancelled("whitelistEnabled is set to false, skipping");
 			}
 			return null;
 		}
@@ -93,20 +93,20 @@ public abstract class CommandModule extends Module{
 	}
 
 	private List<Long> roles() {
-		List<String> rolesString = CONFIG.getList("requiredRoles");
+		List<String> rolesString = this.CONFIG.getList("requiredRoles");
 		List<Long> roles = new ArrayList<>();
 		try {
 			for(String str : rolesString) roles.add(Long.parseLong(str));
 			return roles;
 		} catch (NumberFormatException e) {
-			OUTPUT.error("Error while retrieving required roles");
-			OUTPUT.error("Expected an array of role ids but got ("+CONFIG.get("requiredRoles")+")");
+			this.OUTPUT.error("Error while retrieving required roles");
+			this.OUTPUT.error("Expected an array of role ids but got ("+this.CONFIG.get("requiredRoles")+")");
 			handleTrace(e);
-			if(requireRoles) {
-				OUTPUT.warning("Disabling module to prevent errors");
+			if(this.requireRoles) {
+				this.OUTPUT.warning("Disabling module to prevent errors");
 				Demi.disableModule(this);
 			}else {
-				OUTPUT.cancelled("requireRoles is set to false, skipping");
+				this.OUTPUT.cancelled("requireRoles is set to false, skipping");
 			}
 			return null;
 		}
@@ -114,21 +114,21 @@ public abstract class CommandModule extends Module{
 
 	@Override
 	public String getName() {
-		return commandName;
+		return this.commandName;
 	}
 	
 	public List<String> getAliases(){
-		return aliases;
+		return this.aliases;
 	}
 
 	public boolean canUseCommand(Member member) {
 		if(member == null) return true;
-		if(whitelistEnabled && !whitelist.contains(member.getIdLong())) return false;
-		if(requireAdminPerms && !member.hasPermission(Permission.ADMINISTRATOR)) return false;
-		if(requireRoles) {
+		if(this.whitelistEnabled && !this.whitelist.contains(member.getIdLong())) return false;
+		if(this.requireAdminPerms && !member.hasPermission(Permission.ADMINISTRATOR)) return false;
+		if(this.requireRoles) {
 			List<Long> rolesLong = new ArrayList<>();
 			for(Role role : member.getRoles()) rolesLong.add(role.getIdLong());
-			if(!rolesLong.containsAll(requiredRoles)) return false;
+			if(!rolesLong.containsAll(this.requiredRoles)) return false;
 		}
 		return true;
 	}

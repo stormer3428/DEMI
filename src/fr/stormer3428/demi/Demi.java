@@ -79,40 +79,40 @@ public class Demi extends HasConfig{
 	}
 
 	public void reloadModules() {
-		OUTPUT.action("Reloading Modules...");
+		this.OUTPUT.action("Reloading Modules...");
 		if(!ACTIVE_MODULES.isEmpty()) {
 			for(Module module : ACTIVE_MODULES) {
-				OUTPUT.action("Deactivating module " + module.getName());
+				this.OUTPUT.action("Deactivating module " + module.getName());
 				module.onDisable();
 			}
 			ACTIVE_MODULES.clear();
-			OUTPUT.ok("Successfully deactivated all modules");
+			this.OUTPUT.ok("Successfully deactivated all modules");
 		}
 
 		if(!MODULES.isEmpty()) {
 			//==//
-			OUTPUT.action("Checking for duplicate modules registered...");
+			this.OUTPUT.action("Checking for duplicate modules registered...");
 			List<String> moduleNames = new ArrayList<>();
 			boolean hasDuplicates = false;
 			for(Module module : MODULES) {
 				if(moduleNames.contains(module.getName())) {
-					OUTPUT.warning("Found duplicate module ! (" + module.getName() + ")");
+					this.OUTPUT.warning("Found duplicate module ! (" + module.getName() + ")");
 					hasDuplicates = true;
 				}
 			}
-			if(!hasDuplicates) OUTPUT.ok("Found no duplicate modules registered");
+			if(!hasDuplicates) this.OUTPUT.ok("Found no duplicate modules registered");
 			else {
-				OUTPUT.warning("Found duplicate modules, listing...");
-				for(Module module : MODULES) OUTPUT.info(module.getName());
+				this.OUTPUT.warning("Found duplicate modules, listing...");
+				for(Module module : MODULES) this.OUTPUT.info(module.getName());
 			}
 
 			//==//
-			OUTPUT.action("Reactivating modules...");
+			this.OUTPUT.action("Reactivating modules...");
 			List<Module> toEnable = new ArrayList<>();
 
 			for(Module module : MODULES) 
 				if(module.enabled()) toEnable.add(module);
-				else OUTPUT.cancelled("Module " + module.getName() + " is disabled in it's config");
+				else this.OUTPUT.cancelled("Module " + module.getName() + " is disabled in it's config");
 
 			int oldSize = toEnable.size();
 			while(toEnable.size() > 0) {
@@ -120,12 +120,12 @@ public class Demi extends HasConfig{
 				for(Module module : toEnable) {
 					if(module.canBeLoaded()) {
 						try {
-							OUTPUT.action("Activating module " + module.getName());
+							this.OUTPUT.action("Activating module " + module.getName());
 							ACTIVE_MODULES.add(module);
 							module.onEnable();
 							processedModules.add(module);
 						}catch (Exception e) {
-							OUTPUT.error("Caught an error while loading module " + module.getName());
+							this.OUTPUT.error("Caught an error while loading module " + module.getName());
 							handleTrace(e);
 						}
 					}
@@ -135,7 +135,7 @@ public class Demi extends HasConfig{
 				oldSize = toEnable.size();
 			}
 			for(Module notLoaded : toEnable) {
-				OUTPUT.error("Module " + notLoaded.getName() + " could not be loaded");
+				this.OUTPUT.error("Module " + notLoaded.getName() + " could not be loaded");
 				boolean header = true;
 				for(String dependency : notLoaded.getDependencies()) {
 					boolean dependencyLoaded = false;
@@ -148,26 +148,26 @@ public class Demi extends HasConfig{
 					if(!dependencyLoaded) {
 						if(header) {
 							header = false;
-							OUTPUT.warning("missing dependencies : ");
+							this.OUTPUT.warning("missing dependencies : ");
 						}
-						OUTPUT.warning(dependency);
+						this.OUTPUT.warning(dependency);
 					}
 				}
 			}
 
 			if(!ACTIVE_MODULES.isEmpty()) {
-				OUTPUT.ok("Successfully activated all enabled modules");
-				OUTPUT.ok("Successfully reloaded modules!");
-				OUTPUT.info("Enabled modules : ");
+				this.OUTPUT.ok("Successfully activated all enabled modules");
+				this.OUTPUT.ok("Successfully reloaded modules!");
+				this.OUTPUT.info("Enabled modules : ");
 				for(Module module : ACTIVE_MODULES) {
-					OUTPUT.info(module.getName());
+					this.OUTPUT.info(module.getName());
 				}
 			}else {
-				OUTPUT.error("No modules were loaded!");
-				OUTPUT.error("Exiting...");
+				this.OUTPUT.error("No modules were loaded!");
+				this.OUTPUT.error("Exiting...");
 			}
 		}else {
-			OUTPUT.warning("No modules registered.");
+			this.OUTPUT.warning("No modules registered.");
 		}
 	}
 
@@ -181,20 +181,20 @@ public class Demi extends HasConfig{
 		Returning at this stage will kill DEMI as no module has been activated yet
 		 */
 
-		OUTPUT = new MixedOutput(CONFIG.get("loggingChannelID"), CONFIG.get("logToChannel").equalsIgnoreCase("true"), CONFIG.get("logToConsole").equalsIgnoreCase("true"), "Core");
-		SERVER_ID = CONFIG.get("serverId");
+		this.OUTPUT = new MixedOutput(this.CONFIG.get("loggingChannelID"), this.CONFIG.get("logToChannel").equalsIgnoreCase("true"), this.CONFIG.get("logToConsole").equalsIgnoreCase("true"), "Core");
+		SERVER_ID = this.CONFIG.get("serverId");
 
 		DEBUG_IDS = debugIDs();
-		setDebugMode(CONFIG.get("debugMode"), DEBUG_IDS);
+		setDebugMode(this.CONFIG.get("debugMode"), DEBUG_IDS);
 
 		if(DEBUG_IDS == null) return;
 
 		if(!initialJDACreation()) return;
 
 		if(offlineTestMode) {
-			OUTPUT.error("Overriden by offline test mode");
+			this.OUTPUT.error("Overriden by offline test mode");
 		}else if(jda.getGuildById(SERVER_ID) == null) {
-			OUTPUT.error("Invalid Server ID given, stopping DEMI");
+			this.OUTPUT.error("Invalid Server ID given, stopping DEMI");
 			jda.shutdown();
 			jda = null;
 			return;
@@ -210,36 +210,36 @@ public class Demi extends HasConfig{
 
 	public Demi() {
 		super(new File("config.cfg"));
-		CONFIG_KEYS.add(new Key("discordBotToken", "TOKEN_HERE"));
-		CONFIG_KEYS.add(new Key("debugMode", "false"));
-		CONFIG_KEYS.add(new Key("debugIDs", "[]"));
-		CONFIG_KEYS.add(new Key("serverId", "DISCORD_SERVER_ID_HERE"));
+		this.CONFIG_KEYS.add(new Key("discordBotToken", "TOKEN_HERE"));
+		this.CONFIG_KEYS.add(new Key("debugMode", "false"));
+		this.CONFIG_KEYS.add(new Key("debugIDs", "[]"));
+		this.CONFIG_KEYS.add(new Key("serverId", "DISCORD_SERVER_ID_HERE"));
 		if(!initialConfigIOCreation()) return;
 	}
 
 	private List<Long> debugIDs(){
 		List<Long> list = new ArrayList<>();
-		List<String> stringList = CONFIG.getList("debugIDs");
+		List<String> stringList = this.CONFIG.getList("debugIDs");
 		try {
 			for(String debugID : stringList) list.add(Long.parseLong(debugID));
 			return list;
 		}catch (NumberFormatException e) {
-			OUTPUT.error("Failed to retrieve parameter (debugIDs) in main config file ");
-			OUTPUT.warning("Retrieved value : " + CONFIG.getList("debugIDs"));
-			OUTPUT.warning("Expected an array of user IDs");
+			this.OUTPUT.error("Failed to retrieve parameter (debugIDs) in main config file ");
+			this.OUTPUT.warning("Retrieved value : " + this.CONFIG.getList("debugIDs"));
+			this.OUTPUT.warning("Expected an array of user IDs");
 			handleTrace(e);
 
 			if(DEBUG_MODE) {
-				OUTPUT.error("Debug Mode is active, stopping DEMI");
+				this.OUTPUT.error("Debug Mode is active, stopping DEMI");
 				return null;
 			}
-			OUTPUT.cancelled("Debug Mode is not active, skipping...");
+			this.OUTPUT.cancelled("Debug Mode is not active, skipping...");
 			return new ArrayList<>();
 		}
 	}
 
 	private String discordBotToken() {
-		return CONFIG.get("discordBotToken");
+		return this.CONFIG.get("discordBotToken");
 	}
 
 	private boolean initialJDACreation() {
@@ -281,7 +281,7 @@ public class Demi extends HasConfig{
 		try{
 			jda = builder.build().awaitReady();
 			jda.addEventListener(new RawListener());
-			OUTPUT.ok("JDA instance created");
+			this.OUTPUT.ok("JDA instance created");
 			return true;
 		}catch(Exception e){
 			DemiConsole.error("Error");
@@ -298,11 +298,11 @@ public class Demi extends HasConfig{
 
 	public void setDebugMode(boolean debugMode, List<Long> debugIDs) {
 		if(debugMode) {
-			OUTPUT.info("Demi is in debug mode, will only respond to following members id :");
-			for(Long debugID : debugIDs) OUTPUT.info(debugID + "");
+			this.OUTPUT.info("Demi is in debug mode, will only respond to following members id :");
+			for(Long debugID : debugIDs) this.OUTPUT.info(debugID + "");
 			return;
 		}
-		OUTPUT.info("Debug mode is off, DEMI will perform normal actions");
+		this.OUTPUT.info("Debug mode is off, DEMI will perform normal actions");
 		DEBUG_MODE = debugMode;
 	}
 
@@ -314,8 +314,9 @@ public class Demi extends HasConfig{
 		return DEBUG_IDS.contains(userId);
 	}
 
+	@Override
 	protected void handleTrace(Exception e) {
-		if(PRINT_STACK_TRACE) {
+		if(this.PRINT_STACK_TRACE) {
 			DemiConsole.info("Printing stack trace");
 			e.printStackTrace();
 		}else DemiConsole.cancelled("Core module set to not print stack trace");
@@ -326,12 +327,12 @@ public class Demi extends HasConfig{
 	}
 
 	private void startConsoleInputReader() {
-		OUTPUT.action("Starting console input stream reader");
-		consoleThread = new Thread(new Runnable() {
+		this.OUTPUT.action("Starting console input stream reader");
+		this.consoleThread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				OUTPUT.ok("Console reader Thread started");
+				Demi.this.OUTPUT.ok("Console reader Thread started");
 				@SuppressWarnings("resource")
 				Scanner console = new Scanner(System.in);
 				while (true) {
@@ -349,16 +350,16 @@ public class Demi extends HasConfig{
 						command = cmd;
 					}
 					String[] argsArray = raw.replaceFirst(command, "").split(" ");
-					ArrayList<String> args = new ArrayList<String>();
+					ArrayList<String> args = new ArrayList<>();
 					
-					OUTPUT.info("Command received from console : ");
-					OUTPUT.info(command);
+					Demi.this.OUTPUT.info("Command received from console : ");
+					Demi.this.OUTPUT.info(command);
 					for(String s : argsArray) if(!s.isEmpty()) args.add(s);
-					for(String s : args) OUTPUT.info("- " + s);
+					for(String s : args) Demi.this.OUTPUT.info("- " + s);
 					for(Module module : Demi.i.getActiveModules()) {
 						new Thread(new Runnable() {
 							@Override public void run() {
-								module.onCommand(new DemiCommandReceiveEvent(null, command.replace("\\", ""), args, OUTPUT));
+								module.onCommand(new DemiCommandReceiveEvent(null, command.replace("\\", ""), args, Demi.this.OUTPUT));
 							}
 						}).start();
 					}
@@ -370,11 +371,11 @@ public class Demi extends HasConfig{
 				}
 			}
 		});
-		consoleThread.start();
+		this.consoleThread.start();
 	}
 
-	public File findConfigFileByName(String fileName) {
-		fileName = fileName.replace(".cfg", "");
+	public File findConfigFileByName(String givenFileName) {
+		String fileName = givenFileName.replace(".cfg", "");
 		File parentFolder = Demi.i.CONFIG.getFile().getAbsoluteFile().getParentFile();
 		List<File> files = recursiveFileSearch(parentFolder, 5);
 		for(File configFile : files) {
@@ -386,16 +387,16 @@ public class Demi extends HasConfig{
 		return null;
 	}
 
-	public List<File> recursiveFileSearch(File parentFolder, int i) {
-		return recursiveFileSearch(new ArrayList<>(), parentFolder, i);
+	public List<File> recursiveFileSearch(File parentFolder, int recursion) {
+		return recursiveFileSearch(new ArrayList<>(), parentFolder, recursion);
 	}
 
-	public List<File> recursiveFileSearch(ArrayList<File> files, File folder, int i) {
-		if(i == 0) return files;
+	public List<File> recursiveFileSearch(ArrayList<File> files, File folder, int recursion) {
+		if(recursion == 0) return files;
 		File[] folderFiles = folder.listFiles();
 		for(File file : folderFiles) {
 			if(file.isDirectory()) {
-				recursiveFileSearch(files, file, i - 1);
+				recursiveFileSearch(files, file, recursion - 1);
 				continue;
 			}
 			if(file.getName().endsWith(".cfg") || file.getName().endsWith(".demidb")) files.add(file);

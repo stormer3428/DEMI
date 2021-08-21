@@ -11,11 +11,11 @@ public class Key {
 	}
 
 	public String name() {
-		return name;
+		return this.name;
 	}
 
 	public String defaultValue() {
-		return defaultValue;
+		return this.defaultValue;
 	}
 	
 }
