@@ -7,12 +7,19 @@ import java.util.List;
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class MessageLeveling extends Module{
 
 	private int expPerMessage;
 	private int expPerMessageVariation;
+
+	private long expIncreaseCooldownMS;
+	private boolean enableExpIncreaseCooldownMS;
+	
+	private List<String> onCoolDownUsers = new ArrayList<>();
+	private long lastWiped = System.currentTimeMillis();
 
 	private LevelCalculator LEVEL_CALCULATOR;
 
@@ -21,6 +28,8 @@ public class MessageLeveling extends Module{
 
 		CONFIG_KEYS.add(new Key("expPerMessage", "100"));
 		CONFIG_KEYS.add(new Key("expPerMessageVariation", "100"));
+		CONFIG_KEYS.add(new Key("expIncreaseCooldownMS", "300000"));
+		CONFIG_KEYS.add(new Key("enableExpIncreaseCooldownMS", "true"));
 
 		if(initialConfigIOCreation()) return;
 		OUTPUT.warning("Disabling module to prevent errors");
@@ -85,14 +94,45 @@ public class MessageLeveling extends Module{
 			return;
 		}
 		OUTPUT.trace("expPerMessageVariation : " + expPerMessageVariation);
+		enableExpIncreaseCooldownMS = CONFIG.get("enableExpIncreaseCooldownMS").equalsIgnoreCase("true");
+		OUTPUT.trace("enableExpIncreaseCooldownMS : " + enableExpIncreaseCooldownMS);
+		try {
+			expIncreaseCooldownMS = Long.parseLong(CONFIG.get("expIncreaseCooldownMS"));
+			if(expIncreaseCooldownMS <= 0) {
+				OUTPUT.warning("enableExpIncreaseCooldownMS was set to true with expIncreaseCooldownMS set to " + expIncreaseCooldownMS);
+				OUTPUT.warning("Disabling module to prevent errors");
+				Demi.disableModule(this);
+				return;
+			}
+		} catch (Exception e) {
+			OUTPUT.error("Error while parsing value of expIncreaseCooldownMS, expected an integer");
+			handleTrace(e);
+			OUTPUT.warning("Disabling module to prevent errors");
+			Demi.disableModule(this);
+			return;
+		}
+		OUTPUT.trace("expIncreaseCooldownMS : " + expIncreaseCooldownMS);
 
 		OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+		updateCooldownCache();
+		String memberUID = event.getAuthor().getId();
+		OUTPUT.trace("Message received from member " + memberUID);
+		if(onCoolDownUsers.contains(memberUID)) return;
+		
+		
+		
 		// TODO Auto-generated method stub
-		super.onGuildMessageReceived(event);
+	}
+
+	private void updateCooldownCache() {
+		while(System.currentTimeMillis() - lastWiped >= expIncreaseCooldownMS) {
+			lastWiped += expIncreaseCooldownMS;
+			onCoolDownUsers.clear();
+		}
 	}
 
 }
