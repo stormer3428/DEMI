@@ -36,11 +36,6 @@ public class LevelRoleCalculator extends Module{
 	}
 
 	@Override
-	public List<String> getDependencies() {
-		return new ArrayList<>();
-	}
-
-	@Override
 	public String getName() {
 		return "LevelRoleCalculator";
 	}
@@ -49,10 +44,6 @@ public class LevelRoleCalculator extends Module{
 	public String getDescription() {
 		return "A module that handle the computation needed to know what role should be given for what level";
 	}
-
-	@Override
-	public void onDisable() {}
-
 	@Override
 	public void onEnable() {
 		super.onEnable();

@@ -2,7 +2,6 @@ package fr.stormer3428.demi.module;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.DemiCommandReceiveEvent;
@@ -30,11 +29,6 @@ public class DiscordCommandDispatcher extends Module{
 	}
 
 	@Override
-	public List<String> getDependencies() {
-		return new ArrayList<>();
-	}
-
-	@Override
 	public String getName() {
 		return "DiscordCommandDispatcher";
 	}
@@ -43,10 +37,6 @@ public class DiscordCommandDispatcher extends Module{
 	public String getDescription() {
 		return "A primary module that handle the detection and dispatching of commands coming from discord to all other modules";
 	}
-
-	@Override
-	public void onDisable() {}
-
 	@Override
 	public void onEnable() {
 		super.onEnable();

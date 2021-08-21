@@ -3,11 +3,11 @@ package fr.stormer3428.demi.module;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class MessageLeveling extends Module{
@@ -21,8 +21,8 @@ public class MessageLeveling extends Module{
 	private List<String> onCoolDownUsers = new ArrayList<>();
 	private long lastWiped = System.currentTimeMillis();
 
-	@SuppressWarnings("unused")
 	private LevelCalculator LEVEL_CALCULATOR;
+	private MessageLevelingMultiplierRoles MULTIPLIER_ROLES; //TODO
 
 	public MessageLeveling() {
 		super(new File("level/messageLeveling.cfg"));
@@ -47,17 +47,14 @@ public class MessageLeveling extends Module{
 
 	@Override
 	public String getName() {
-		return "Leveling";
+		return "MessageLeveling";
 	}
 
 	@Override
 	public String getDescription() {
 		return "The module that handles leveling up upon sending messages \n"
-				+ "the way the exp variation works is simple with the variation set to 150 and the base set to 100 for exemple, the amount of exp given will be from 100 all the way up to 150";
+				+ "the way the exp variation works is simple with the variation set to 150 and the base set to 100 for exemple, the amount of exp given will be from 100 all the way up to 250";
 	}
-
-	@Override
-	public void onDisable() {}
 
 	@Override
 	public void onEnable() {
@@ -94,26 +91,27 @@ public class MessageLeveling extends Module{
 			Demi.disableModule(this);
 			return;
 		}
-		OUTPUT.trace("expPerMessageVariation : " + expPerMessageVariation);
-		enableExpIncreaseCooldownMS = CONFIG.get("enableExpIncreaseCooldownMS").equalsIgnoreCase("true");
-		OUTPUT.trace("enableExpIncreaseCooldownMS : " + enableExpIncreaseCooldownMS);
+		this.OUTPUT.trace("expPerMessageVariation : " + this.expPerMessageVariation);
+		
+		this.enableExpIncreaseCooldownMS = this.CONFIG.get("enableExpIncreaseCooldownMS").equalsIgnoreCase("true");
+		this.OUTPUT.trace("enableExpIncreaseCooldownMS : " + this.enableExpIncreaseCooldownMS);
+		
 		try {
-			expIncreaseCooldownMS = Long.parseLong(CONFIG.get("expIncreaseCooldownMS"));
-			if(expIncreaseCooldownMS <= 0) {
-				OUTPUT.warning("enableExpIncreaseCooldownMS was set to true with expIncreaseCooldownMS set to " + expIncreaseCooldownMS);
-				OUTPUT.warning("Disabling module to prevent errors");
+			this.expIncreaseCooldownMS = Long.parseLong(this.CONFIG.get("expIncreaseCooldownMS"));
+			if(this.expIncreaseCooldownMS <= 0) {
+				this.OUTPUT.warning("enableExpIncreaseCooldownMS was set to true with expIncreaseCooldownMS set to " + this.expIncreaseCooldownMS);
+				this.OUTPUT.warning("Disabling module to prevent errors");
 				Demi.disableModule(this);
 				return;
 			}
 		} catch (Exception e) {
-			OUTPUT.error("Error while parsing value of expIncreaseCooldownMS, expected an integer");
+			this.OUTPUT.error("Error while parsing value of expIncreaseCooldownMS, expected an integer");
 			handleTrace(e);
-			OUTPUT.warning("Disabling module to prevent errors");
+			this.OUTPUT.warning("Disabling module to prevent errors");
 			Demi.disableModule(this);
 			return;
 		}
-		OUTPUT.trace("expIncreaseCooldownMS : " + expIncreaseCooldownMS);
-		this.OUTPUT.trace("expPerMessageVariation : " + this.expPerMessageVariation);
+		this.OUTPUT.trace("expIncreaseCooldownMS : " + this.expIncreaseCooldownMS);
 
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
@@ -122,18 +120,20 @@ public class MessageLeveling extends Module{
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		updateCooldownCache();
 		String memberUID = event.getAuthor().getId();
-		OUTPUT.trace("Message received from member " + memberUID);
-		if(onCoolDownUsers.contains(memberUID)) return;
+		this.OUTPUT.trace("Message received from member " + memberUID);
+		if(this.onCoolDownUsers.contains(memberUID)) return;
 		
+		Long increase = (long) (this.expPerMessage + Math.round(new Random().nextFloat() * this.expPerMessageVariation));
 		
+		//TODO Nitro booster roles
 		
-		// TODO Auto-generated method stub
+		this.LEVEL_CALCULATOR.increaseUserExpBy(memberUID, increase);
 	}
 
 	private void updateCooldownCache() {
-		while(System.currentTimeMillis() - lastWiped >= expIncreaseCooldownMS) {
-			lastWiped += expIncreaseCooldownMS;
-			onCoolDownUsers.clear();
+		while(System.currentTimeMillis() - this.lastWiped >= this.expIncreaseCooldownMS) {
+			this.lastWiped += this.expIncreaseCooldownMS;
+			this.onCoolDownUsers.clear();
 		}
 	}
 

@@ -3,7 +3,6 @@ package fr.stormer3428.demi.module;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.IO;
@@ -35,11 +34,6 @@ public class LevelCalculator extends Module{
 		this.OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
 
-	}
-
-	@Override
-	public List<String> getDependencies() {
-		return new ArrayList<>();
 	}
 
 	@Override
@@ -188,12 +182,12 @@ public class LevelCalculator extends Module{
 	}
 
 	public void setUserExp(String UID, Long exp) {
-		OUTPUT.trace("Setting exp of user " + UID + " to " + exp);
+		this.OUTPUT.trace("Setting exp of user " + UID + " to " + exp);
 		this.LEVEL_DATABASE.setParameter(UID, exp + "");
 	}
 
 	public void setUserLevel(String UID, int level) {
-		OUTPUT.trace("Setting level of user " + UID + " to " + level);
+		this.OUTPUT.trace("Setting level of user " + UID + " to " + level);
 		setUserExp(UID, getExpForLevel(level));
 	}
 	
@@ -204,7 +198,7 @@ public class LevelCalculator extends Module{
 			this.OUTPUT.error("getUserExp returned -1, signaling an error earlier in the process");
 			return;
 		}
-		OUTPUT.trace("Increasing exp of user " + UID + " from " + currentExp + " to " + (currentExp + expIncrease));
+		this.OUTPUT.trace("Increasing exp of user " + UID + " from " + currentExp + " to " + (currentExp + expIncrease));
 		setUserExp(UID, currentExp + expIncrease);
 	}
 }

@@ -194,7 +194,8 @@ public abstract class Module extends HasConfig{
 		this.CONFIG_KEYS.add(new Key("enabled", "false"));
 	}
 
-	public abstract List<String> getDependencies();
+	public List<String> getDependencies(){return new ArrayList<>();}
+	public List<String> getSoftDependencies(){return new ArrayList<>();}
 	public boolean canBeLoaded() {
 		List<String> activeModules = new ArrayList<>();
 		for(Module module : Demi.ACTIVE_MODULES) activeModules.add(module.getName());
@@ -222,7 +223,7 @@ public abstract class Module extends HasConfig{
 		}else DemiConsole.cancelled(getName() + " module set to not print stack trace");
 	}
 
-	public abstract void onDisable();
+	public void onDisable() {}
 	public void onEnable() {
 		this.OUTPUT = new MixedOutput(this.CONFIG.get("loggingChannelID"), this.CONFIG.get("logToChannel").equalsIgnoreCase("true"), this.CONFIG.get("logToConsole").equalsIgnoreCase("true"), getName());
 	}

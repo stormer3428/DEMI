@@ -47,14 +47,6 @@ public class Autorole extends Module{
 				+ "This can be used as a mean to check whether a member has a verified account as having a role bypasses the requirement for having a verified account."
 				+ "Auto roles may be roles such as category roles or something like a member role.";
 	}
-	
-	@Override
-	public List<String> getDependencies() {
-		return new ArrayList<>();
-	}
-
-	@Override
-	public void onDisable() {}
 
 	@Override
 	public void onEnable() {
