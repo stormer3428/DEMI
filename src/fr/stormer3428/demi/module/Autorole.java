@@ -28,11 +28,11 @@ public class Autorole extends Module{
 	public Autorole() {
 		super(new File("autorole.cfg"));
 		
-		CONFIG_KEYS.add(new Key("cooldown", "300000"));
-		CONFIG_KEYS.add(new Key("roles", "[]"));
-		CONFIG_KEYS.add(new Key("listensToBots", "false"));
+		this.CONFIG_KEYS.add(new Key("cooldown", "300000"));
+		this.CONFIG_KEYS.add(new Key("roles", "[]"));
+		this.CONFIG_KEYS.add(new Key("listensToBots", "false"));
 		if(initialConfigIOCreation()) return;
-		OUTPUT.warning("Disabling module to prevent errors");
+		this.OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
 	}
 
@@ -59,26 +59,26 @@ public class Autorole extends Module{
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		COOLDOWN = cooldown();
-		if(COOLDOWN == -1) return;
-		OUTPUT.trace("cooldown : " + COOLDOWN);
-		LISTENSTOBOT = listensToBots();
-		OUTPUT.trace("listensToBots : " + (LISTENSTOBOT ? "true" : "false"));
-		ROLES = roles();
-		if(ROLES == null) return;
-		OUTPUT.trace("roles :");
-		for(Long role : ROLES) OUTPUT.info(role + "");
+		this.COOLDOWN = cooldown();
+		if(this.COOLDOWN == -1) return;
+		this.OUTPUT.trace("cooldown : " + this.COOLDOWN);
+		this.LISTENSTOBOT = listensToBots();
+		this.OUTPUT.trace("listensToBots : " + (this.LISTENSTOBOT ? "true" : "false"));
+		this.ROLES = roles();
+		if(this.ROLES == null) return;
+		this.OUTPUT.trace("roles :");
+		for(Long role : this.ROLES) this.OUTPUT.info(role + "");
 		
-		OUTPUT.ok("Successfully loaded all config parameters");
+		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event){
-		if(System.currentTimeMillis() - lastWiped > cooldown()){
-			lastWiped = System.currentTimeMillis();
-			cooldownSet.clear();
+		if(System.currentTimeMillis() - this.lastWiped > cooldown()){
+			this.lastWiped = System.currentTimeMillis();
+			this.cooldownSet.clear();
 		}
-		if(!LISTENSTOBOT && event.getAuthor().isBot()) return;
+		if(!this.LISTENSTOBOT && event.getAuthor().isBot()) return;
 		Message message = event.getMessage();
 		if(message.getChannel().getType() != ChannelType.TEXT) return;
 
@@ -90,14 +90,14 @@ public class Autorole extends Module{
 
 		if(Demi.i.getDebugMode() && !Demi.i.isDebugger(member.getIdLong())) return;
 
-		OUTPUT.info("Message received from member " + member.getEffectiveName());
+		this.OUTPUT.info("Message received from member " + member.getEffectiveName());
 		
-		if(cooldownSet.contains(member.getIdLong())) return;
+		if(this.cooldownSet.contains(member.getIdLong())) return;
 		
 		List<Role> memberRoles = member.getRoles();
 		List<Role> autoRoles = new ArrayList<>();
 		List<Thread> threads = new ArrayList<>();
-		for(Long autoRoleID : ROLES) {
+		for(Long autoRoleID : this.ROLES) {
 			threads.add(new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -109,57 +109,55 @@ public class Autorole extends Module{
 		for(Thread thread : threads) try {
 			thread.wait();
 		} catch (InterruptedException e) {
-			OUTPUT.error(getName() + " caught an error while multithreading");
+			this.OUTPUT.error(getName() + " caught an error while multithreading");
 			handleTrace(e);
 		}
 		
 		for(Role role : autoRoles) {
 			if(memberRoles != null && !memberRoles.isEmpty() &&  memberRoles.contains(role)) continue;
-			OUTPUT.info("Member " + member.getEffectiveName() + " is missing role " + role.getName());
+			this.OUTPUT.info("Member " + member.getEffectiveName() + " is missing role " + role.getName());
 			member.getGuild().addRoleToMember(member, role).complete();
-			OUTPUT.ok("Role " + role.getName() + " added!");
+			this.OUTPUT.ok("Role " + role.getName() + " added!");
 		}
 	}	
 
 	private boolean listensToBots() {
-		return CONFIG.get("listensToBots").equalsIgnoreCase("true");
+		return this.CONFIG.get("listensToBots").equalsIgnoreCase("true");
 	}	
 
 	private int cooldown() {
 		int i = -1;
 		try{
-			i = Integer.parseInt(CONFIG.get("cooldown"));
+			i = Integer.parseInt(this.CONFIG.get("cooldown"));
 		}catch (NumberFormatException e) {
 			handleTrace(e);
 		}
 		if(i > 0) return i;
-		OUTPUT.error("Failed to retrieve parameter (cooldown) in config file " + getName());
-		OUTPUT.warning("Retrieved value : " + CONFIG.get("cooldown"));
-		OUTPUT.warning("Expected a strictly positive number");
-		OUTPUT.warning("Disabling module to prevent errors");
+		this.OUTPUT.error("Failed to retrieve parameter (cooldown) in config file " + getName());
+		this.OUTPUT.warning("Retrieved value : " + this.CONFIG.get("cooldown"));
+		this.OUTPUT.warning("Expected a strictly positive number");
+		this.OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
 		return -1;
 	}
 
 	public List<Long> roles() {
 		List<Long> list = new ArrayList<>();
-		List<String> stringList = CONFIG.getList("roles");
+		List<String> stringList = this.CONFIG.getList("roles");
 		try {
 			for(String role : stringList) list.add(Long.parseLong(role));
 			if(!list.isEmpty()) return list;
-			else {
-				OUTPUT.warning("Parameter (roles) in config file " + getName() + " was found to be empty, disabling module");
-				Demi.disableModule(this);
-				return null;
-			}
+			this.OUTPUT.warning("Parameter (roles) in config file " + getName() + " was found to be empty, disabling module");
+			Demi.disableModule(this);
+			return null;
 		}catch (NumberFormatException e) {
-			OUTPUT.error("Failed to retrieve parameter (roles) in config file " + getName());
-			OUTPUT.warning("Retrieved value : " + CONFIG.getList("roles"));
-			OUTPUT.warning("Expected an array of role IDs");
+			this.OUTPUT.error("Failed to retrieve parameter (roles) in config file " + getName());
+			this.OUTPUT.warning("Retrieved value : " + this.CONFIG.getList("roles"));
+			this.OUTPUT.warning("Expected an array of role IDs");
 			
 			handleTrace(e);
 			
-			OUTPUT.warning("Disabling module to prevent errors");
+			this.OUTPUT.warning("Disabling module to prevent errors");
 			Demi.disableModule(this);
 			return null;
 		}

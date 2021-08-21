@@ -19,19 +19,19 @@ public class DemiCommandReceiveEvent {
 	}
 
 	public MessageReceivedEvent getMessageReceivedEvent() {
-		return messageReceivedEvent;
+		return this.messageReceivedEvent;
 	}
 
 	public String getCommand() {
-		return command;
+		return this.command;
 	}
 
 	public ArrayList<String> getArgs() {
-		return args;
+		return this.args;
 	}
 
 	public MixedOutput getOutput() {
-		return output;
+		return this.output;
 	}
 	
 }

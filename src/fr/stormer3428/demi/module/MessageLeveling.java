@@ -21,24 +21,25 @@ public class MessageLeveling extends Module{
 	private List<String> onCoolDownUsers = new ArrayList<>();
 	private long lastWiped = System.currentTimeMillis();
 
+	@SuppressWarnings("unused")
 	private LevelCalculator LEVEL_CALCULATOR;
 
 	public MessageLeveling() {
 		super(new File("level/messageLeveling.cfg"));
 
-		CONFIG_KEYS.add(new Key("expPerMessage", "100"));
-		CONFIG_KEYS.add(new Key("expPerMessageVariation", "100"));
-		CONFIG_KEYS.add(new Key("expIncreaseCooldownMS", "300000"));
-		CONFIG_KEYS.add(new Key("enableExpIncreaseCooldownMS", "true"));
+		this.CONFIG_KEYS.add(new Key("expIncreaseCooldownMS", "300000"));
+		this.CONFIG_KEYS.add(new Key("enableExpIncreaseCooldownMS", "true"));
+		this.CONFIG_KEYS.add(new Key("expPerMessage", "100"));
+		this.CONFIG_KEYS.add(new Key("expPerMessageVariation", "100"));
 
 		if(initialConfigIOCreation()) return;
-		OUTPUT.warning("Disabling module to prevent errors");
+		this.OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
 	}
 
 	@Override
 	public List<String> getDependencies() {
-		ArrayList<String> dependencies = new ArrayList<String>();
+		ArrayList<String> dependencies = new ArrayList<>();
 		dependencies.add("LevelCalculator");
 		dependencies.add("LevelRoleCalculator");
 		return dependencies;
@@ -63,33 +64,33 @@ public class MessageLeveling extends Module{
 		super.onEnable();
 		try {
 			for(Module module : Demi.i.getActiveModules()) if(module.getName().equals("LevelCalculator")) {
-				LEVEL_CALCULATOR = (LevelCalculator) module;
+				this.LEVEL_CALCULATOR = (LevelCalculator) module;
 				break;
 			}
 		}catch (Exception e) {
-			OUTPUT.error("Error while hooking to dependency LevelCalculator");
+			this.OUTPUT.error("Error while hooking to dependency LevelCalculator");
 			handleTrace(e);
-			OUTPUT.warning("Disabling module to prevent errors");
+			this.OUTPUT.warning("Disabling module to prevent errors");
 			Demi.disableModule(this);
 			return;
 		}
 
 		try {
-			expPerMessage = Integer.parseInt(CONFIG.get("expPerMessage"));
+			this.expPerMessage = Integer.parseInt(this.CONFIG.get("expPerMessage"));
 		} catch (Exception e) {
-			OUTPUT.error("Error while parsing value of expPerMessage, expected an integer");
+			this.OUTPUT.error("Error while parsing value of expPerMessage, expected an integer");
 			handleTrace(e);
-			OUTPUT.warning("Disabling module to prevent errors");
+			this.OUTPUT.warning("Disabling module to prevent errors");
 			Demi.disableModule(this);
 			return;
 		}
-		OUTPUT.trace("expPerMessage : " + expPerMessage);
+		this.OUTPUT.trace("expPerMessage : " + this.expPerMessage);
 		try {
-			expPerMessageVariation = Integer.parseInt(CONFIG.get("expPerMessageVariation"));
+			this.expPerMessageVariation = Integer.parseInt(this.CONFIG.get("expPerMessageVariation"));
 		} catch (Exception e) {
-			OUTPUT.error("Error while parsing value of expPerMessageVariation, expected an integer");
+			this.OUTPUT.error("Error while parsing value of expPerMessageVariation, expected an integer");
 			handleTrace(e);
-			OUTPUT.warning("Disabling module to prevent errors");
+			this.OUTPUT.warning("Disabling module to prevent errors");
 			Demi.disableModule(this);
 			return;
 		}
@@ -112,8 +113,9 @@ public class MessageLeveling extends Module{
 			return;
 		}
 		OUTPUT.trace("expIncreaseCooldownMS : " + expIncreaseCooldownMS);
+		this.OUTPUT.trace("expPerMessageVariation : " + this.expPerMessageVariation);
 
-		OUTPUT.ok("Successfully loaded all config parameters");
+		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 	@Override

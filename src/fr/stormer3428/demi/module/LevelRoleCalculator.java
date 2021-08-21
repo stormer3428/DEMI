@@ -27,11 +27,11 @@ public class LevelRoleCalculator extends Module{
 	public LevelRoleCalculator() {
 		super(new File("level/levelRoleCalculator.cfg"));
 
-		CONFIG_KEYS.add(new Key("enableCache", "false"));
-		CONFIG_KEYS.add(new Key("keepOnlyLatestRole", "true"));
+		this.CONFIG_KEYS.add(new Key("enableCache", "false"));
+		this.CONFIG_KEYS.add(new Key("keepOnlyLatestRole", "true"));
 
 		if(initialConfigIOCreation()) return;
-		OUTPUT.warning("Disabling module to prevent errors");
+		this.OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);	
 	}
 
@@ -56,21 +56,21 @@ public class LevelRoleCalculator extends Module{
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		enableCache = CONFIG.get("enableCache").equalsIgnoreCase("true");
-		OUTPUT.trace("enableCache : " + enableCache);
-		keepOnlyLatestRole = CONFIG.get("keepOnlyLatestRole").equalsIgnoreCase("true");
-		OUTPUT.trace("keepOnlyLatestRole : " + keepOnlyLatestRole);
+		this.enableCache = this.CONFIG.get("enableCache").equalsIgnoreCase("true");
+		this.OUTPUT.trace("enableCache : " + this.enableCache);
+		this.keepOnlyLatestRole = this.CONFIG.get("keepOnlyLatestRole").equalsIgnoreCase("true");
+		this.OUTPUT.trace("keepOnlyLatestRole : " + this.keepOnlyLatestRole);
 
-		ROLES_DATABASE = new IO(new File("level/rolesdb" + Demi.i.getServerID() + ".cfg"), new ArrayList<>(), true);
+		this.ROLES_DATABASE = new IO(new File("level/rolesdb" + Demi.i.getServerID() + ".cfg"), new ArrayList<>(), true);
 		
-		OUTPUT.ok("Successfully loaded all config parameters");
+		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 	public int retrieveLevelFromRoles(String UID) {
 		if(!enabled()) return -1;
 		Member member = Demi.jda.getGuildById(Demi.i.getServerID()).getMemberById(UID);
 		if(member == null) {
-			OUTPUT.warning("Attempted te retrieve level of non guild member, returning 0");
+			this.OUTPUT.warning("Attempted te retrieve level of non guild member, returning 0");
 			return 0;
 		}
 		return retrieveLevelFromRoles(member);
@@ -108,20 +108,20 @@ public class LevelRoleCalculator extends Module{
 			return;
 		}
 		List<Role> rolesToHave = new ArrayList<>();
-		if(keepOnlyLatestRole) rolesToHave.add(latestAttainedRole);
+		if(this.keepOnlyLatestRole) rolesToHave.add(latestAttainedRole);
 		else rolesToHave.addAll(getObtainedRoles(level));
 
 		List<Role> memberRoles = member.getRoles();
 		for(Role levelRole : levelRoles(false)) {
 			if(rolesToHave.contains(levelRole) && !memberRoles.contains(levelRole)) {
-				OUTPUT.trace("Member " + member.getEffectiveName() + "(" + member.getId() + ") is missing levelrole " + levelRole.getName());
+				this.OUTPUT.trace("Member " + member.getEffectiveName() + "(" + member.getId() + ") is missing levelrole " + levelRole.getName());
 				member.getGuild().addRoleToMember(member, levelRole).queue();
-				OUTPUT.trace("levelRole added!");
+				this.OUTPUT.trace("levelRole added!");
 			}
 			else if(!rolesToHave.contains(levelRole) && memberRoles.contains(levelRole)) {
-				OUTPUT.trace("Member " + member.getEffectiveName() + "(" + member.getId() + ") has levelrole " + levelRole.getName() + " but is level " + level);
+				this.OUTPUT.trace("Member " + member.getEffectiveName() + "(" + member.getId() + ") has levelrole " + levelRole.getName() + " but is level " + level);
 				member.getGuild().removeRoleFromMember(member, levelRole).queue();
-				OUTPUT.trace("levelRole removed!");
+				this.OUTPUT.trace("levelRole removed!");
 			}
 		}
 	}
@@ -144,7 +144,7 @@ public class LevelRoleCalculator extends Module{
 	}
 
 	private HashMap<Role, Integer> roleLevelMap(boolean returnNullIfError) {
-		if(enableCache && cachedRolelevelMap != null) return cachedRolelevelMap;
+		if(this.enableCache && this.cachedRolelevelMap != null) return this.cachedRolelevelMap;
 		HashMap<Integer, Role> levelRolesIDs = levelRoleMap(returnNullIfError);
 		if(levelRolesIDs == null) return null;
 		HashMap<Role, List<Integer>> reversedMap = new HashMap<>();
@@ -160,16 +160,16 @@ public class LevelRoleCalculator extends Module{
 			if(list.size() > 1 && returnNullIfError) return null;
 			roleLevelIDs.put(key, list.get(0));
 		}
-		if(enableCache) cachedRolelevelMap = roleLevelIDs;
+		if(this.enableCache) this.cachedRolelevelMap = roleLevelIDs;
 		return roleLevelIDs;
 	}
 
 	private HashMap<Integer, Role> levelRoleMap(boolean returnNullIfError) {
-		if(enableCache && cachedLevelRoleMap != null) return cachedLevelRoleMap;
-		HashMap<String, String> levelRolesIDsString = ROLES_DATABASE.getSortedAll();
+		if(this.enableCache && this.cachedLevelRoleMap != null) return this.cachedLevelRoleMap;
+		HashMap<String, String> levelRolesIDsString = this.ROLES_DATABASE.getSortedAll();
 		if(levelRolesIDsString == null) {
-			OUTPUT.error("Error, unable to generate SingleReversedMap for file " + ROLES_DATABASE.getFileName());
-			OUTPUT.error("It is crucial for this module to function properly, deactivating module...");
+			this.OUTPUT.error("Error, unable to generate SingleReversedMap for file " + this.ROLES_DATABASE.getFileName());
+			this.OUTPUT.error("It is crucial for this module to function properly, deactivating module...");
 			Demi.disableModule(this);
 			return null;
 		}
@@ -179,42 +179,42 @@ public class LevelRoleCalculator extends Module{
 			try {
 				level = Integer.parseInt(levelString);
 			}catch (NumberFormatException e) {
-				OUTPUT.error("Error while parsing level value for levelrole, expected a number but got " + levelString);
+				this.OUTPUT.error("Error while parsing level value for levelrole, expected a number but got " + levelString);
 				handleTrace(e);
 				if(returnNullIfError) return null;
-				else continue;
+				continue;
 			}
 			long roleId;
 			try {
 				roleId = Long.parseLong(levelRolesIDsString.get(levelString));
 			}catch (NumberFormatException e) {
-				OUTPUT.error("Error while parsing id value for levelRole, expected an integer but got " + levelRolesIDsString.get(levelString));
+				this.OUTPUT.error("Error while parsing id value for levelRole, expected an integer but got " + levelRolesIDsString.get(levelString));
 				handleTrace(e);
 				if(returnNullIfError) return null;
-				else continue;
+				continue;
 			}
 			Role role = Demi.jda.getGuildById(Demi.i.getServerID()).getRoleById(roleId);
 			if(role == null) {
-				OUTPUT.error("Error while attempting to retrieve level, invalid id " + levelRolesIDsString.get(levelString));
+				this.OUTPUT.error("Error while attempting to retrieve level, invalid id " + levelRolesIDsString.get(levelString));
 				if(returnNullIfError) return null;
-				else continue;
+				continue;
 			}
 			levelRolesMap.put(level, role);
 		}
-		if(enableCache) cachedLevelRoleMap = levelRolesMap;
+		if(this.enableCache) this.cachedLevelRoleMap = levelRolesMap;
 		return levelRolesMap;
 	}
 
 	private List<Role> levelRoles(boolean returnNullIfError){
-		if(enableCache && cachedLevelRoles != null) return cachedLevelRoles;
-		List<String> roleIdsString = ROLES_DATABASE.getValues();
+		if(this.enableCache && this.cachedLevelRoles != null) return this.cachedLevelRoles;
+		List<String> roleIdsString = this.ROLES_DATABASE.getValues();
 		if(roleIdsString.isEmpty()) return new ArrayList<>();
 		List<Long> roleIds = new ArrayList<>();
 		for(String roleIdString : roleIdsString) {
 			try {
 				roleIds.add(Long.parseLong(roleIdString));
 			} catch (NumberFormatException e) {
-				OUTPUT.error("Error while parsing id of levelRole, expected an integer but got " + roleIdString);
+				this.OUTPUT.error("Error while parsing id of levelRole, expected an integer but got " + roleIdString);
 				handleTrace(e);
 				if(returnNullIfError) return null;
 			}
@@ -225,9 +225,9 @@ public class LevelRoleCalculator extends Module{
 		for(Long roleId : roleIds) {
 			Role role = guild.getRoleById(roleId);
 			if(role == null) {
-				OUTPUT.error("Error while attempting to retrieve level, invalid id " + roleId);
+				this.OUTPUT.error("Error while attempting to retrieve level, invalid id " + roleId);
 				if(returnNullIfError) return null;
-				else continue;
+				continue;
 			}
 			levelRoles.add(role);
 		}

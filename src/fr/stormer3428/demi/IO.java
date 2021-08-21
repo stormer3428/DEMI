@@ -76,7 +76,7 @@ public class IO {
 		}
 		if(checkKeys) {
 			List<String> keys = getKeys();
-			for(Key defaultKey : defaultKeys) {
+			for(Key defaultKey : this.defaultKeys) {
 				if(keys.contains(defaultKey.name())) continue;
 				DemiConsole.info("File " + getFileName() + " is missing the key " + defaultKey.name());
 				DemiConsole.action("Adding the missing key at the end of file");
@@ -115,7 +115,7 @@ public class IO {
 	}
 
 	private boolean isCommentLine(String line) {
-		for(String header : commentLinesHeaders) if(line.startsWith(header)) return true;
+		for(String header : this.commentLinesHeaders) if(line.startsWith(header)) return true;
 		return false;
 	}
 
@@ -152,13 +152,13 @@ public class IO {
 		if(arrayString.isEmpty()) {
 			DemiConsole.warning("Unable to retrieve list " + key + " from file " + getFileName());
 			DemiConsole.info("Returned an empty list, if it is intentional, ignore this message");
-			return new ArrayList<String>();
+			return new ArrayList<>();
 		}
 
 		arrayString = arrayString.replace("[", "");
 		arrayString = arrayString.replace("]", "");
 
-		List<String> array = new ArrayList<String>();
+		List<String> array = new ArrayList<>();
 
 		for(String string : arrayString.split(",")) if(!string.isBlank() && !string.isEmpty()) array.add(string);
 
@@ -214,7 +214,7 @@ public class IO {
 			handleTrace(e);
 			return null;
 		}
-		HashMap<String, String> keys = new HashMap<String, String>();
+		HashMap<String, String> keys = new HashMap<>();
 		for(String line : lines){
 			if(isCommentLine(line)) continue;
 			if(!line.contains(":")) continue;
@@ -243,7 +243,7 @@ public class IO {
 		if(!fileCheck()) {
 			DemiConsole.error("Failed retrieval of raw file " + getFileName());
 			DemiConsole.warning("retuning an empty list");
-			return new ArrayList<String>();
+			return new ArrayList<>();
 		}
 
 		List<String> lines;
@@ -254,7 +254,7 @@ public class IO {
 			handleTrace(e);
 			return null;
 		}
-		ArrayList<String> keys = new ArrayList<String>();
+		ArrayList<String> keys = new ArrayList<>();
 		for(String line : lines){
 			if(isCommentLine(line)) continue;
 			keys.add(line);
@@ -336,9 +336,9 @@ public class IO {
 
 	}
 
-	public final boolean removeParameter(File file, String key) {
-		File inputFile = file;
-		File tempFile = new File(file.getName() + ".temp");
+	public final boolean removeParameter(File givenFile, String key) {
+		File inputFile = givenFile;
+		File tempFile = new File(givenFile.getName() + ".temp");
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)); BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
 			String currentLine;
@@ -350,7 +350,7 @@ public class IO {
 			}
 			return tempFile.renameTo(inputFile);
 		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception while attempting to remove parameter ("+key+") in file ("+file.getName()+"), returning false");
+			DemiConsole.error("Caught an IO exception while attempting to remove parameter ("+key+") in file ("+givenFile.getName()+"), returning false");
 			handleTrace(e);
 			return false;
 		}
@@ -362,14 +362,14 @@ public class IO {
 	}
 
 	private void handleTrace(IOException e) {
-		if(printStackTrace) {
+		if(this.printStackTrace) {
 			DemiConsole.info("Printing stack trace");
 			e.printStackTrace();
 		}else DemiConsole.cancelled(getFileName() + " IO set to not print stack trace");
 	}
 
 	public String getFileName() {
-		return fileName;
+		return this.fileName;
 	}
 
 	public static IO findIOByFileName(String fileName2) {
@@ -383,14 +383,14 @@ public class IO {
 	}
 
 	public File getFile() {
-		return file;
+		return this.file;
 	}
 	
 	public HashMap<String, List<String>> getReversedMap(){
-		HashMap<String, String> all = getAll();
-		HashMap<String, List<String>> reversedMap = new HashMap<String, List<String>>();
-		for(String key : all.keySet()) {
-			String reversedKey = all.get(key);
+		HashMap<String, String> returnedAll = getAll();
+		HashMap<String, List<String>> reversedMap = new HashMap<>();
+		for(String key : returnedAll.keySet()) {
+			String reversedKey = returnedAll.get(key);
 			if(!reversedMap.containsKey(reversedKey)) reversedMap.put(reversedKey, new ArrayList<>());
 			reversedMap.get(reversedKey).add(key);
 		}
@@ -411,7 +411,7 @@ public class IO {
 
 	public HashMap<String, String> getSingleReversedMap(boolean returnNullIfMulti) {
 		HashMap<String, List<String>> reversedMap = getReversedMap();
-		HashMap<String, String> singleReversedMap = new HashMap<String, String>();
+		HashMap<String, String> singleReversedMap = new HashMap<>();
 		
 		for(String key : reversedMap.keySet()) {
 			List<String> list = reversedMap.get(key);

@@ -12,8 +12,8 @@ public class MixedOutput {
 	private static IO io;
 
 	private static boolean enableBuffer;
-	private static int bufferTimeoutMS;
-	private static String buffer = "";
+	static int bufferTimeoutMS;
+	static String buffer = "";
 	private static Thread bufferThread;
 
 	public boolean PRINT_STACK_TRACE;
@@ -21,7 +21,7 @@ public class MixedOutput {
 	private String outputChannelID;
 	private boolean outputToChannel;
 	private boolean outputToConsole;
-	private TextChannel textChannel;
+	TextChannel textChannel;
 	private String mixedOutputHead;
 
 	public MixedOutput(String channelID, boolean channel, boolean console, String header) {
@@ -43,11 +43,11 @@ public class MixedOutput {
 			}
 			if(enableBuffer) startBufferThread();
 		}
-		outputChannelID = channelID;
-		outputToChannel = channel;
-		outputToConsole = console;
-		mixedOutputHead = header;
-		if(!outputToChannel) return;
+		this.outputChannelID = channelID;
+		this.outputToChannel = channel;
+		this.outputToConsole = console;
+		this.mixedOutputHead = header;
+		if(!this.outputToChannel) return;
 	}
 
 	public MixedOutput(String channelID, boolean console, String header) {
@@ -59,7 +59,7 @@ public class MixedOutput {
 	}
 
 	protected void handleTrace(Exception e) {
-		if(PRINT_STACK_TRACE) {
+		if(this.PRINT_STACK_TRACE) {
 			DemiConsole.info("printing stack trace");
 			e.printStackTrace();
 		}else DemiConsole.cancelled("Mixed Output set to not print stack trace");
@@ -74,7 +74,7 @@ public class MixedOutput {
 			public void run() {
 				while(true) {
 					if(!buffer.isEmpty()) {
-						textChannel.sendMessage(buffer).complete();
+						MixedOutput.this.textChannel.sendMessage(buffer).complete();
 						buffer = "";
 					}
 					try {
@@ -89,83 +89,83 @@ public class MixedOutput {
 	}
 
 	private void textChannelInit() {
-		if(textChannel == null) {
+		if(this.textChannel == null) {
 			if(Demi.jda == null) return;
-			textChannel = Demi.i.getGuild().getTextChannelById(outputChannelID);
+			this.textChannel = Demi.i.getGuild().getTextChannelById(this.outputChannelID);
 		}
 	}
 
 	public final void error(String message) {
-		if(outputToConsole) System.out.println("\033[38;5;196m" + "" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + "[📕Error] " + message + "\033[38;5;7m");
-		if(!outputToChannel) return;
+		if(this.outputToConsole) System.out.println("\033[38;5;196m" + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + "[📕Error] " + message + "\033[38;5;7m");
+		if(!this.outputToChannel) return;
 		textChannelInit();
-		if(enableBuffer) buffer = (buffer + "" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " **📕ERROR " + message + ".**" + "\n");
-		else textChannel.sendMessage("" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " **📕ERROR " + message + ".**" + "\n").queue();
+		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " **📕ERROR " + message + ".**" + "\n");
+		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " **📕ERROR " + message + ".**" + "\n").queue();
 	}
 
 	public final void warning(String message) {
-		if(outputToConsole) System.out.println("\033[38;5;208m" + "" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + "[📙Warning] " + message + "\033[38;5;7m");
-		if(!outputToChannel) return;
+		if(this.outputToConsole) System.out.println("\033[38;5;208m" + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + "[📙Warning] " + message + "\033[38;5;7m");
+		if(!this.outputToChannel) return;
 		textChannelInit();
-		if(enableBuffer) buffer = (buffer + "" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " ***📙WARNING " + message + ".***" + "\n");
-		else textChannel.sendMessage("" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " ***📙WARNING " + message + ".***" + "\n").queue();
+		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " ***📙WARNING " + message + ".***" + "\n");
+		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " ***📙WARNING " + message + ".***" + "\n").queue();
 	}
 
 	public final void ok(String message) {
-		if(outputToConsole) System.out.println("\033[38;5;118m" + "" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + "[📗Ok] " + message + "\033[38;5;7m");
-		if(!outputToChannel) return;
+		if(this.outputToConsole) System.out.println("\033[38;5;118m" + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + "[📗Ok] " + message + "\033[38;5;7m");
+		if(!this.outputToChannel) return;
 		textChannelInit();
-		if(enableBuffer) buffer = (buffer + "" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " 📗Ok " + message + "." + "\n");
-		else textChannel.sendMessage("" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " 📗Ok " + message + "." + "\n").queue();
+		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " 📗Ok " + message + "." + "\n");
+		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " 📗Ok " + message + "." + "\n").queue();
 	}
 
 	public final void action(String message) {
-		if(outputToConsole) System.out.println("\033[38;5;123m"+"" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + "[📘Action] " + message + "\033[38;5;7m");
-		if(!outputToChannel) return;
+		if(this.outputToConsole) System.out.println("\033[38;5;123m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + "[📘Action] " + message + "\033[38;5;7m");
+		if(!this.outputToChannel) return;
 		textChannelInit();
-		if(enableBuffer) buffer = (buffer + "" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " 📘Action " + message + "." + "\n");
-		else textChannel.sendMessage("" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " 📘Action " + message + "." + "\n").queue();
+		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " 📘Action " + message + "." + "\n");
+		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " 📘Action " + message + "." + "\n").queue();
 	}
 
 	public final void cancelled(String message) {
-		if(outputToConsole) System.out.println("\033[38;5;245m"+"" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + "[📓Cancelled] " + message + "\033[38;5;7m");
-		if(!outputToChannel) return;
+		if(this.outputToConsole) System.out.println("\033[38;5;245m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + "[📓Cancelled] " + message + "\033[38;5;7m");
+		if(!this.outputToChannel) return;
 		textChannelInit();
-		if(enableBuffer) buffer = (buffer + "" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " *📓Cancelled " + message + ".*" + "\n");
-		else textChannel.sendMessage("" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " *📓Cancelled " + message + ".*" + "\n").queue();
+		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " *📓Cancelled " + message + ".*" + "\n");
+		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " *📓Cancelled " + message + ".*" + "\n").queue();
 	}
 
 	public final void info(String message) {
-		if(outputToConsole) System.out.println("\033[38;5;226m"+"" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + "[Info] " + message + "\033[38;5;7m");
-		if(!outputToChannel) return;
+		if(this.outputToConsole) System.out.println("\033[38;5;226m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + "[Info] " + message + "\033[38;5;7m");
+		if(!this.outputToChannel) return;
 		textChannelInit();
-		if(enableBuffer) buffer = (buffer + "" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " Info " + message + "." + "\n");
-		else textChannel.sendMessage("" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " Info " + message + "." + "\n").queue();
+		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " Info " + message + "." + "\n");
+		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " Info " + message + "." + "\n").queue();
 	}
 
 	public final void trace(String message) {
-		if(!PRINT_STACK_TRACE) return;
-		if(outputToConsole) System.out.println("\033[38;5;226m"+"" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " " + message + "\033[38;5;7m");
-		if(!outputToChannel) return;
+		if(!this.PRINT_STACK_TRACE) return;
+		if(this.outputToConsole) System.out.println("\033[38;5;226m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + message + "\033[38;5;7m");
+		if(!this.outputToChannel) return;
 		textChannelInit();
-		if(enableBuffer) buffer = (buffer + "" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " " + message + "." + "\n");
-		else textChannel.sendMessage("" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " " + message + "." + "\n").queue();
+		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + message + "." + "\n");
+		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + message + "." + "\n").queue();
 	}
 
 	public void command(String message) {
-		if(outputToConsole)  System.out.println("\033[38;5;226m"+"" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " " + message + "\033[38;5;7m");
-		if(!outputToChannel) return;
+		if(this.outputToConsole)  System.out.println("\033[38;5;226m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + message + "\033[38;5;7m");
+		if(!this.outputToChannel) return;
 		textChannelInit();
-		textChannel.sendMessage("```" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " " + message + "```" + "\n").queue();
+		this.textChannel.sendMessage("```" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + message + "```" + "\n").queue();
 	}
 
 	public void embed(MessageEmbed embed, List<String> embedReplacement) {
-		if(outputToChannel) {
+		if(this.outputToChannel) {
 			textChannelInit();
-			textChannel.sendMessage(embed).queue();
+			this.textChannel.sendMessage(embed).queue();
 		}
-		if(!outputToConsole) return;
+		if(!this.outputToConsole) return;
 		for(String line : embedReplacement)
-			System.out.println("\033[38;5;226m"+"" + (mixedOutputHead.isEmpty() ? "" : "[" + mixedOutputHead + "]") + " " + line);
+			System.out.println("\033[38;5;226m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + line);
 	}
 }

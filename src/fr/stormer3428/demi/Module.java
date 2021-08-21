@@ -184,14 +184,14 @@ import net.dv8tion.jda.api.events.user.update.UserUpdateFlagsEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
 
-@SuppressWarnings({"deprecation", "rawtypes"})
+@SuppressWarnings({"deprecation", "rawtypes", "unused"})
 public abstract class Module extends HasConfig{
 
 	protected MixedOutput OUTPUT;
 
 	public Module(File file) {
 		super(file);
-		CONFIG_KEYS.add(new Key("enabled", "false"));
+		this.CONFIG_KEYS.add(new Key("enabled", "false"));
 	}
 
 	public abstract List<String> getDependencies();
@@ -206,7 +206,7 @@ public abstract class Module extends HasConfig{
 
 	public boolean enabled() {
 		try {
-			return CONFIG.get("enabled").equalsIgnoreCase("true");
+			return this.CONFIG.get("enabled").equalsIgnoreCase("true");
 		}catch (Exception e) {
 			DemiConsole.error("Caught an error while attempting to get module state of module "+getName()+", returning false");
 			handleTrace(e);
@@ -214,8 +214,9 @@ public abstract class Module extends HasConfig{
 		}
 	}
 
+	@Override
 	protected void handleTrace(Exception e) {
-		if(PRINT_STACK_TRACE) {
+		if(this.PRINT_STACK_TRACE) {
 			DemiConsole.info("printing stack trace");
 			e.printStackTrace();
 		}else DemiConsole.cancelled(getName() + " module set to not print stack trace");
@@ -223,9 +224,10 @@ public abstract class Module extends HasConfig{
 
 	public abstract void onDisable();
 	public void onEnable() {
-		OUTPUT = new MixedOutput(CONFIG.get("loggingChannelID"), CONFIG.get("logToChannel").equalsIgnoreCase("true"), CONFIG.get("logToConsole").equalsIgnoreCase("true"), getName());
+		this.OUTPUT = new MixedOutput(this.CONFIG.get("loggingChannelID"), this.CONFIG.get("logToChannel").equalsIgnoreCase("true"), this.CONFIG.get("logToConsole").equalsIgnoreCase("true"), getName());
 	}
 
+	
 	public void onCategoryCreate(CategoryCreateEvent event) {}
 	public void onCategoryDelete(CategoryDeleteEvent event){}
 	public void onCategoryUpdateName(CategoryUpdateNameEvent event){}

@@ -12,10 +12,10 @@ public class Reload extends CommandModule{
 	public Reload() {
 		super("Reload");
 
-		aliases.add("rl");
+		this.aliases.add("rl");
 		
 		if(initialConfigIOCreation()) return;
-		OUTPUT.warning("Disabling module to prevent errors");
+		this.OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
 	}
 
@@ -35,9 +35,10 @@ public class Reload extends CommandModule{
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		OUTPUT.ok("Successfully loaded all config parameters");
+		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
+	@Override
 	protected void runCommand(DemiCommandReceiveEvent event) {
 		Demi.i.reloadModules();
 	}
