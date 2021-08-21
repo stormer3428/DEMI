@@ -3,6 +3,7 @@ package fr.stormer3428.demi.module;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.IO;
@@ -17,7 +18,7 @@ public class LevelCalculator extends Module{
 	private HashMap<Integer, Long> CACHE_expToNextLevel = new HashMap<>();
 
 	private LevelRoleCalculator LEVEL_ROLE_CALCULATOR;
-	
+
 	private float levelIncreasePow;
 	protected int levelBase;
 
@@ -29,7 +30,7 @@ public class LevelCalculator extends Module{
 		this.CONFIG_KEYS.add(new Key("levelIncreasePow", "1.05"));
 		this.CONFIG_KEYS.add(new Key("levelBase", "500"));
 		this.CONFIG_KEYS.add(new Key("enableCaches", "true"));
-		
+
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
@@ -47,6 +48,13 @@ public class LevelCalculator extends Module{
 	}
 
 	@Override
+	public List<String> getSoftDependencies() {
+		ArrayList<String> dependencies = new ArrayList<>();
+		dependencies.add("LevelRoleCalculator");
+		return dependencies;
+	}
+
+	@Override
 	public void onDisable() {
 		if(this.enableCaches) {
 			this.OUTPUT.info("Wiping caches..");
@@ -60,7 +68,7 @@ public class LevelCalculator extends Module{
 		super.onEnable();
 
 		this.enableCaches = this.CONFIG.get("enableCaches").equalsIgnoreCase("true");
-		
+
 		this.OUTPUT.trace("enableCaches : " + this.enableCaches);
 		try {
 			this.levelIncreasePow = Float.parseFloat(this.CONFIG.get("levelIncreasePow"));
@@ -83,21 +91,15 @@ public class LevelCalculator extends Module{
 		}
 		this.OUTPUT.trace("levelBase : " + this.levelBase);
 
-		this.OUTPUT.trace("Attempting to hook into softDependency LevelRoleCalculator...");
-		for(Module module : Demi.i.getActiveModules()) if(module.getName().equals("LevelRoleCalculator")) {
-			this.LEVEL_ROLE_CALCULATOR = (LevelRoleCalculator) module;
-			break;
-		}
-		
+
+		this.LEVEL_ROLE_CALCULATOR = (LevelRoleCalculator) softLoad("LevelRoleCalculator", this.OUTPUT);
 		if(this.LEVEL_ROLE_CALCULATOR == null) if(this.PRINT_STACK_TRACE) {
-			this.OUTPUT.cancelled("Failed to hook");
 			this.OUTPUT.warning(getName() + " will be unable to retrieve a member's level based from his roles and thus will ignore them, as weel as not making them level up");
 			this.OUTPUT.warning("Members already in the database will level up normally");
 		}
-		else this.OUTPUT.ok("Hook into softDependency LevelRoleCalculator successful");
 
 		this.LEVEL_DATABASE = new IO(new File("level/leveldb" + Demi.i.getServerID() + ".demidb"), new ArrayList<>(), true);
-		
+
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
@@ -129,7 +131,7 @@ public class LevelCalculator extends Module{
 	public long getExpForLevel(int givenLevel) {
 		if(!enabled()) return -1;
 		if(this.enableCaches && this.CACHE_expForLevel.containsKey(givenLevel)) return this.CACHE_expForLevel.get(givenLevel);
-		
+
 		if(!this.enableCaches) this.OUTPUT.trace("New value requiring computing : " + givenLevel);
 
 		double totalExp = 0;
@@ -153,7 +155,7 @@ public class LevelCalculator extends Module{
 			handleTrace(e);
 			return -1;
 		}
-		
+
 		if(this.LEVEL_ROLE_CALCULATOR == null) return -1;
 		else if(!this.LEVEL_ROLE_CALCULATOR.enabled()) {
 			this.OUTPUT.warning("Soft dependency LevelRoleCalculator is no longer loaded!");
@@ -190,7 +192,7 @@ public class LevelCalculator extends Module{
 		this.OUTPUT.trace("Setting level of user " + UID + " to " + level);
 		setUserExp(UID, getExpForLevel(level));
 	}
-	
+
 	public void increaseUserExpBy(String UID, Long expIncrease) {
 		Long currentExp = getUserExp(UID);
 		if(currentExp == -1) {

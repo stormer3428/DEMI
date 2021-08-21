@@ -8,6 +8,8 @@ import java.util.Random;
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class MessageLeveling extends Module{
@@ -17,12 +19,12 @@ public class MessageLeveling extends Module{
 
 	private long expIncreaseCooldownMS;
 	private boolean enableExpIncreaseCooldownMS;
-	
+
 	private List<String> onCoolDownUsers = new ArrayList<>();
 	private long lastWiped = System.currentTimeMillis();
 
 	private LevelCalculator LEVEL_CALCULATOR;
-	private MessageLevelingMultiplierRoles MULTIPLIER_ROLES; //TODO
+	private MessageLevelingMultiplierRoles MULTIPLIER_ROLES;
 
 	public MessageLeveling() {
 		super(new File("level/messageLeveling.cfg"));
@@ -41,7 +43,13 @@ public class MessageLeveling extends Module{
 	public List<String> getDependencies() {
 		ArrayList<String> dependencies = new ArrayList<>();
 		dependencies.add("LevelCalculator");
-		dependencies.add("LevelRoleCalculator");
+		return dependencies;
+	}
+
+	@Override
+	public List<String> getSoftDependencies() {
+		ArrayList<String> dependencies = new ArrayList<>();
+		dependencies.add("MessageLevelingMultiplierRoles");
 		return dependencies;
 	}
 
@@ -92,10 +100,10 @@ public class MessageLeveling extends Module{
 			return;
 		}
 		this.OUTPUT.trace("expPerMessageVariation : " + this.expPerMessageVariation);
-		
+
 		this.enableExpIncreaseCooldownMS = this.CONFIG.get("enableExpIncreaseCooldownMS").equalsIgnoreCase("true");
 		this.OUTPUT.trace("enableExpIncreaseCooldownMS : " + this.enableExpIncreaseCooldownMS);
-		
+
 		try {
 			this.expIncreaseCooldownMS = Long.parseLong(this.CONFIG.get("expIncreaseCooldownMS"));
 			if(this.expIncreaseCooldownMS <= 0) {
@@ -113,6 +121,12 @@ public class MessageLeveling extends Module{
 		}
 		this.OUTPUT.trace("expIncreaseCooldownMS : " + this.expIncreaseCooldownMS);
 
+
+		this.MULTIPLIER_ROLES = (MessageLevelingMultiplierRoles) softLoad("MessageLevelingMultiplierRoles", this.OUTPUT);
+		if(this.MULTIPLIER_ROLES == null) if(this.PRINT_STACK_TRACE) {
+			this.OUTPUT.warning(getName() + " will apply multipliers associated with roles, leveling will occur normally");
+		}
+
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
@@ -122,12 +136,24 @@ public class MessageLeveling extends Module{
 		String memberUID = event.getAuthor().getId();
 		this.OUTPUT.trace("Message received from member " + memberUID);
 		if(this.onCoolDownUsers.contains(memberUID)) return;
-		
-		Long increase = (long) (this.expPerMessage + Math.round(new Random().nextFloat() * this.expPerMessageVariation));
-		
-		//TODO Nitro booster roles
-		
-		this.LEVEL_CALCULATOR.increaseUserExpBy(memberUID, increase);
+
+		int increase = (this.expPerMessage + Math.round(new Random().nextFloat() * this.expPerMessageVariation));
+		increase = handleBoosterRoles(increase, event.getMember());
+
+		this.LEVEL_CALCULATOR.increaseUserExpBy(memberUID, (long) increase);
+	}
+
+	private int handleBoosterRoles(int increase, Member member) {
+		int returnStatement = increase;
+		if(this.MULTIPLIER_ROLES == null) return increase;
+		else if(!this.MULTIPLIER_ROLES.enabled()) {
+			this.OUTPUT.warning("Soft dependency MULTIPLIER_ROLES is no longer loaded!");
+			this.OUTPUT.warning(getName() + " won't apply multipliers anymore, leveling will occur normally");
+			this.MULTIPLIER_ROLES = null;
+			return increase;
+		}
+		for(Role role : member.getRoles()) returnStatement = Math.round(returnStatement * this.MULTIPLIER_ROLES.getMultiplier(role.getIdLong()));
+		return returnStatement;
 	}
 
 	private void updateCooldownCache() {

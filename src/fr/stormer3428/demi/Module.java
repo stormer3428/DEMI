@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.stormer3428.demi.module.LevelRoleCalculator;
 import net.dv8tion.jda.api.events.DisconnectEvent;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.GatewayPingEvent;
@@ -196,10 +197,10 @@ public abstract class Module extends HasConfig{
 
 	public List<String> getDependencies(){return new ArrayList<>();}
 	public List<String> getSoftDependencies(){return new ArrayList<>();}
-	public boolean canBeLoaded() {
+	public boolean canBeLoaded(boolean countSoftDependencies) {
 		List<String> activeModules = new ArrayList<>();
 		for(Module module : Demi.ACTIVE_MODULES) activeModules.add(module.getName());
-		return activeModules.containsAll(getDependencies());
+		return activeModules.containsAll(getDependencies()) && (!countSoftDependencies || activeModules.containsAll(getSoftDependencies()));
 	}
 
 	public abstract String getName();
@@ -226,6 +227,16 @@ public abstract class Module extends HasConfig{
 	public void onDisable() {}
 	public void onEnable() {
 		this.OUTPUT = new MixedOutput(this.CONFIG.get("loggingChannelID"), this.CONFIG.get("logToChannel").equalsIgnoreCase("true"), this.CONFIG.get("logToConsole").equalsIgnoreCase("true"), getName());
+	}
+	
+	public static Module softLoad(String moduleName, MixedOutput OUTPUT) {
+		OUTPUT.trace("Attempting to hook into softDependency LevelRoleCalculator...");
+		for(Module module : Demi.i.getActiveModules()) if(module.getName().equals("LevelRoleCalculator")) {
+			OUTPUT.ok("Hook into softDependency LevelRoleCalculator successful");
+			return module;
+		}
+		if(OUTPUT.PRINT_STACK_TRACE) OUTPUT.cancelled("Failed to hook");
+		return null;
 	}
 
 	

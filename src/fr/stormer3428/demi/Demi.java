@@ -115,10 +115,11 @@ public class Demi extends HasConfig{
 				else this.OUTPUT.cancelled("Module " + module.getName() + " is disabled in it's config");
 
 			int oldSize = toEnable.size();
+			boolean withSoft = true;
 			while(toEnable.size() > 0) {
 				List<Module> processedModules = new ArrayList<>();
 				for(Module module : toEnable) {
-					if(module.canBeLoaded()) {
+					if(module.canBeLoaded(withSoft)) {
 						try {
 							this.OUTPUT.action("Activating module " + module.getName());
 							ACTIVE_MODULES.add(module);
@@ -131,7 +132,11 @@ public class Demi extends HasConfig{
 					}
 				}
 				toEnable.removeAll(processedModules);
-				if(oldSize == toEnable.size()) break;
+				if(oldSize == toEnable.size()) {
+					if(withSoft) {
+						withSoft = false;
+					}else break;
+				}
 				oldSize = toEnable.size();
 			}
 			for(Module notLoaded : toEnable) {
