@@ -2,6 +2,7 @@ package fr.stormer3428.demi.module;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.DemiCommandReceiveEvent;
@@ -41,9 +42,9 @@ public class DiscordCommandDispatcher extends Module{
 	public void onEnable() {
 		super.onEnable();
 		this.acceptFromDiscordBots = this.CONFIG.get("acceptCommandsFromDiscordBots").equalsIgnoreCase("true");
-		this.OUTPUT.trace("acceptCommandsFromDiscordBots : " + (this.acceptFromDiscordBots ? "true" : "false"));
+		this.OUTPUT.trace("acceptCommandsFromDiscordBots : " + (this.acceptFromDiscordBots ? "true" : "false"), this.PRINT_STACK_TRACE);
 		this.prefix = this.CONFIG.get("prefix");
-		this.OUTPUT.trace("prefix : " + this.prefix);
+		this.OUTPUT.trace("prefix : " + this.prefix, this.PRINT_STACK_TRACE);
 
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
@@ -69,14 +70,15 @@ public class DiscordCommandDispatcher extends Module{
 			for(String s : argsArray) if(!s.isEmpty()) args.add(s);
 			for(String s : args) this.OUTPUT.info("- " + s);
 
-
+			List<Thread> threads = new ArrayList<>();
 			for(Module module : Demi.i.getActiveModules()) {
-				new Thread(new Runnable() {
+				threads.add(new Thread(new Runnable() {
 					@Override public void run() {
 						module.onCommand(new DemiCommandReceiveEvent(event, cmd, args, new MixedOutput(event.getTextChannel().getId(), false, "")));
 					}
-				}).start();
+				}));
 			}
+			for(Thread th : threads) th.start(); 
 		}
 	}
 
