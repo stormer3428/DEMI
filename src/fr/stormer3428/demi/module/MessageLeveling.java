@@ -129,6 +129,11 @@ public class MessageLeveling extends Module{
 
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
+	
+	@Override
+	public void onDisable() {
+		this.onCoolDownUsers.clear();
+	}
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
