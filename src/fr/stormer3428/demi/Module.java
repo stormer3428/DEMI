@@ -230,12 +230,12 @@ public abstract class Module extends HasConfig{
 	}
 	
 	public static Module softLoad(String moduleName, MixedOutput OUTPUT) {
-		OUTPUT.trace("Attempting to hook into softDependency LevelRoleCalculator...");
-		for(Module module : Demi.i.getActiveModules()) if(module.getName().equals("LevelRoleCalculator")) {
-			OUTPUT.ok("Hook into softDependency LevelRoleCalculator successful");
+		OUTPUT.info("Attempting to hook into softDependency LevelRoleCalculator...");
+		for(Module module : Demi.i.getActiveModules()) if(module.getName().equals(moduleName)) {
+			OUTPUT.ok("Hook into softDependency " + moduleName +" successful");
 			return module;
 		}
-		if(OUTPUT.PRINT_STACK_TRACE) OUTPUT.cancelled("Failed to hook");
+		OUTPUT.cancelled("Failed to hook");
 		return null;
 	}
 
