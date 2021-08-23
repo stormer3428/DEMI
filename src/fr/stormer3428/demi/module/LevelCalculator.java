@@ -17,6 +17,7 @@ public class LevelCalculator extends Module{
 	private HashMap<Integer, Long> CACHE_expForLevel = new HashMap<>();
 	private HashMap<Integer, Long> CACHE_expToNextLevel = new HashMap<>();
 
+	private boolean levelRoleOffSafeMode;
 	private LevelRoleCalculator LEVEL_ROLE_CALCULATOR;
 
 	private float levelIncreasePow;
@@ -30,6 +31,7 @@ public class LevelCalculator extends Module{
 		this.CONFIG_KEYS.add(new Key("levelIncreasePow", "1.05"));
 		this.CONFIG_KEYS.add(new Key("levelBase", "500"));
 		this.CONFIG_KEYS.add(new Key("enableCaches", "true"));
+		this.CONFIG_KEYS.add(new Key("levelRoleOffSafeMode", "true"));
 
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");
@@ -68,8 +70,9 @@ public class LevelCalculator extends Module{
 		super.onEnable();
 
 		this.enableCaches = this.CONFIG.get("enableCaches").equalsIgnoreCase("true");
+		this.levelRoleOffSafeMode = this.CONFIG.get("levelRoleOffSafeMode").equalsIgnoreCase("true");
 
-		this.OUTPUT.trace("enableCaches : " + this.enableCaches);
+		this.OUTPUT.trace("enableCaches : " + this.enableCaches, this.PRINT_STACK_TRACE);
 		try {
 			this.levelIncreasePow = Float.parseFloat(this.CONFIG.get("levelIncreasePow"));
 		} catch (Exception e) {
@@ -79,7 +82,7 @@ public class LevelCalculator extends Module{
 			Demi.disableModule(this);
 			return;
 		}
-		this.OUTPUT.trace("levelIncreasePow : " + this.levelIncreasePow);
+		this.OUTPUT.trace("levelIncreasePow : " + this.levelIncreasePow, this.PRINT_STACK_TRACE);
 		try {
 			this.levelBase = Integer.parseInt(this.CONFIG.get("levelBase"));
 		} catch (Exception e) {
@@ -89,12 +92,12 @@ public class LevelCalculator extends Module{
 			Demi.disableModule(this);
 			return;
 		}
-		this.OUTPUT.trace("levelBase : " + this.levelBase);
+		this.OUTPUT.trace("levelBase : " + this.levelBase, this.PRINT_STACK_TRACE);
 
 
 		this.LEVEL_ROLE_CALCULATOR = (LevelRoleCalculator) softLoad("LevelRoleCalculator", this.OUTPUT);
 		if(this.LEVEL_ROLE_CALCULATOR == null) if(this.PRINT_STACK_TRACE) {
-			this.OUTPUT.warning(getName() + " will be unable to retrieve a member's level based from his roles and thus will ignore them, as weel as not making them level up");
+			this.OUTPUT.warning(getName() + " will be unable to retrieve a member's level based from his roles and thus will ignore them, as well as not making them level up");
 			this.OUTPUT.warning("Members already in the database will level up normally");
 		}
 
@@ -122,7 +125,7 @@ public class LevelCalculator extends Module{
 		if(this.enableCaches && this.CACHE_expToNextLevel.containsKey(level)) return this.CACHE_expToNextLevel.get(level);
 		long exp = Math.round(this.levelBase * Math.pow(this.levelIncreasePow, level));
 		if(this.enableCaches) {
-			this.OUTPUT.trace("Writing values to CACHE_expToNextLevel (" + level + ", " + Math.round(exp) + ")");
+			this.OUTPUT.trace("Writing values to CACHE_expToNextLevel (" + level + ", " + Math.round(exp) + ")", this.PRINT_STACK_TRACE);
 			this.CACHE_expToNextLevel.put(level, exp);
 		}
 		return exp;
@@ -132,7 +135,7 @@ public class LevelCalculator extends Module{
 		if(!enabled()) return -1;
 		if(this.enableCaches && this.CACHE_expForLevel.containsKey(givenLevel)) return this.CACHE_expForLevel.get(givenLevel);
 
-		if(!this.enableCaches) this.OUTPUT.trace("New value requiring computing : " + givenLevel);
+		if(!this.enableCaches) this.OUTPUT.trace("New value requiring computing : " + givenLevel, this.PRINT_STACK_TRACE);
 
 		double totalExp = 0;
 		long exp;
@@ -141,7 +144,7 @@ public class LevelCalculator extends Module{
 			totalExp += exp;
 		}
 
-		this.OUTPUT.trace("Writing values to CACHE_expForLevel (" + givenLevel + ", " + Math.round(totalExp) + ")");
+		this.OUTPUT.trace("Writing values to CACHE_expForLevel (" + givenLevel + ", " + Math.round(totalExp) + ")", this.PRINT_STACK_TRACE);
 		this.CACHE_expForLevel.put(givenLevel, Math.round(totalExp));
 		return Math.round(totalExp);
 	}
@@ -156,23 +159,27 @@ public class LevelCalculator extends Module{
 			return -1;
 		}
 
-		if(this.LEVEL_ROLE_CALCULATOR == null) return -1;
+		if(this.LEVEL_ROLE_CALCULATOR == null) {
+			if(this.levelRoleOffSafeMode) return -2;
+			return 0;
+		}
 		else if(!this.LEVEL_ROLE_CALCULATOR.enabled()) {
 			this.OUTPUT.warning("Soft dependency LevelRoleCalculator is no longer loaded!");
 			this.OUTPUT.warning(getName() + " will now be unable to retrieve a member's level based from his roles and thus will ignore them, as weel as not making them level up");
 			this.OUTPUT.warning("Members already in the database will level up normally");
 			this.LEVEL_ROLE_CALCULATOR = null;
-			return -1;
+			if(this.levelRoleOffSafeMode) return -2;
+			return 0;
 		}
-		this.OUTPUT.trace("New user in database : " + UID);
-		Member member = Demi.jda.getGuildById(Demi.i.getServerID()).getMemberById(UID);
+		this.OUTPUT.trace("New user in database : " + UID, this.PRINT_STACK_TRACE);
+		Member member = Demi.jda.getGuildById(Demi.i.getServerID()).retrieveMemberById(UID).complete();
 		if(member == null) return -1;
 		int retrievedLevel = this.LEVEL_ROLE_CALCULATOR.retrieveLevelFromRoles(UID);
 		if(retrievedLevel == -1) {
 			this.OUTPUT.error("Module LevelRoleCalculator returned -1 on retrieveLevelFromRoles(), it may be disabled or has encountered an error, skipping writing...");
 			return -1;
 		}
-		this.OUTPUT.trace("Retrieved level from roles (" + retrievedLevel + ")");
+		this.OUTPUT.trace("Retrieved level from roles (" + retrievedLevel + ")", this.PRINT_STACK_TRACE);
 		long exp = getExpForLevel(retrievedLevel);
 		this.LEVEL_DATABASE.setParameter(UID, exp + "");
 		return exp;
@@ -184,12 +191,12 @@ public class LevelCalculator extends Module{
 	}
 
 	public void setUserExp(String UID, Long exp) {
-		this.OUTPUT.trace("Setting exp of user " + UID + " to " + exp);
+		this.OUTPUT.trace("Setting exp of user " + UID + " to " + exp, this.PRINT_STACK_TRACE);
 		this.LEVEL_DATABASE.setParameter(UID, exp + "");
 	}
 
 	public void setUserLevel(String UID, int level) {
-		this.OUTPUT.trace("Setting level of user " + UID + " to " + level);
+		this.OUTPUT.trace("Setting level of user " + UID + " to " + level, this.PRINT_STACK_TRACE);
 		setUserExp(UID, getExpForLevel(level));
 	}
 
@@ -200,7 +207,11 @@ public class LevelCalculator extends Module{
 			this.OUTPUT.error("getUserExp returned -1, signaling an error earlier in the process");
 			return;
 		}
-		this.OUTPUT.trace("Increasing exp of user " + UID + " from " + currentExp + " to " + (currentExp + expIncrease));
+		if(currentExp == -2) {
+			this.OUTPUT.cancelled("member is not in database, levelRole softDepend is off and levelRoleOffSafeMode is set to true, skipping...");
+			return;
+		}
+		this.OUTPUT.trace("Increasing exp of user " + UID + " from " + currentExp + " to " + (currentExp + expIncrease), this.PRINT_STACK_TRACE);
 		setUserExp(UID, currentExp + expIncrease);
 	}
 }
