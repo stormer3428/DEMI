@@ -29,7 +29,7 @@ public class MessageLeveling extends Module{
 	public MessageLeveling() {
 		super(new File("level/messageLeveling.cfg"));
 
-		this.CONFIG_KEYS.add(new Key("expIncreaseCooldownMS", "300000"));
+		this.CONFIG_KEYS.add(new Key("expIncreaseCooldownMS", "60000"));
 		this.CONFIG_KEYS.add(new Key("enableExpIncreaseCooldownMS", "true"));
 		this.CONFIG_KEYS.add(new Key("expPerMessage", "75"));
 		this.CONFIG_KEYS.add(new Key("expPerMessageVariation", "50"));
