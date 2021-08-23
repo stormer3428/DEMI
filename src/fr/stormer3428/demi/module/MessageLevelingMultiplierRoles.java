@@ -1,14 +1,17 @@
 package fr.stormer3428.demi.module;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import fr.stormer3428.demi.Demi;
+import fr.stormer3428.demi.IO;
 import fr.stormer3428.demi.Module;
 
 public class MessageLevelingMultiplierRoles extends Module{
 
+	private IO ROLE_MULTIPLIERS;
 	private HashMap<Long, Float> roleMultipliers = new HashMap<>();
 	
 	public MessageLevelingMultiplierRoles() {
@@ -21,7 +24,11 @@ public class MessageLevelingMultiplierRoles extends Module{
 
 	@Override
 	public void onEnable() {
-		List<String> roleIDs = this.CONFIG.getKeys();
+		super.onEnable();
+
+		this.ROLE_MULTIPLIERS = new IO(new File("level/multiplierRoles" + Demi.i.getServerID() + ".demidb"), new ArrayList<>(), true);
+
+		List<String> roleIDs = this.ROLE_MULTIPLIERS.getKeys();
 		for(String roleID : roleIDs) {
 			try {
 				long ID = Long.parseLong(roleID);
