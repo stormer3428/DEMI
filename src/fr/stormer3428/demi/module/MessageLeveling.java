@@ -26,6 +26,8 @@ public class MessageLeveling extends Module{
 	private LevelCalculator LEVEL_CALCULATOR;
 	private MessageLevelingMultiplierRoles MULTIPLIER_ROLES;
 
+	//TODO fix cooldown
+	
 	public MessageLeveling() {
 		super(new File("level/messageLeveling.cfg"));
 
@@ -89,7 +91,7 @@ public class MessageLeveling extends Module{
 			Demi.disableModule(this);
 			return;
 		}
-		this.OUTPUT.trace("expPerMessage : " + this.expPerMessage);
+		this.OUTPUT.trace("expPerMessage : " + this.expPerMessage, this.PRINT_STACK_TRACE);
 		try {
 			this.expPerMessageVariation = Integer.parseInt(this.CONFIG.get("expPerMessageVariation"));
 		} catch (Exception e) {
@@ -99,10 +101,10 @@ public class MessageLeveling extends Module{
 			Demi.disableModule(this);
 			return;
 		}
-		this.OUTPUT.trace("expPerMessageVariation : " + this.expPerMessageVariation);
+		this.OUTPUT.trace("expPerMessageVariation : " + this.expPerMessageVariation, this.PRINT_STACK_TRACE);
 
 		this.enableExpIncreaseCooldownMS = this.CONFIG.get("enableExpIncreaseCooldownMS").equalsIgnoreCase("true");
-		this.OUTPUT.trace("enableExpIncreaseCooldownMS : " + this.enableExpIncreaseCooldownMS);
+		this.OUTPUT.trace("enableExpIncreaseCooldownMS : " + this.enableExpIncreaseCooldownMS, this.PRINT_STACK_TRACE);
 
 		try {
 			this.expIncreaseCooldownMS = Long.parseLong(this.CONFIG.get("expIncreaseCooldownMS"));
@@ -119,12 +121,12 @@ public class MessageLeveling extends Module{
 			Demi.disableModule(this);
 			return;
 		}
-		this.OUTPUT.trace("expIncreaseCooldownMS : " + this.expIncreaseCooldownMS);
+		this.OUTPUT.trace("expIncreaseCooldownMS : " + this.expIncreaseCooldownMS, this.PRINT_STACK_TRACE);
 
 
 		this.MULTIPLIER_ROLES = (MessageLevelingMultiplierRoles) softLoad("MessageLevelingMultiplierRoles", this.OUTPUT);
 		if(this.MULTIPLIER_ROLES == null) if(this.PRINT_STACK_TRACE) {
-			this.OUTPUT.warning(getName() + " will apply multipliers associated with roles, leveling will occur normally");
+			this.OUTPUT.warning(getName() + " won't apply multipliers associated with roles, leveling will occur normally");
 		}
 
 		this.OUTPUT.ok("Successfully loaded all config parameters");
@@ -133,8 +135,9 @@ public class MessageLeveling extends Module{
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		updateCooldownCache();
+		if(event.getAuthor().isBot()) return;
 		String memberUID = event.getAuthor().getId();
-		this.OUTPUT.trace("Message received from member " + memberUID);
+		this.OUTPUT.trace("Message received from member " + memberUID, this.PRINT_STACK_TRACE);
 		if(this.onCoolDownUsers.contains(memberUID)) return;
 
 		int increase = (this.expPerMessage + Math.round(new Random().nextFloat() * this.expPerMessageVariation));
