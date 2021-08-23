@@ -211,7 +211,7 @@ public class LevelCalculator extends Module{
 			this.OUTPUT.cancelled("member is not in database, levelRole softDepend is off and levelRoleOffSafeMode is set to true, skipping...");
 			return;
 		}
-		this.OUTPUT.trace("Increasing exp of user " + UID + " from " + currentExp + " to " + (currentExp + expIncrease), this.PRINT_STACK_TRACE);
+		this.OUTPUT.trace("Increasing exp of user " + UID + " (" + currentExp + ") by " + expIncrease, this.PRINT_STACK_TRACE);
 		setUserExp(UID, currentExp + expIncrease);
 	}
 }
