@@ -227,6 +227,7 @@ public abstract class Module extends HasConfig{
 	public void onDisable() {}
 	public void onEnable() {
 		this.OUTPUT = new MixedOutput(this.CONFIG.get("loggingChannelID"), this.CONFIG.get("logToChannel").equalsIgnoreCase("true"), this.CONFIG.get("logToConsole").equalsIgnoreCase("true"), getName());
+		this.CONFIG.fileCheck(true);
 	}
 	
 	public static Module softLoad(String moduleName, MixedOutput OUTPUT) {

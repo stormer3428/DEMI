@@ -27,7 +27,7 @@ public abstract class HasConfig {
 	protected boolean initialConfigIOCreation() {
 		int configIoRetry = 0;
 		while (configIoRetry < CONFIGIORETRY) {
-			if(!refreshConfigIO()) {
+			if(!createConfigIO()) {
 				DemiConsole.error("Failed to create main config IO");
 				DemiConsole.info("Retrying...");
 				try {
@@ -53,7 +53,7 @@ public abstract class HasConfig {
 		return true;
 	}
 
-	protected boolean refreshConfigIO() {
+	protected boolean createConfigIO() {
 		DemiConsole.action("Creating Config IO...");
 		this.CONFIG = new IO(this.file, this.CONFIG_KEYS, this.PRINT_STACK_TRACE, IO.defaultHeaders);
 		if(this.CONFIG == null) {
