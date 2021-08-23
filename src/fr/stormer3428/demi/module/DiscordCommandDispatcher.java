@@ -78,8 +78,7 @@ public class DiscordCommandDispatcher extends Module{
 					}
 				}));
 			}
-			for(Thread th : threads) th.start(); 
+			for(Thread th : threads) th.start();
 		}
 	}
-
 }
