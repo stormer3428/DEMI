@@ -74,7 +74,16 @@ public class MixedOutput {
 			public void run() {
 				while(true) {
 					if(!buffer.isEmpty()) {
-						MixedOutput.this.textChannel.sendMessage(buffer).complete();
+						final String[] listRaw = buffer.split("\n");
+						List<String> list = new ArrayList<>();
+						for(String s : listRaw) list.add(s);
+
+						while(!list.isEmpty()) {
+							String tempBuffer = "";
+							while(!list.isEmpty() && tempBuffer.length() + list.get(0).length() + 2 < 2000) tempBuffer = tempBuffer + "\n" +list.remove(0);
+							MixedOutput.this.textChannel.sendMessage(tempBuffer).complete();
+							tempBuffer = "";
+						}
 						buffer = "";
 					}
 					try {
@@ -99,40 +108,40 @@ public class MixedOutput {
 		if(this.outputToConsole) System.out.println("\033[38;5;196m" + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + "[📕Error] " + message + "\033[38;5;7m");
 		if(!this.outputToChannel) return;
 		textChannelInit();
-		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " **📕ERROR " + message + ".**" + "\n");
-		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " **📕ERROR " + message + ".**" + "\n").queue();
+		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " **ERROR 📕 " + message + ".**" + "\n");
+		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " **ERROR 📕 " + message + ".**" + "\n").queue();
 	}
 
 	public final void warning(String message) {
 		if(this.outputToConsole) System.out.println("\033[38;5;208m" + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + "[📙Warning] " + message + "\033[38;5;7m");
 		if(!this.outputToChannel) return;
 		textChannelInit();
-		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " ***📙WARNING " + message + ".***" + "\n");
-		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " ***📙WARNING " + message + ".***" + "\n").queue();
+		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " ***WARNING 📙 " + message + ".***" + "\n");
+		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " ***WARNING 📙 " + message + ".***" + "\n").queue();
 	}
 
 	public final void ok(String message) {
 		if(this.outputToConsole) System.out.println("\033[38;5;118m" + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + "[📗Ok] " + message + "\033[38;5;7m");
 		if(!this.outputToChannel) return;
 		textChannelInit();
-		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " 📗Ok " + message + "." + "\n");
-		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " 📗Ok " + message + "." + "\n").queue();
+		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " Ok 📗 " + message + "." + "\n");
+		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " Ok 📗 " + message + "." + "\n").queue();
 	}
 
 	public final void action(String message) {
 		if(this.outputToConsole) System.out.println("\033[38;5;123m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + "[📘Action] " + message + "\033[38;5;7m");
 		if(!this.outputToChannel) return;
 		textChannelInit();
-		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " 📘Action " + message + "." + "\n");
-		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " 📘Action " + message + "." + "\n").queue();
+		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " Action 📘 " + message + "." + "\n");
+		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " Action 📘 " + message + "." + "\n").queue();
 	}
 
 	public final void cancelled(String message) {
 		if(this.outputToConsole) System.out.println("\033[38;5;245m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + "[📓Cancelled] " + message + "\033[38;5;7m");
 		if(!this.outputToChannel) return;
 		textChannelInit();
-		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " *📓Cancelled " + message + ".*" + "\n");
-		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " *📓Cancelled " + message + ".*" + "\n").queue();
+		if(enableBuffer) buffer = (buffer + "" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " *Cancelled 📓 " + message + ".*" + "\n");
+		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " *Cancelled 📓 " + message + ".*" + "\n").queue();
 	}
 
 	public final void info(String message) {
@@ -143,8 +152,8 @@ public class MixedOutput {
 		else this.textChannel.sendMessage("" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " Info " + message + "." + "\n").queue();
 	}
 
-	public final void trace(String message) {
-		if(!this.PRINT_STACK_TRACE) return;
+	public final void trace(String message, boolean print) {
+		if(!print && !this.PRINT_STACK_TRACE) return;
 		if(this.outputToConsole) System.out.println("\033[38;5;226m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + message + "\033[38;5;7m");
 		if(!this.outputToChannel) return;
 		textChannelInit();
