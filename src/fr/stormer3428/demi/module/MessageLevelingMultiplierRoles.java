@@ -30,9 +30,18 @@ public class MessageLevelingMultiplierRoles extends Module{
 
 		List<String> roleIDs = this.ROLE_MULTIPLIERS.getKeys();
 		for(String roleID : roleIDs) {
+			long ID;
 			try {
-				long ID = Long.parseLong(roleID);
-				float multiplier = Integer.parseInt(this.CONFIG.get(ID + ""));
+				ID = Long.parseLong(roleID);
+			}catch (NumberFormatException e) {
+				this.OUTPUT.error("Error found in configuration, all keys are supposed to be role id's but found " + roleID);
+				this.OUTPUT.cancelled("Skipping...");
+				handleTrace(e);
+				continue;
+			}
+
+			try {
+				float multiplier = Float.parseFloat(this.ROLE_MULTIPLIERS.get(ID + ""));
 				if(multiplier < 0) {
 					this.OUTPUT.error("Error found in configuration, role " + ID + " has a negative multiplier!, lowest multiplier allowed is 0");
 					this.OUTPUT.cancelled("Skipping this multiplier...");
@@ -40,10 +49,11 @@ public class MessageLevelingMultiplierRoles extends Module{
 				}
 				this.roleMultipliers.put(ID, multiplier);
 			}catch (NumberFormatException e) {
-				this.OUTPUT.error("Error found in configuration, all keys are supposed to be role id's but found " + roleID);
+				this.OUTPUT.error("Error found in configuration, value of key " + roleID + " is supposed to be a float, but found " + this.ROLE_MULTIPLIERS.get(ID + ""));
 				this.OUTPUT.cancelled("Skipping...");
 				handleTrace(e);
 			}
+			
 		}
 		if(roleIDs.isEmpty()) {
 			this.OUTPUT.warning("No roles were set, disabling module...");
@@ -65,6 +75,7 @@ public class MessageLevelingMultiplierRoles extends Module{
 	public Float getMultiplier(Long roleId) {
 		if(!Demi.i.getActiveModules().contains(this)) return 1.0f;
 		if(!this.roleMultipliers.containsKey(roleId)) return 1.0f;
+		this.OUTPUT.trace("Retrieving multiplier for role " + roleId + " (" + this.roleMultipliers.get(roleId) +")", this.PRINT_STACK_TRACE);
 		return this.roleMultipliers.get(roleId);
 	}
 	
