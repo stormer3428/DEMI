@@ -48,20 +48,20 @@ public class LevelRoleCalculator extends Module{
 	public void onEnable() {
 		super.onEnable();
 		this.enableCache = this.CONFIG.get("enableCache").equalsIgnoreCase("true");
-		this.OUTPUT.trace("enableCache : " + this.enableCache);
+		this.OUTPUT.trace("enableCache : " + this.enableCache, this.PRINT_STACK_TRACE);
 		this.keepOnlyLatestRole = this.CONFIG.get("keepOnlyLatestRole").equalsIgnoreCase("true");
-		this.OUTPUT.trace("keepOnlyLatestRole : " + this.keepOnlyLatestRole);
+		this.OUTPUT.trace("keepOnlyLatestRole : " + this.keepOnlyLatestRole, this.PRINT_STACK_TRACE);
 
-		this.ROLES_DATABASE = new IO(new File("level/rolesdb" + Demi.i.getServerID() + ".cfg"), new ArrayList<>(), true);
+		this.ROLES_DATABASE = new IO(new File("level/levelRolesdb" + Demi.i.getServerID() + ".cfg"), new ArrayList<>(), true);
 		
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 	public int retrieveLevelFromRoles(String UID) {
 		if(!enabled()) return -1;
-		Member member = Demi.jda.getGuildById(Demi.i.getServerID()).getMemberById(UID);
+		Member member = Demi.jda.getGuildById(Demi.i.getServerID()).retrieveMemberById(UID).complete();
 		if(member == null) {
-			this.OUTPUT.warning("Attempted te retrieve level of non guild member, returning 0");
+			this.OUTPUT.warning("Attempted te retrieve level from roles of non guild member, returning 0");
 			return 0;
 		}
 		return retrieveLevelFromRoles(member);
@@ -105,14 +105,14 @@ public class LevelRoleCalculator extends Module{
 		List<Role> memberRoles = member.getRoles();
 		for(Role levelRole : levelRoles(false)) {
 			if(rolesToHave.contains(levelRole) && !memberRoles.contains(levelRole)) {
-				this.OUTPUT.trace("Member " + member.getEffectiveName() + "(" + member.getId() + ") is missing levelrole " + levelRole.getName());
+				this.OUTPUT.trace("Member " + member.getEffectiveName() + "(" + member.getId() + ") is missing levelrole " + levelRole.getName(), this.PRINT_STACK_TRACE);
 				member.getGuild().addRoleToMember(member, levelRole).queue();
-				this.OUTPUT.trace("levelRole added!");
+				this.OUTPUT.trace("levelRole added!", this.PRINT_STACK_TRACE);
 			}
 			else if(!rolesToHave.contains(levelRole) && memberRoles.contains(levelRole)) {
-				this.OUTPUT.trace("Member " + member.getEffectiveName() + "(" + member.getId() + ") has levelrole " + levelRole.getName() + " but is level " + level);
+				this.OUTPUT.trace("Member " + member.getEffectiveName() + "(" + member.getId() + ") has levelrole " + levelRole.getName() + " but is level " + level, this.PRINT_STACK_TRACE);
 				member.getGuild().removeRoleFromMember(member, levelRole).queue();
-				this.OUTPUT.trace("levelRole removed!");
+				this.OUTPUT.trace("levelRole removed!", this.PRINT_STACK_TRACE);
 			}
 		}
 	}
