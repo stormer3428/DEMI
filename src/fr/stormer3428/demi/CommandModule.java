@@ -34,9 +34,9 @@ public abstract class CommandModule extends Module{
 	public void onEnable() {
 		super.onEnable();
 		this.requireAdminPerms = this.CONFIG.get("requireAdminPerms").equalsIgnoreCase("true");
-		this.OUTPUT.trace("requireAdminPerms : " + (this.requireAdminPerms ? "true" : false));
+		this.OUTPUT.trace("requireAdminPerms : " + (this.requireAdminPerms ? "true" : false), this.PRINT_STACK_TRACE);
 		this.requireRoles = this.CONFIG.get("requireRoles").equalsIgnoreCase("true");
-		this.OUTPUT.trace("requireRoles : " + (this.requireRoles ? "true" : false));
+		this.OUTPUT.trace("requireRoles : " + (this.requireRoles ? "true" : false), this.PRINT_STACK_TRACE);
 		this.requiredRoles = roles();
 		if(this.requiredRoles == null) return;
 		if(this.requiredRoles.isEmpty()) {
@@ -46,13 +46,13 @@ public abstract class CommandModule extends Module{
 				this.requireRoles = false;
 			}
 		}else {
-			this.OUTPUT.trace("requireRoles : ");
+			this.OUTPUT.trace("requireRoles : ", this.PRINT_STACK_TRACE);
 			for(Long role : this.requiredRoles) {
-				this.OUTPUT.trace("- " + role);
+				this.OUTPUT.trace("- " + role, this.PRINT_STACK_TRACE);
 			}
 		}
 		this.whitelistEnabled = this.CONFIG.get("whitelistEnabled").equalsIgnoreCase("true");
-		this.OUTPUT.trace("whitelistEnabled : " + (this.whitelistEnabled ? "true" : false));
+		this.OUTPUT.trace("whitelistEnabled : " + (this.whitelistEnabled ? "true" : false), this.PRINT_STACK_TRACE);
 		this.whitelist = whitelist();
 		if(this.whitelist == null) return;
 		if(this.whitelist.isEmpty()) {
@@ -64,9 +64,9 @@ public abstract class CommandModule extends Module{
 				return;
 			}
 		}else {
-			this.OUTPUT.trace("whitelist : ");
+			this.OUTPUT.trace("whitelist : ", this.PRINT_STACK_TRACE);
 			for(Long member : this.whitelist) {
-				this.OUTPUT.trace("- " + member);
+				this.OUTPUT.trace("- " + member, this.PRINT_STACK_TRACE);
 			}
 		}
 	}
