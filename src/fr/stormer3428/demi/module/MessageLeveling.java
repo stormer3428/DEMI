@@ -31,8 +31,8 @@ public class MessageLeveling extends Module{
 
 		this.CONFIG_KEYS.add(new Key("expIncreaseCooldownMS", "300000"));
 		this.CONFIG_KEYS.add(new Key("enableExpIncreaseCooldownMS", "true"));
-		this.CONFIG_KEYS.add(new Key("expPerMessage", "100"));
-		this.CONFIG_KEYS.add(new Key("expPerMessageVariation", "100"));
+		this.CONFIG_KEYS.add(new Key("expPerMessage", "75"));
+		this.CONFIG_KEYS.add(new Key("expPerMessageVariation", "50"));
 
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");
