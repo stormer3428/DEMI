@@ -51,21 +51,21 @@ public class FileEdit extends CommandModule{
 			return;
 		}
 		String action = args.remove(0);
-		if(action.equalsIgnoreCase("help") || action.equalsIgnoreCase("?")) {
+		if(action.equalsIgnoreCase("--help") || action.equalsIgnoreCase("-h") || action.equalsIgnoreCase("?")) {
 			showHelp(event_OUTPUT);
 			return;
 		}
-		if(action.equalsIgnoreCase("listFiles") || action.equalsIgnoreCase("lFiles") || action.equalsIgnoreCase("listF") || action.equalsIgnoreCase("lf") || action.equalsIgnoreCase("l") || action.equalsIgnoreCase("list")) {
+		if(action.equalsIgnoreCase("--listFiles") || action.equalsIgnoreCase("-l")) {
 			showAvailableFiles(event_OUTPUT);
 			return;
 		}
-		if(action.equalsIgnoreCase("parameter") || action.equalsIgnoreCase("param") || action.equalsIgnoreCase("prm") || action.equalsIgnoreCase("p")) {
+		if(action.equalsIgnoreCase("--parameter") || action.equalsIgnoreCase("-p")) {
 			if(args.isEmpty()) {
 				showHelpParam(event_OUTPUT);
 				return;
 			}
 			String paramType = args.remove(0).toLowerCase();
-			if(paramType.equalsIgnoreCase("edit") || paramType.equalsIgnoreCase("edt") || paramType.equalsIgnoreCase("ed") || paramType.equalsIgnoreCase("e")) {
+			if(paramType.equalsIgnoreCase("--edit") || paramType.equalsIgnoreCase("-e")) {
 				if(args.isEmpty()) {
 					showHelpParamEdit(event_OUTPUT);
 					return;
@@ -105,7 +105,7 @@ public class FileEdit extends CommandModule{
 				while(!args.isEmpty()) newValue = newValue + " " + args.remove(0);
 				setParam(event_OUTPUT, io, foundKey, newValue);
 				return;
-			}else if(paramType.equalsIgnoreCase("listParameters") || paramType.equalsIgnoreCase("listParams") || paramType.equalsIgnoreCase("list") || paramType.equalsIgnoreCase("lp") || paramType.equalsIgnoreCase("l")) {
+			}else if(paramType.equalsIgnoreCase("--listParameters") ||  paramType.equalsIgnoreCase("-l")) {
 				if(args.isEmpty()) {
 					showHelpParamList(event_OUTPUT);
 					return;
@@ -120,7 +120,7 @@ public class FileEdit extends CommandModule{
 				}
 				listParams(event_OUTPUT, foundFile);
 				return;
-			}else if(paramType.equalsIgnoreCase("get") || paramType.equalsIgnoreCase("g")) {
+			}else if(paramType.equalsIgnoreCase("--get") || paramType.equalsIgnoreCase("-g")) {
 				if(args.isEmpty()) {
 					showHelpParamGet(event_OUTPUT);
 					return;
@@ -178,13 +178,13 @@ public class FileEdit extends CommandModule{
 	private void showHelpParamGet(MixedOutput HELP_OUTPUT) {
 		List<String> embedReplacement = new ArrayList<>();
 		embedReplacement.add("Help for command " + getName() + " parameter get :");
-		embedReplacement.add("Usage : " + getName() + " parameter get <filename> <param name>");
+		embedReplacement.add("Usage : " + getName() + " --parameter --get <filename> <param name>");
 		embedReplacement.add("A command used to get the value of a parameter from a config file");
 
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setAuthor(getName());
 		builder.setTitle("Command help");
-		builder.addField("Usage", getName() + " parameter get <filename> <param name>", false);
+		builder.addField("Usage", getName() + " --parameter --get <filename> <param name>", false);
 		builder.setDescription("A command used to get the value of a parameter from a config file");
 
 		HELP_OUTPUT.embed(builder.build(), embedReplacement);
@@ -193,13 +193,13 @@ public class FileEdit extends CommandModule{
 	private void showHelpParamList(MixedOutput HELP_OUTPUT) {
 		List<String> embedReplacement = new ArrayList<>();
 		embedReplacement.add("Help for command " + getName() + " parameter list :");
-		embedReplacement.add("Usage : " + getName() + " parameter list <filename>");
+		embedReplacement.add("Usage : " + getName() + " --parameter --list <filename>");
 		embedReplacement.add("A command used to list all parameters of a config file");
 
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setAuthor(getName());
 		builder.setTitle("Command help");
-		builder.addField("Usage", getName() + " parameter list <filename>", false);
+		builder.addField("Usage", getName() + " --parameter -list <filename>", false);
 		builder.setDescription("A command used to list all parameters of a config file");
 
 		HELP_OUTPUT.embed(builder.build(), embedReplacement);
@@ -208,13 +208,13 @@ public class FileEdit extends CommandModule{
 	private void showHelpParamEdit(MixedOutput HELP_OUTPUT) {
 		List<String> embedReplacement = new ArrayList<>();
 		embedReplacement.add("Help for command " + getName() + " parameter list :");
-		embedReplacement.add("Usage : " + getName() + " parameter <filename> <param name> <new value>");
+		embedReplacement.add("Usage : " + getName() + " --parameter --edit <filename> <param name> <new value>");
 		embedReplacement.add("A command used to edit parameters of a config file");
 
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setAuthor(getName());
 		builder.setTitle("Command help");
-		builder.addField("Usage", getName() + " parameter edit <filename> <param name> <new value>", false);
+		builder.addField("Usage", getName() + " --parameter --edit <filename> <param name> <new value>", false);
 		builder.setDescription("A command used to edit parameters of a config file");
 
 		HELP_OUTPUT.embed(builder.build(), embedReplacement);
@@ -223,13 +223,13 @@ public class FileEdit extends CommandModule{
 	private void showHelpParam(MixedOutput HELP_OUTPUT) {
 		List<String> embedReplacement = new ArrayList<>();
 		embedReplacement.add("Help for command " + getName() + " parameter list :");
-		embedReplacement.add("Usage : " + getName() + " parameter <list;get;edit> <filename>");
+		embedReplacement.add("Usage : " + getName() + " parameter <--list;--get;--edit> <filename>");
 		embedReplacement.add("A command used to tinker with parameters of a config file");
 
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setAuthor(getName());
 		builder.setTitle("Command help");
-		builder.addField("Usage", getName() + " parameter <list;get;edit> <filename>", false);
+		builder.addField("Usage", getName() + " parameter <--list;--get;--edit> <filename>", false);
 		builder.setDescription("A command used to tinker with parameters of a config file");
 
 		HELP_OUTPUT.embed(builder.build(), embedReplacement);
@@ -278,13 +278,13 @@ public class FileEdit extends CommandModule{
 	private void showHelp(MixedOutput HELP_OUTPUT) {
 		List<String> embedReplacement = new ArrayList<>();
 		embedReplacement.add("Help for command " + getName() + " :");
-		embedReplacement.add("Usage : " + getName() + " <help;listfiles;parameter>");
+		embedReplacement.add("Usage : " + getName() + " <--help;--listfiles;--parameter>");
 		embedReplacement.add("A command used to directly edit config files");
 
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setAuthor(getName());
 		builder.setTitle("Command help");
-		builder.addField("Usage", getName() + " <help;listfiles;parameter>", false);
+		builder.addField("Usage", getName() + " <--help;--listfiles;--parameter>", false);
 		builder.setDescription("A command used to directly edit config files");
 
 		HELP_OUTPUT.embed(builder.build(), embedReplacement);
@@ -292,7 +292,7 @@ public class FileEdit extends CommandModule{
 
 	@Override
 	public String getUsage() {
-		return "Usage : " + getName() + " <help;listfiles;parameter>";
+		return "Usage : " + getName() + " <--help;--listfiles;--parameter>";
 	}
 
 
