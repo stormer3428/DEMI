@@ -25,8 +25,6 @@ public class MessageLeveling extends Module{
 
 	private LevelCalculator LEVEL_CALCULATOR;
 	private MessageLevelingMultiplierRoles MULTIPLIER_ROLES;
-
-	//TODO fix cooldown
 	
 	public MessageLeveling() {
 		super(new File("level/messageLeveling.cfg"));
@@ -138,12 +136,16 @@ public class MessageLeveling extends Module{
 		if(event.getAuthor().isBot()) return;
 		String memberUID = event.getAuthor().getId();
 		this.OUTPUT.trace("Message received from member " + memberUID, this.PRINT_STACK_TRACE);
-		if(this.onCoolDownUsers.contains(memberUID)) return;
+		if(this.onCoolDownUsers.contains(memberUID)) {
+			this.OUTPUT.trace("on cooldown...", this.PRINT_STACK_TRACE);
+			return;
+		}
 
 		int increase = (this.expPerMessage + Math.round(new Random().nextFloat() * this.expPerMessageVariation));
 		increase = handleBoosterRoles(increase, event.getMember());
 
 		this.LEVEL_CALCULATOR.increaseUserExpBy(memberUID, (long) increase);
+		this.onCoolDownUsers.add(memberUID);
 	}
 
 	private int handleBoosterRoles(int increase, Member member) {
