@@ -141,10 +141,7 @@ public class MessageLeveling extends Module{
 		if(event.getAuthor().isBot()) return;
 		String memberUID = event.getAuthor().getId();
 		this.OUTPUT.trace("Message received from member " + memberUID, this.PRINT_STACK_TRACE);
-		if(this.onCoolDownUsers.contains(memberUID)) {
-			this.OUTPUT.trace("on cooldown...", this.PRINT_STACK_TRACE);
-			return;
-		}
+		if(this.onCoolDownUsers.contains(memberUID)) return;
 
 		int increase = (this.expPerMessage + Math.round(new Random().nextFloat() * this.expPerMessageVariation));
 		increase = handleBoosterRoles(increase, event.getMember());
