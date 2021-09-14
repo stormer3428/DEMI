@@ -320,7 +320,7 @@ public class IO {
 			handleTrace(e);
 			return false;
 		}
-		System.out.println("tempFile.isFile = " + tempFile.isFile());
+		//System.out.println("tempFile.isFile = " + tempFile.isFile());
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)); BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
 			String currentLine;
 

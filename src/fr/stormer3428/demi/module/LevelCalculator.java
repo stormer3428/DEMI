@@ -108,6 +108,7 @@ public class LevelCalculator extends Module{
 	}
 
 	public int getLevelForExp(long givenExp) {
+		//System.out.println("getLevelForExp " + givenExp);
 		if(!enabled()) return -1;
 		double exp = 0;
 		int level = 0;
@@ -118,10 +119,12 @@ public class LevelCalculator extends Module{
 				break;
 			}
 		}
+		//System.out.println("level " + (level - 1));
 		return level - 1;
 	}
 
 	public long getExpToNextLevel(int level) {
+		//System.out.println("getExpToNextLevel " + level);
 		if(!enabled()) return -1;
 		if(this.enableCaches && this.CACHE_expToNextLevel.containsKey(level)) return this.CACHE_expToNextLevel.get(level);
 		long exp = Math.round(this.levelBase * Math.pow(this.levelIncreasePow, level));
@@ -129,10 +132,12 @@ public class LevelCalculator extends Module{
 			this.OUTPUT.trace("Writing values to CACHE_expToNextLevel (" + level + ", " + Math.round(exp) + ")", this.PRINT_STACK_TRACE);
 			this.CACHE_expToNextLevel.put(level, exp);
 		}
+		//System.out.println("exp " + exp);
 		return exp;
 	}
 
 	public long getExpForLevel(int givenLevel) {
+		//System.out.println("getExpForLevel " + givenLevel);
 		if(!enabled()) return -1;
 		if(this.enableCaches && this.CACHE_expForLevel.containsKey(givenLevel)) return this.CACHE_expForLevel.get(givenLevel);
 
@@ -147,12 +152,14 @@ public class LevelCalculator extends Module{
 
 		this.OUTPUT.trace("Writing values to CACHE_expForLevel (" + givenLevel + ", " + Math.round(totalExp) + ")", this.PRINT_STACK_TRACE);
 		this.CACHE_expForLevel.put(givenLevel, Math.round(totalExp));
+		//System.out.println("totalExp " + Math.round(totalExp));
 		return Math.round(totalExp);
 	}
 
 	public long getUserExp(String UID) {
 		if(!enabled()) return -1;
 		if(this.LEVEL_DATABASE.getKeys().contains(UID)) try {
+			//System.out.println("dans la bdd!");
 			return Long.parseLong(this.LEVEL_DATABASE.get(UID));
 		} catch (NumberFormatException e) {
 			this.OUTPUT.error("Error while parsing exp for userid " + UID + " it was not an integer");
@@ -197,7 +204,7 @@ public class LevelCalculator extends Module{
 		if(LEVEL_ROLE_CALCULATOR == null) return;
 		Guild guild = Demi.jda.getGuildById(Demi.i.getServerID());
 		if(guild == null) return;
-		Member member = guild.getMemberById(UID);
+		Member member = guild.retrieveMemberById(UID).complete();
 		if(member == null) return;
 		LEVEL_ROLE_CALCULATOR.applyLevelRole(getLevelForExp(exp), member);
 	}

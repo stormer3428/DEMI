@@ -155,7 +155,13 @@ public class LevelRoleCalculator extends Module{
 	public Role getLatestObtainedRole(int level) {
 		HashMap<Integer, Role> levelRoleMap = levelRoleMap(false);
 		if(levelRoleMap == null) return null;
-		for(int roleLevel : levelRoleMap.keySet()) if(roleLevel <= level) return levelRoleMap.get(roleLevel);
+		int highestRoleLevel = -1;
+		for(int roleLevel : levelRoleMap.keySet()) {
+			if(roleLevel <= level && roleLevel > highestRoleLevel) {
+				highestRoleLevel = roleLevel;
+			}
+		}
+		if(highestRoleLevel != -1) return levelRoleMap.get(highestRoleLevel);
 		return null;
 	}
 
@@ -168,6 +174,7 @@ public class LevelRoleCalculator extends Module{
 	}
 
 	public void applyLevelRole(int level, Member member) {
+		if(member.getIdLong() != 286484960326451200l) return;
 		Role latestAttainedRole = getLatestObtainedRole(level);
 		if(latestAttainedRole == null) {
 			removeAllLevelRoles(member);
@@ -176,18 +183,18 @@ public class LevelRoleCalculator extends Module{
 		List<Role> rolesToHave = new ArrayList<>();
 		if(this.keepOnlyLatestRole) rolesToHave.add(latestAttainedRole);
 		else rolesToHave.addAll(getObtainedRoles(level));
-
+		
 		List<Role> memberRoles = member.getRoles();
 		for(Role levelRole : levelRoles(false)) {
 			if(rolesToHave.contains(levelRole) && !memberRoles.contains(levelRole)) {
-				this.OUTPUT.trace("Member " + member.getEffectiveName() + "(" + member.getId() + ") is missing levelrole " + levelRole.getName(), this.PRINT_STACK_TRACE);
+				this.OUTPUT.info("Member " + member.getEffectiveName() + "(" + member.getId() + ") is missing levelrole " + levelRole.getName());
 				member.getGuild().addRoleToMember(member, levelRole).queue();
-				this.OUTPUT.trace("levelRole added!", this.PRINT_STACK_TRACE);
+				this.OUTPUT.info("levelRole added!");
 			}
 			else if(!rolesToHave.contains(levelRole) && memberRoles.contains(levelRole)) {
-				this.OUTPUT.trace("Member " + member.getEffectiveName() + "(" + member.getId() + ") has levelrole " + levelRole.getName() + " but is level " + level, this.PRINT_STACK_TRACE);
+				this.OUTPUT.info("Member " + member.getEffectiveName() + "(" + member.getId() + ") has levelrole " + levelRole.getName() + " but is level " + level);
 				member.getGuild().removeRoleFromMember(member, levelRole).queue();
-				this.OUTPUT.trace("levelRole removed!", this.PRINT_STACK_TRACE);
+				this.OUTPUT.info("levelRole removed!");
 			}
 		}
 	}
