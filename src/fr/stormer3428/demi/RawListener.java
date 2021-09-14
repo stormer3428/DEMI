@@ -262,6 +262,7 @@ public class RawListener extends ListenerAdapter{
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericCategory(event);}}).start();}}catch (Exception e) {}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void onGenericCategoryUpdate(GenericCategoryUpdateEvent event) {try {
 
@@ -274,6 +275,7 @@ public class RawListener extends ListenerAdapter{
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericEmote(event);}}).start();}}catch (Exception e) {}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void onGenericEmoteUpdate(GenericEmoteUpdateEvent event) {try {
 
@@ -304,6 +306,7 @@ public class RawListener extends ListenerAdapter{
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildMember(event);}}).start();}}catch (Exception e) {}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void onGenericGuildMemberUpdate(GenericGuildMemberUpdateEvent event) {try {
 
@@ -322,6 +325,7 @@ public class RawListener extends ListenerAdapter{
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericGuildMessageReaction(event);}}).start();}}catch (Exception e) {}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void onGenericGuildUpdate(GenericGuildUpdateEvent event) {try {
 
@@ -370,12 +374,14 @@ public class RawListener extends ListenerAdapter{
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericRole(event);}}).start();}}catch (Exception e) {}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void onGenericRoleUpdate(GenericRoleUpdateEvent event) {try {
 
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericRoleUpdate(event);}}).start();}}catch (Exception e) {}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void onGenericSelfUpdate(GenericSelfUpdateEvent event) {try {
 
@@ -388,6 +394,7 @@ public class RawListener extends ListenerAdapter{
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericStoreChannel(event);}}).start();}}catch (Exception e) {}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void onGenericStoreChannelUpdate(GenericStoreChannelUpdateEvent event) {try {
 
@@ -400,6 +407,7 @@ public class RawListener extends ListenerAdapter{
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericTextChannel(event);}}).start();}}catch (Exception e) {}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void onGenericTextChannelUpdate(GenericTextChannelUpdateEvent event) {try {
 
@@ -430,6 +438,7 @@ public class RawListener extends ListenerAdapter{
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericVoiceChannel(event);}}).start();}}catch (Exception e) {}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void onGenericVoiceChannelUpdate(GenericVoiceChannelUpdateEvent event) {try {
 
