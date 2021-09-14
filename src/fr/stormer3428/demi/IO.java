@@ -268,12 +268,12 @@ public class IO {
 			return false;
 		}
 		if(!fileCheck()) {
-			DemiConsole.error("Failed to edit parameter " + key + " of file " + getFileName());
+			DemiConsole.error("Failed to edit parameter " + key + " of file " + getFileName() + "(0)");
 			return false;
 		}
 		if(getKeys().contains(key)){
 			if(!editParameter(key, value)) {
-				DemiConsole.error("Failed to edit parameter " + key + " of file " + getFileName());
+				DemiConsole.error("Failed to edit parameter " + key + " of file " + getFileName() + "(1)");
 				return false;
 			}
 			return true;
@@ -313,6 +313,14 @@ public class IO {
 	public final boolean editParameter(String key, String value) {
 		File inputFile = getFile();
 		File tempFile = new File(getFile().getName() + ".temp");
+		try {
+			tempFile.createNewFile();
+		} catch (IOException e) {
+			System.err.println("loul ca a foiré");
+			handleTrace(e);
+			return false;
+		}
+		System.out.println("tempFile.isFile = " + tempFile.isFile());
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)); BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
 			String currentLine;
 
