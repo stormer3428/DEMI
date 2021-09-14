@@ -88,21 +88,8 @@ public class Autorole extends Module{
 		
 		List<Role> memberRoles = member.getRoles();
 		List<Role> autoRoles = new ArrayList<>();
-		List<Thread> threads = new ArrayList<>();
 		for(Long autoRoleID : this.ROLES) {
-			threads.add(new Thread(new Runnable() {
-				@Override
-				public void run() {
 					autoRoles.add(guild.getRoleById(autoRoleID));		
-				}
-			}));
-		}
-		for(Thread thread : threads) thread.start();
-		for(Thread thread : threads) try {
-			thread.wait();
-		} catch (InterruptedException e) {
-			this.OUTPUT.error(getName() + " caught an error while multithreading");
-			handleTrace(e);
 		}
 		
 		for(Role role : autoRoles) {
