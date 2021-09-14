@@ -174,7 +174,7 @@ public class LevelRoleCalculator extends Module{
 	}
 
 	public void applyLevelRole(int level, Member member) {
-		if(member.getIdLong() != 286484960326451200l) return;
+		//if(member.getIdLong() != 286484960326451200l) return;
 		Role latestAttainedRole = getLatestObtainedRole(level);
 		if(latestAttainedRole == null) {
 			removeAllLevelRoles(member);
