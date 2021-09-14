@@ -48,6 +48,7 @@ public class MixedOutput {
 		this.outputToConsole = console;
 		this.mixedOutputHead = header;
 		if(!this.outputToChannel) return;
+		textChannelInit();
 	}
 
 	public MixedOutput(String channelID, boolean console, String header) {
@@ -77,14 +78,21 @@ public class MixedOutput {
 						final String[] listRaw = buffer.split("\n");
 						List<String> list = new ArrayList<>();
 						for(String s : listRaw) list.add(s);
-
+						
+						boolean clearBuffer = true;
+						
 						while(!list.isEmpty()) {
+							if(MixedOutput.this.textChannel == null) {
+								textChannelInit();
+								clearBuffer = false;
+								break;
+							}
 							String tempBuffer = "";
 							while(!list.isEmpty() && tempBuffer.length() + list.get(0).length() + 2 < 2000) tempBuffer = tempBuffer + "\n" +list.remove(0);
 							MixedOutput.this.textChannel.sendMessage(tempBuffer).complete();
 							tempBuffer = "";
 						}
-						buffer = "";
+						if(clearBuffer) buffer = "";
 					}
 					try {
 						Thread.sleep(bufferTimeoutMS);
