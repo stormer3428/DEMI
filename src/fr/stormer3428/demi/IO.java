@@ -310,38 +310,64 @@ public class IO {
 		}
 	}
 
+	Thread editingThread = null;
+	public boolean editThreadStarted = false;
+	HashMap<String, String> queue = new HashMap<>();
+
+
 	public final boolean editParameter(String key, String value) {
-		File inputFile = getFile();
-		File tempFile = new File(getFile().getName() + ".temp");
-		try {
-			tempFile.createNewFile();
-		} catch (IOException e) {
-			System.err.println("loul ca a foiré");
-			handleTrace(e);
-			return false;
-		}
-		//System.out.println("tempFile.isFile = " + tempFile.isFile());
-		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)); BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
-			String currentLine;
+		queue.put(key, value);
 
-			while((currentLine = reader.readLine()) != null) {
-				String trimmedLine = currentLine.trim();
-				if(trimmedLine.startsWith(key)) {
-					writer.write(key + ":" + value + System.getProperty("line.separator"));
-					continue;
+		if(!editThreadStarted) {
+			editingThread = new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+
+					while(queue.keySet().size() > 0) {
+						String key = (String) queue.keySet().toArray()[0];
+						String value = queue.get(key);
+						
+						File inputFile = getFile();
+						File tempFile = new File(getFile().getName() + ".temp");
+						try {
+							tempFile.createNewFile();
+						} catch (IOException e) {
+							System.err.println("loul ca a foiré");
+							handleTrace(e);
+							continue;
+						}
+						//System.out.println("tempFile.isFile = " + tempFile.isFile());
+						try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)); BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
+							String currentLine;
+
+							while((currentLine = reader.readLine()) != null) {
+								String trimmedLine = currentLine.trim();
+								if(trimmedLine.startsWith(key)) {
+									writer.write(key + ":" + value + System.getProperty("line.separator"));
+									continue;
+								}
+								writer.write(currentLine + System.getProperty("line.separator"));
+							}
+							writer.close(); 
+							reader.close(); 
+							inputFile.delete();
+							tempFile.renameTo(inputFile);
+						} catch (IOException e) {
+							DemiConsole.error("Caught an IO exception while attempting to edit parameter ("+key+") in file ("+getFile().getName()+"), returning false");
+							handleTrace(e);
+							continue;
+						}
+						queue.remove(key);
+					}
+					editThreadStarted = false;
 				}
-				writer.write(currentLine + System.getProperty("line.separator"));
-			}
-			writer.close(); 
-			reader.close(); 
-			inputFile.delete();
-			return tempFile.renameTo(inputFile);
-		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception while attempting to edit parameter ("+key+") in file ("+getFile().getName()+"), returning false");
-			handleTrace(e);
-			return false;
-		}
 
+			});
+			editThreadStarted = true;
+			editingThread.start();
+		}
+		return true;
 	}
 
 	public final boolean removeParameter(File givenFile, String key) {
@@ -393,7 +419,7 @@ public class IO {
 	public File getFile() {
 		return this.file;
 	}
-	
+
 	public HashMap<String, List<String>> getReversedMap(){
 		HashMap<String, String> returnedAll = getAll();
 		HashMap<String, List<String>> reversedMap = new HashMap<>();
@@ -420,7 +446,7 @@ public class IO {
 	public HashMap<String, String> getSingleReversedMap(boolean returnNullIfMulti) {
 		HashMap<String, List<String>> reversedMap = getReversedMap();
 		HashMap<String, String> singleReversedMap = new HashMap<>();
-		
+
 		for(String key : reversedMap.keySet()) {
 			List<String> list = reversedMap.get(key);
 			if(list.size() > 1 && returnNullIfMulti) return null;
