@@ -3,15 +3,21 @@ package fr.stormer3428.demi.module;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.IO;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class LevelRoleCalculator extends Module{
 
@@ -22,6 +28,11 @@ public class LevelRoleCalculator extends Module{
 	private HashMap<Role, Integer> cachedRolelevelMap;
 	private List<Role> cachedLevelRoles;
 
+	private Set<Long> cooldownSet = new HashSet<>();
+	private int COOLDOWN;
+	private long lastWiped = System.currentTimeMillis();
+	
+
 	private boolean keepOnlyLatestRole;
 
 	public LevelRoleCalculator() {
@@ -29,6 +40,7 @@ public class LevelRoleCalculator extends Module{
 
 		this.CONFIG_KEYS.add(new Key("enableCache", "false"));
 		this.CONFIG_KEYS.add(new Key("keepOnlyLatestRole", "true"));
+		this.CONFIG_KEYS.add(new Key("cooldown", "300000"));
 
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");
@@ -51,12 +63,75 @@ public class LevelRoleCalculator extends Module{
 		this.OUTPUT.trace("enableCache : " + this.enableCache, this.PRINT_STACK_TRACE);
 		this.keepOnlyLatestRole = this.CONFIG.get("keepOnlyLatestRole").equalsIgnoreCase("true");
 		this.OUTPUT.trace("keepOnlyLatestRole : " + this.keepOnlyLatestRole, this.PRINT_STACK_TRACE);
+		
+		this.COOLDOWN = cooldown();
+		if(this.COOLDOWN == -1) return;
+		this.OUTPUT.trace("cooldown : " + this.COOLDOWN, this.PRINT_STACK_TRACE);
 
 		this.ROLES_DATABASE = new IO(new File("level/levelRolesdb" + Demi.i.getServerID() + ".cfg"), new ArrayList<>(), true);
 		
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
+	@Override
+	public void onGuildMessageReceived(GuildMessageReceivedEvent event){
+		if(System.currentTimeMillis() - this.lastWiped > cooldown()){
+			this.lastWiped = System.currentTimeMillis();
+			this.cooldownSet.clear();
+		}
+		if(event.getAuthor().isBot()) return;
+		Message message = event.getMessage();
+		if(message.getChannel().getType() != ChannelType.TEXT) return;
+
+		TextChannel channel = event.getChannel();
+		if(channel == null) return;
+		Guild guild = event.getGuild();
+		if(!guild.getId().equals(Demi.i.getServerID())) return;
+		Member member = event.getMember();
+
+		if(Demi.i.getDebugMode() && !Demi.i.isDebugger(member.getIdLong())) return;
+
+		this.OUTPUT.info("Message received from member " + member.getEffectiveName());
+		
+		if(this.cooldownSet.contains(member.getIdLong())) return;
+		
+		//applyLevelRole(, member);
+
+		
+	}	
+	
+	public void updateLevelRoles(Member member, int level) {
+		if(System.currentTimeMillis() - this.lastWiped > cooldown()){
+			this.lastWiped = System.currentTimeMillis();
+			this.cooldownSet.clear();
+		}
+		
+		if(Demi.i.getDebugMode() && !Demi.i.isDebugger(member.getIdLong())) return;
+
+		this.OUTPUT.info("Message received from member " + member.getEffectiveName());
+		
+		if(this.cooldownSet.contains(member.getIdLong())) return;
+		
+		applyLevelRole(level, member);
+		this.cooldownSet.add(member.getIdLong());
+	}
+
+	private int cooldown() {
+		int i = -1;
+		try{
+			i = Integer.parseInt(this.CONFIG.get("cooldown"));
+		}catch (NumberFormatException e) {
+			handleTrace(e);
+		}
+		if(i > 0) return i;
+		this.OUTPUT.error("Failed to retrieve parameter (cooldown) in config file " + getName());
+		this.OUTPUT.warning("Retrieved value : " + this.CONFIG.get("cooldown"));
+		this.OUTPUT.warning("Expected a strictly positive number");
+		this.OUTPUT.warning("Disabling module to prevent errors");
+		Demi.disableModule(this);
+		return -1;
+	}
+	
 	public int retrieveLevelFromRoles(String UID) {
 		if(!enabled()) return -1;
 		Member member = Demi.jda.getGuildById(Demi.i.getServerID()).retrieveMemberById(UID).complete();

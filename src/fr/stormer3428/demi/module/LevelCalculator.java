@@ -9,6 +9,7 @@ import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.IO;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 
 public class LevelCalculator extends Module{
@@ -193,6 +194,12 @@ public class LevelCalculator extends Module{
 	public void setUserExp(String UID, Long exp) {
 		this.OUTPUT.trace("Setting exp of user " + UID + " to " + exp, this.PRINT_STACK_TRACE);
 		this.LEVEL_DATABASE.setParameter(UID, exp + "");
+		if(LEVEL_ROLE_CALCULATOR == null) return;
+		Guild guild = Demi.jda.getGuildById(Demi.i.getServerID());
+		if(guild == null) return;
+		Member member = guild.getMemberById(UID);
+		if(member == null) return;
+		LEVEL_ROLE_CALCULATOR.applyLevelRole(getLevelForExp(exp), member);
 	}
 
 	public void setUserLevel(String UID, int level) {
