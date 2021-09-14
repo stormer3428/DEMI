@@ -2,3 +2,4 @@
 config.cfg
 *.cfg
 *.demidb
+*.jar
