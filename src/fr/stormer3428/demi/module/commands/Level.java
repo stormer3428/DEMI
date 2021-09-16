@@ -39,9 +39,6 @@ public class Level extends CommandModule{
 	}
 
 	@Override
-	public void onDisable() {}
-
-	@Override
 	public void onEnable() {
 		super.onEnable();
 		this.OUTPUT.ok("Successfully loaded all config parameters");

@@ -11,6 +11,7 @@ import fr.stormer3428.demi.module.LevelCalculator;
 import fr.stormer3428.demi.module.LevelRoleCalculator;
 import fr.stormer3428.demi.module.MessageLeveling;
 import fr.stormer3428.demi.module.MessageLevelingMultiplierRoles;
+import fr.stormer3428.demi.module.commands.BanName;
 import fr.stormer3428.demi.module.commands.FileEdit;
 import fr.stormer3428.demi.module.commands.Help;
 import fr.stormer3428.demi.module.commands.Level;
@@ -55,6 +56,7 @@ public class Demi extends HasConfig{
 		registerModule(new Modules()); //TODO make modules implement themselves
 		registerModule(new Help()); //TODO make modules implement themselves
 		registerModule(new Level()); //TODO make modules implement themselves
+		registerModule(new BanName()); //TODO make modules implement themselves
 	}
 
 	public List<Module> getActiveModules(){

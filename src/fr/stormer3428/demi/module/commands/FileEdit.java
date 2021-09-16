@@ -32,17 +32,6 @@ public class FileEdit extends CommandModule{
 	}
 
 	@Override
-	public List<String> getDependencies() {
-		return new ArrayList<>();
-	}
-
-	@Override
-	public void onDisable() {}
-
-	@Override
-	public void onEnable() {}
-
-	@Override
 	protected void runCommand(DemiCommandReceiveEvent event) {
 		ArrayList<String> args = event.getArgs();
 		MixedOutput event_OUTPUT = event.getOutput();
@@ -51,21 +40,21 @@ public class FileEdit extends CommandModule{
 			return;
 		}
 		String action = args.remove(0);
-		if(action.equalsIgnoreCase("--help") || action.equalsIgnoreCase("-h") || action.equalsIgnoreCase("?")) {
+		if(action.equalsIgnoreCase("--help") || action.equalsIgnoreCase("-h") || action.equalsIgnoreCase("h") || action.equalsIgnoreCase("?")) {
 			showHelp(event_OUTPUT);
 			return;
 		}
-		if(action.equalsIgnoreCase("--listFiles") || action.equalsIgnoreCase("-l")) {
+		if(action.equalsIgnoreCase("--listFiles") || action.equalsIgnoreCase("-l") || action.equalsIgnoreCase("l")) {
 			showAvailableFiles(event_OUTPUT);
 			return;
 		}
-		if(action.equalsIgnoreCase("--parameter") || action.equalsIgnoreCase("-p")) {
+		if(action.equalsIgnoreCase("--parameter") || action.equalsIgnoreCase("-p") || action.equalsIgnoreCase("p")) {
 			if(args.isEmpty()) {
 				showHelpParam(event_OUTPUT);
 				return;
 			}
 			String paramType = args.remove(0).toLowerCase();
-			if(paramType.equalsIgnoreCase("--edit") || paramType.equalsIgnoreCase("-e")) {
+			if(paramType.equalsIgnoreCase("--edit") || paramType.equalsIgnoreCase("-e") || paramType.equalsIgnoreCase("e")) {
 				if(args.isEmpty()) {
 					showHelpParamEdit(event_OUTPUT);
 					return;
@@ -105,7 +94,7 @@ public class FileEdit extends CommandModule{
 				while(!args.isEmpty()) newValue = newValue + " " + args.remove(0);
 				setParam(event_OUTPUT, io, foundKey, newValue);
 				return;
-			}else if(paramType.equalsIgnoreCase("--listParameters") ||  paramType.equalsIgnoreCase("-l")) {
+			}else if(paramType.equalsIgnoreCase("--listParameters") ||  paramType.equalsIgnoreCase("-l") ||  paramType.equalsIgnoreCase("l")) {
 				if(args.isEmpty()) {
 					showHelpParamList(event_OUTPUT);
 					return;
@@ -120,7 +109,7 @@ public class FileEdit extends CommandModule{
 				}
 				listParams(event_OUTPUT, foundFile);
 				return;
-			}else if(paramType.equalsIgnoreCase("--get") || paramType.equalsIgnoreCase("-g")) {
+			}else if(paramType.equalsIgnoreCase("--get") || paramType.equalsIgnoreCase("-g") || paramType.equalsIgnoreCase("g")) {
 				if(args.isEmpty()) {
 					showHelpParamGet(event_OUTPUT);
 					return;
@@ -292,7 +281,7 @@ public class FileEdit extends CommandModule{
 
 	@Override
 	public String getUsage() {
-		return "Usage : " + getName() + " <--help;--listfiles;--parameter>";
+		return "Usage : " + getName() + " [--help; --listfiles; --parameter]";
 	}
 
 
