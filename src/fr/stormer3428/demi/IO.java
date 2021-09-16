@@ -21,6 +21,8 @@ public class IO {
 	public static List<String> defaultHeaders = new ArrayList<>();
 	private List<Key> defaultKeys = new ArrayList<>();
 
+	Semaphore fileSemaphore = new Semaphore(1);
+
 	static {
 		defaultHeaders.add("#");
 		defaultHeaders.add("//");
@@ -58,8 +60,15 @@ public class IO {
 	}
 
 	public final boolean fileCheck(boolean checkKeys) {
+		try {
+			fileSemaphore.acquire();
+		} catch (InterruptedException e1) {
+			DemiConsole.error("Internal error occured while aquiring semaphore (check)");
+			return false;
+		}
 		if(getFile() == null) {
 			DemiConsole.cancelled("Attempted to check integrity of null file, returning false");
+			fileSemaphore.release();
 			return false;
 		}
 		if(!(getFile().exists() && getFile().isFile())) {
@@ -71,6 +80,7 @@ public class IO {
 			} catch (IOException e) {
 				DemiConsole.error("Failed to create file " + getFileName());
 				handleTrace(e);
+				fileSemaphore.release();
 				return false;
 			}
 			DemiConsole.ok("Created file " + getFileName() + " successfully !");
@@ -84,6 +94,7 @@ public class IO {
 				addParameter(defaultKey.name(), defaultKey.defaultValue());
 			}
 		}
+		fileSemaphore.release();
 		return true;
 	}
 
@@ -290,6 +301,12 @@ public class IO {
 	}
 
 	public final boolean addParameter(String key, String value) {
+		try {
+			fileSemaphore.acquire();
+		} catch (InterruptedException e1) {
+			DemiConsole.error("Internal error occured while aquiring semaphore (add)");
+			return false;
+		}
 		File inputFile = getFile();
 		File tempFile = new File(getFile().getName() + ".temp");
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));	BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
@@ -303,23 +320,25 @@ public class IO {
 			writer.close(); 
 			reader.close(); 
 			inputFile.delete();
-			return tempFile.renameTo(inputFile);
+			boolean success = tempFile.renameTo(inputFile);
+			fileSemaphore.release();
+			return success;
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to add parameter ("+key+") in file ("+getFile().getName()+"), returning false");
 			handleTrace(e);
+			fileSemaphore.release();
 			return false;
 		}
 	}
 
-	Semaphore editSemaphore = new Semaphore(1);
-
 	public final boolean editParameter(String key, String value) {
 		try {
-			editSemaphore.acquire();
+			fileSemaphore.acquire();
 		} catch (InterruptedException e1) {
-			DemiConsole.error("Internal error occured while aquiring semaphore");
+			DemiConsole.error("Internal error occured while aquiring semaphore (edit)");
 			return false;
 		}
+		//DemiConsole.action("Starting writing for " + key + " " + value);
 		
 		File inputFile = getFile();
 		File tempFile = new File(getFile().getName() + ".temp");
@@ -328,7 +347,7 @@ public class IO {
 		} catch (IOException e) {
 			DemiConsole.error("Failed to create temp file");
 			handleTrace(e);
-			editSemaphore.release();
+			fileSemaphore.release();
 			return false;
 		}
 		//System.out.println("tempFile.isFile = " + tempFile.isFile());
@@ -347,18 +366,30 @@ public class IO {
 			reader.close(); 
 			inputFile.delete();
 			tempFile.renameTo(inputFile);
+			
+			
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to edit parameter ("+key+") in file ("+getFile().getName()+"), returning false");
 			handleTrace(e);
-			editSemaphore.release();
+			fileSemaphore.release();
 			return false;
 		}
 
-		editSemaphore.release();
+
+		//DemiConsole.ok("Finished writing for " + key + " " + value);
+		
+		fileSemaphore.release();
 		return true;
 	}
 
 	public final boolean removeParameter(File givenFile, String key) {
+		try {
+			fileSemaphore.acquire();
+		} catch (InterruptedException e1) {
+			DemiConsole.error("Internal error occured while aquiring semaphore (remove)");
+			return false;
+		}
+		
 		File inputFile = givenFile;
 		File tempFile = new File(givenFile.getName() + ".temp");
 
@@ -370,10 +401,12 @@ public class IO {
 				if(trimmedLine.startsWith(key)) continue;
 				writer.write(currentLine + System.getProperty("line.separator"));
 			}
+			fileSemaphore.release();
 			return tempFile.renameTo(inputFile);
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to remove parameter ("+key+") in file ("+givenFile.getName()+"), returning false");
 			handleTrace(e);
+			fileSemaphore.release();
 			return false;
 		}
 	}
