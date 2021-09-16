@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Semaphore;
 
 public class IO {
 
@@ -310,63 +311,50 @@ public class IO {
 		}
 	}
 
-	Thread editingThread = null;
-	public boolean editThreadStarted = false;
-	HashMap<String, String> queue = new HashMap<>();
-
+	Semaphore editSemaphore = new Semaphore(1);
 
 	public final boolean editParameter(String key, String value) {
-		queue.put(key, value);
-
-		if(!editThreadStarted) {
-			editingThread = new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-
-					while(queue.keySet().size() > 0) {
-						String key = (String) queue.keySet().toArray()[0];
-						String value = queue.get(key);
-						
-						File inputFile = getFile();
-						File tempFile = new File(getFile().getName() + ".temp");
-						try {
-							tempFile.createNewFile();
-						} catch (IOException e) {
-							System.err.println("loul ca a foiré");
-							handleTrace(e);
-							continue;
-						}
-						//System.out.println("tempFile.isFile = " + tempFile.isFile());
-						try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)); BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
-							String currentLine;
-
-							while((currentLine = reader.readLine()) != null) {
-								String trimmedLine = currentLine.trim();
-								if(trimmedLine.startsWith(key)) {
-									writer.write(key + ":" + value + System.getProperty("line.separator"));
-									continue;
-								}
-								writer.write(currentLine + System.getProperty("line.separator"));
-							}
-							writer.close(); 
-							reader.close(); 
-							inputFile.delete();
-							tempFile.renameTo(inputFile);
-						} catch (IOException e) {
-							DemiConsole.error("Caught an IO exception while attempting to edit parameter ("+key+") in file ("+getFile().getName()+"), returning false");
-							handleTrace(e);
-							continue;
-						}
-						queue.remove(key);
-					}
-					editThreadStarted = false;
-				}
-
-			});
-			editThreadStarted = true;
-			editingThread.start();
+		try {
+			editSemaphore.acquire();
+		} catch (InterruptedException e1) {
+			DemiConsole.error("Internal error occured while aquiring semaphore");
+			return false;
 		}
+		
+		File inputFile = getFile();
+		File tempFile = new File(getFile().getName() + ".temp");
+		try {
+			tempFile.createNewFile();
+		} catch (IOException e) {
+			DemiConsole.error("Failed to create temp file");
+			handleTrace(e);
+			editSemaphore.release();
+			return false;
+		}
+		//System.out.println("tempFile.isFile = " + tempFile.isFile());
+		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)); BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
+			String currentLine;
+
+			while((currentLine = reader.readLine()) != null) {
+				String trimmedLine = currentLine.trim();
+				if(trimmedLine.startsWith(key)) {
+					writer.write(key + ":" + value + System.getProperty("line.separator"));
+					continue;
+				}
+				writer.write(currentLine + System.getProperty("line.separator"));
+			}
+			writer.close(); 
+			reader.close(); 
+			inputFile.delete();
+			tempFile.renameTo(inputFile);
+		} catch (IOException e) {
+			DemiConsole.error("Caught an IO exception while attempting to edit parameter ("+key+") in file ("+getFile().getName()+"), returning false");
+			handleTrace(e);
+			editSemaphore.release();
+			return false;
+		}
+
+		editSemaphore.release();
 		return true;
 	}
 
