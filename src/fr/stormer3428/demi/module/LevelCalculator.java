@@ -26,6 +26,10 @@ public class LevelCalculator extends Module{
 
 	private IO LEVEL_DATABASE;
 
+	public IO getLEVEL_DATABASE() {
+		return LEVEL_DATABASE;
+	}
+	
 	public LevelCalculator() {
 		super(new File("level/levelCalculator.cfg"));
 
