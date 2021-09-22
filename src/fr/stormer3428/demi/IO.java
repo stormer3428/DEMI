@@ -13,12 +13,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Semaphore;
 
 public class IO {
 
 	public static List<IO> all = new ArrayList<>();
 	public static List<String> defaultHeaders = new ArrayList<>();
 	private List<Key> defaultKeys = new ArrayList<>();
+
+	private Semaphore fileSemaphore = new Semaphore(1);
 
 	static {
 		defaultHeaders.add("#");
@@ -97,12 +100,18 @@ public class IO {
 			return new ArrayList<>();
 		}
 
+		try {
+			fileSemaphore.acquire();
+		} catch (Exception e) {
+			handleTrace(e);
+		}
 		List<String> lines;
 		try {
 			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to retrieve keySet from file ("+getFile().getName()+"), returning empty list");
 			handleTrace(e);
+			fileSemaphore.release();
 			return new ArrayList<>();
 		}
 		List<String> keys = new ArrayList<>();
@@ -111,6 +120,7 @@ public class IO {
 			if(!line.contains(":")) continue;
 			keys.add(line.split(":",2)[0]);
 		}
+		fileSemaphore.release();
 		return keys;
 	}
 
@@ -130,12 +140,18 @@ public class IO {
 			return new ArrayList<>();
 		}
 
+		try {
+			fileSemaphore.acquire();
+		} catch (Exception e) {
+			handleTrace(e);
+		}
 		List<String> lines;
 		try {
 			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to retrieve all values from file ("+getFile().getName()+"), returning null");
 			handleTrace(e);
+			fileSemaphore.release();
 			return null;
 		}
 		List<String> keys = new ArrayList<>();
@@ -144,6 +160,7 @@ public class IO {
 			if(!line.contains(":")) continue;
 			keys.add(line.split(":",2)[1].replace("\"", ""));
 		}
+		fileSemaphore.release();
 		return keys;
 	}
 
@@ -176,12 +193,18 @@ public class IO {
 			return null;
 		}
 
+		try {
+			fileSemaphore.acquire();
+		} catch (Exception e) {
+			handleTrace(e);
+		}
 		List<String> lines;
 		try {
 			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to retrieve parameter ("+key+") from file ("+getFile().getName()+"), returning null");
 			handleTrace(e);
+			fileSemaphore.release();
 			return null;
 		}
 		for(String line : lines){
@@ -189,9 +212,11 @@ public class IO {
 			if(!line.startsWith(key + ":")) continue;
 			String s = line.substring(key.length() + 1);
 			s = s.replace("\"", "");
+			fileSemaphore.release();
 			return s;
 
 		}
+		fileSemaphore.release();
 		return "";
 	}
 
@@ -206,12 +231,18 @@ public class IO {
 			return new HashMap<>();
 		}
 
+		try {
+			fileSemaphore.acquire();
+		} catch (Exception e) {
+			handleTrace(e);
+		}
 		List<String> lines;
 		try {
 			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to retrieve hashMap of file ("+getFile().getName()+"), returning null");
 			handleTrace(e);
+			fileSemaphore.release();
 			return null;
 		}
 		HashMap<String, String> keys = new HashMap<>();
@@ -221,6 +252,7 @@ public class IO {
 			keys.put(line.split(":",2)[0], line.split(":",2)[1].replace("\"", ""));
 
 		}
+		fileSemaphore.release();
 		return keys;
 	}
 
@@ -289,6 +321,11 @@ public class IO {
 	}
 
 	public final boolean addParameter(String key, String value) {
+		try {
+			fileSemaphore.acquire();
+		} catch (Exception e) {
+			handleTrace(e);
+		}
 		File inputFile = getFile();
 		File tempFile = new File(getFile().getName() + ".temp");
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));	BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
@@ -302,75 +339,55 @@ public class IO {
 			writer.close(); 
 			reader.close(); 
 			inputFile.delete();
+			fileSemaphore.release();
 			return tempFile.renameTo(inputFile);
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to add parameter ("+key+") in file ("+getFile().getName()+"), returning false");
 			handleTrace(e);
+			fileSemaphore.release();
 			return false;
 		}
 	}
 
-	Thread editingThread = null;
-	public boolean editThreadStarted = false;
-	HashMap<String, String> queue = new HashMap<>();
 
 
 	public final boolean editParameter(String key, String value) {
-		queue.put(key, value);
-
-		if(!editThreadStarted) {
-			editingThread = new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-
-					while(queue.keySet().size() > 0) {
-						String key = (String) queue.keySet().toArray()[0];
-						String value = queue.get(key);
-						
-						File inputFile = getFile();
-						File tempFile = new File(getFile().getName() + ".temp");
-						try {
-							tempFile.createNewFile();
-						} catch (IOException e) {
-							System.err.println("loul ca a foiré");
-							handleTrace(e);
-							continue;
-						}
-						//System.out.println("tempFile.isFile = " + tempFile.isFile());
-						try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)); BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
-							String currentLine;
-
-							while((currentLine = reader.readLine()) != null) {
-								String trimmedLine = currentLine.trim();
-								if(trimmedLine.startsWith(key)) {
-									writer.write(key + ":" + value + System.getProperty("line.separator"));
-									continue;
-								}
-								writer.write(currentLine + System.getProperty("line.separator"));
-							}
-							writer.close(); 
-							reader.close(); 
-							inputFile.delete();
-							tempFile.renameTo(inputFile);
-						} catch (IOException e) {
-							DemiConsole.error("Caught an IO exception while attempting to edit parameter ("+key+") in file ("+getFile().getName()+"), returning false");
-							handleTrace(e);
-							continue;
-						}
-						queue.remove(key);
-					}
-					editThreadStarted = false;
-				}
-
-			});
-			editThreadStarted = true;
-			editingThread.start();
+		try {
+			fileSemaphore.acquire();
+		} catch (Exception e) {
+			handleTrace(e);
 		}
-		return true;
+		File inputFile = getFile();
+		File tempFile = new File(file.getName() + ".temp");
+		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)); BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
+			String currentLine;
+
+			while((currentLine = reader.readLine()) != null) {
+				String trimmedLine = currentLine.trim();
+				if(trimmedLine.startsWith(key)) {
+					writer.write(key + ":" + value + System.getProperty("line.separator"));
+					continue;
+				}
+				writer.write(currentLine + System.getProperty("line.separator"));
+			}
+			writer.close(); 
+			reader.close(); 
+			inputFile.delete();
+			fileSemaphore.release();
+			return tempFile.renameTo(inputFile);
+		}catch (Exception e) {
+			e.printStackTrace();
+			fileSemaphore.release();
+			return false;
+		}
 	}
 
 	public final boolean removeParameter(File givenFile, String key) {
+		try {
+			fileSemaphore.acquire();
+		} catch (Exception e) {
+			handleTrace(e);
+		}
 		File inputFile = givenFile;
 		File tempFile = new File(givenFile.getName() + ".temp");
 
@@ -382,10 +399,12 @@ public class IO {
 				if(trimmedLine.startsWith(key)) continue;
 				writer.write(currentLine + System.getProperty("line.separator"));
 			}
+			fileSemaphore.release();
 			return tempFile.renameTo(inputFile);
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to remove parameter ("+key+") in file ("+givenFile.getName()+"), returning false");
 			handleTrace(e);
+			fileSemaphore.release();
 			return false;
 		}
 	}
@@ -395,7 +414,7 @@ public class IO {
 		DemiConsole.ok(getFileName() + " IO now set to " + (printStackTrace ? "" : "not") +" print stack trace");
 	}
 
-	private void handleTrace(IOException e) {
+	private void handleTrace(Exception e) {
 		if(this.printStackTrace) {
 			DemiConsole.info("Printing stack trace");
 			e.printStackTrace();
