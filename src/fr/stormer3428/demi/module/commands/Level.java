@@ -92,7 +92,7 @@ public class Level extends CommandModule{
 		}
 		long exp = LEVEL_CALCULATOR.getUserExp(member.getId());
 		int level = LEVEL_CALCULATOR.getLevelForExp(exp);
-		long expNextLevel = LEVEL_CALCULATOR.getExpToNextLevel(level + 1);
+		long expNextLevel = LEVEL_CALCULATOR.getExpForLevel(level + 1) - exp;
 		
 		OUTPUT.command(member.getEffectiveName() + " is currently level " + level + " with " + exp + " xp" + "\n" + "Exp until next level : " + expNextLevel + " xp");
 		

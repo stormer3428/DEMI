@@ -14,9 +14,12 @@ import fr.stormer3428.demi.module.MessageLevelingMultiplierRoles;
 import fr.stormer3428.demi.module.commands.BanName;
 import fr.stormer3428.demi.module.commands.FileEdit;
 import fr.stormer3428.demi.module.commands.Help;
+import fr.stormer3428.demi.module.commands.Leaderboard;
 import fr.stormer3428.demi.module.commands.Level;
 import fr.stormer3428.demi.module.commands.Modules;
 import fr.stormer3428.demi.module.commands.Reload;
+import fr.stormer3428.demi.module.commands.SetLevel;
+import fr.stormer3428.demi.module.commands.Version;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -57,6 +60,9 @@ public class Demi extends HasConfig{
 		registerModule(new Help()); //TODO make modules implement themselves
 		registerModule(new Level()); //TODO make modules implement themselves
 		registerModule(new BanName()); //TODO make modules implement themselves
+		registerModule(new SetLevel()); //TODO make modules implement themselves
+		registerModule(new Version()); //TODO make modules implement themselves
+		registerModule(new Leaderboard()); //TODO make modules implement themselves
 	}
 
 	public List<Module> getActiveModules(){

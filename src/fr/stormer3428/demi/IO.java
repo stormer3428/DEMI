@@ -21,7 +21,7 @@ public class IO {
 	public static List<String> defaultHeaders = new ArrayList<>();
 	private List<Key> defaultKeys = new ArrayList<>();
 
-	Semaphore fileSemaphore = new Semaphore(1);
+	private Semaphore fileSemaphore = new Semaphore(1);
 
 	static {
 		defaultHeaders.add("#");
@@ -109,12 +109,18 @@ public class IO {
 			return new ArrayList<>();
 		}
 
+		try {
+			fileSemaphore.acquire();
+		} catch (Exception e) {
+			handleTrace(e);
+		}
 		List<String> lines;
 		try {
 			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to retrieve keySet from file ("+getFile().getName()+"), returning empty list");
 			handleTrace(e);
+			fileSemaphore.release();
 			return new ArrayList<>();
 		}
 		List<String> keys = new ArrayList<>();
@@ -123,6 +129,7 @@ public class IO {
 			if(!line.contains(":")) continue;
 			keys.add(line.split(":",2)[0]);
 		}
+		fileSemaphore.release();
 		return keys;
 	}
 
@@ -142,12 +149,18 @@ public class IO {
 			return new ArrayList<>();
 		}
 
+		try {
+			fileSemaphore.acquire();
+		} catch (Exception e) {
+			handleTrace(e);
+		}
 		List<String> lines;
 		try {
 			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to retrieve all values from file ("+getFile().getName()+"), returning null");
 			handleTrace(e);
+			fileSemaphore.release();
 			return null;
 		}
 		List<String> keys = new ArrayList<>();
@@ -156,6 +169,7 @@ public class IO {
 			if(!line.contains(":")) continue;
 			keys.add(line.split(":",2)[1].replace("\"", ""));
 		}
+		fileSemaphore.release();
 		return keys;
 	}
 
@@ -188,12 +202,18 @@ public class IO {
 			return null;
 		}
 
+		try {
+			fileSemaphore.acquire();
+		} catch (Exception e) {
+			handleTrace(e);
+		}
 		List<String> lines;
 		try {
 			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to retrieve parameter ("+key+") from file ("+getFile().getName()+"), returning null");
 			handleTrace(e);
+			fileSemaphore.release();
 			return null;
 		}
 		for(String line : lines){
@@ -201,9 +221,11 @@ public class IO {
 			if(!line.startsWith(key + ":")) continue;
 			String s = line.substring(key.length() + 1);
 			s = s.replace("\"", "");
+			fileSemaphore.release();
 			return s;
 
 		}
+		fileSemaphore.release();
 		return "";
 	}
 
@@ -218,12 +240,18 @@ public class IO {
 			return new HashMap<>();
 		}
 
+		try {
+			fileSemaphore.acquire();
+		} catch (Exception e) {
+			handleTrace(e);
+		}
 		List<String> lines;
 		try {
 			lines = Files.readAllLines(getFile().toPath(), Charset.forName("UTF-8"));
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to retrieve hashMap of file ("+getFile().getName()+"), returning null");
 			handleTrace(e);
+			fileSemaphore.release();
 			return null;
 		}
 		HashMap<String, String> keys = new HashMap<>();
@@ -233,6 +261,7 @@ public class IO {
 			keys.put(line.split(":",2)[0], line.split(":",2)[1].replace("\"", ""));
 
 		}
+		fileSemaphore.release();
 		return keys;
 	}
 
@@ -331,6 +360,7 @@ public class IO {
 		}
 	}
 
+
 	public final boolean editParameter(String key, String value) {
 		try {
 			fileSemaphore.acquire();
@@ -416,7 +446,7 @@ public class IO {
 		DemiConsole.ok(getFileName() + " IO now set to " + (printStackTrace ? "" : "not") +" print stack trace");
 	}
 
-	private void handleTrace(IOException e) {
+	private void handleTrace(Exception e) {
 		if(this.printStackTrace) {
 			DemiConsole.info("Printing stack trace");
 			e.printStackTrace();
