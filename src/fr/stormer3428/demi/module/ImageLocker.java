@@ -22,7 +22,7 @@ public class ImageLocker extends Module{
 	private ArrayList<Long> exemptRoles;
 	private ArrayList<Long> exemptMembers;
 	
-	public ImageLocker(File file) {
+	public ImageLocker() {
 		super(new File("ImageLocker.cfg"));
 
 		this.CONFIG_KEYS.add(new Key("imageLockedChannels", "[]"));
