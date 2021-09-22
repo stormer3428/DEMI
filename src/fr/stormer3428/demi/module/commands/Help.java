@@ -66,9 +66,18 @@ public class Help extends CommandModule{
 	}
 
 	@Override
+	public List<String> getDependencies() {
+		return new ArrayList<>();
+	}
+
+	@Override
 	public String getDescription() {
 		return "A command that shows the list of commands available to the sender";
 	}
+
+	@Override
+	public void onDisable() {}
+
 	@Override
 	public String getUsage() {
 		return "Usage : help";

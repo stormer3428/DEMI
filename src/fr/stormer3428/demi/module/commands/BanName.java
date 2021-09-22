@@ -33,6 +33,9 @@ public class BanName extends CommandModule{
 	public void onDisable() {}
 
 	@Override
+	public void onEnable() {}
+
+	@Override
 	protected void runCommand(DemiCommandReceiveEvent event) {
 		List<String> args = event.getArgs();
 		MixedOutput OUTPUT = event.getOutput();
@@ -41,7 +44,7 @@ public class BanName extends CommandModule{
 			return;
 		}
 		String type = args.remove(0);
-		if(type.equalsIgnoreCase("--query") || type.equalsIgnoreCase("-q") || type.equalsIgnoreCase("q")) {
+		if(type.equalsIgnoreCase("-query") || type.equalsIgnoreCase("-q")) {
 			if(args.size() == 0) {
 				OUTPUT.command("i need a name to search members with");
 				return;
@@ -51,16 +54,16 @@ public class BanName extends CommandModule{
 			return;
 		}
 
-		if(type.equalsIgnoreCase("--confirm") || type.equalsIgnoreCase("-c") || type.equalsIgnoreCase("c")) {
+		if(type.equalsIgnoreCase("-confirm") || type.equalsIgnoreCase("-c")) {
 			//TODO
 			return;
 		}
-		OUTPUT.command("There's only two valid argument, --query and --confirm, and " + type + " isn't one of them");
+		OUTPUT.command("there's only two valid argument, -query and -confirm, and " + type + " isn't one of them");
 	}
 
 	@Override
 	public String getUsage() {
-		return "Usage : " + getName() + " <--query; --confirm>";
+		return "Usage : " + getName() + " <-query; -confirm>";
 	}
 
 
