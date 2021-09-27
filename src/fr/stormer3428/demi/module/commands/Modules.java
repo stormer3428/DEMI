@@ -1,13 +1,12 @@
 package fr.stormer3428.demi.module.commands;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.stormer3428.demi.CommandModule;
 import fr.stormer3428.demi.Demi;
-import fr.stormer3428.demi.Module;
 import fr.stormer3428.demi.DemiCommandReceiveEvent;
 import fr.stormer3428.demi.MixedOutput;
+import fr.stormer3428.demi.Module;
 
 public class Modules extends CommandModule{
 
@@ -50,22 +49,8 @@ public class Modules extends CommandModule{
 	}
 
 	@Override
-	public List<String> getDependencies() {
-		return new ArrayList<>();
-	}
-
-	@Override
 	public String getDescription() {
 		return "A comand that lists currently enabled modules";
-	}
-
-	@Override
-	public void onDisable() {}
-
-	@Override
-	public void onEnable() {
-		super.onEnable();
-		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
 	@Override

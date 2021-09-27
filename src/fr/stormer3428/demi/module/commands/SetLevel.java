@@ -40,10 +40,7 @@ public class SetLevel extends CommandModule{
 		dependencies.add("LevelCalculator");
 		return dependencies;
 	}
-
-	@Override
-	public void onDisable() {}
-
+	
 	@Override
 	public void onEnable() {
 		super.onEnable();

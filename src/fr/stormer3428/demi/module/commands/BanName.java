@@ -1,6 +1,5 @@
 package fr.stormer3428.demi.module.commands;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.stormer3428.demi.CommandModule;
@@ -23,17 +22,6 @@ public class BanName extends CommandModule{
 	public String getDescription() {
 		return "A module that can ban multiple people based on the name prompted";
 	}
-
-	@Override
-	public List<String> getDependencies() {
-		return new ArrayList<>();
-	}
-
-	@Override
-	public void onDisable() {}
-
-	@Override
-	public void onEnable() {}
 
 	@Override
 	protected void runCommand(DemiCommandReceiveEvent event) {

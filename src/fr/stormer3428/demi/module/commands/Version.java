@@ -1,8 +1,5 @@
 package fr.stormer3428.demi.module.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.stormer3428.demi.CommandModule;
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.DemiCommandReceiveEvent;
@@ -27,18 +24,10 @@ public class Version extends CommandModule{
 	}
 
 	@Override
-	public List<String> getDependencies() {
-		return new ArrayList<>();
-	}
-
-	@Override
 	public String getDescription() {
 		return "A command that shows the main jar name, thus showing the version DEMI is running on";
 	}
-
-	@Override
-	public void onDisable() {}
-
+	
 	@Override
 	public String getUsage() {
 		return "Usage : version";

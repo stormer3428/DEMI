@@ -32,17 +32,6 @@ public class FileEdit extends CommandModule{
 	}
 
 	@Override
-	public List<String> getDependencies() {
-		return new ArrayList<>();
-	}
-
-	@Override
-	public void onDisable() {}
-
-	@Override
-	public void onEnable() {}
-
-	@Override
 	protected void runCommand(DemiCommandReceiveEvent event) {
 		ArrayList<String> args = event.getArgs();
 		MixedOutput event_OUTPUT = event.getOutput();
