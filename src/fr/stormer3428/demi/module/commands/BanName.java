@@ -72,7 +72,7 @@ public class BanName extends CommandModule{
 		for(Long id : list) {
 			Member member = guild.retrieveMemberById(id).complete();
 			OUTPUT.command("Banned " + member.getEffectiveName());
-			member.ban(14).complete();
+			member.ban(7).complete();
 		}
 	}
 
