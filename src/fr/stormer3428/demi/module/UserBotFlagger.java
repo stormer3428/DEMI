@@ -65,9 +65,11 @@ public class UserBotFlagger extends Module{
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		Member member = event.getMember();
+		if(member.getUser() == null) return;
 		if(member.getUser().isBot()) return;
 		Long id = member.getIdLong();
 		String message = event.getMessage().getContentRaw();
+		if(message == null) return;
 		
 		if(!lastMessagesMap.containsKey(id)) {
 			lastMessagesMap.put(id, message);
