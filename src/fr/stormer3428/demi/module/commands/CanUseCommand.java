@@ -67,7 +67,7 @@ public class CanUseCommand extends CommandModule{
 
 	@Override
 	public String getDescription() {
-		return "A command that shows the list of commands available to the sender";
+		return "A command that shows whether a member can use a specific command or not";
 	}
 
 	@Override
