@@ -1,15 +1,16 @@
 package fr.stormer3428.demi.module.commands;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.stormer3428.demi.CommandModule;
-import fr.stormer3428.demi.Module;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.DemiCommandReceiveEvent;
 import fr.stormer3428.demi.MixedOutput;
+import fr.stormer3428.demi.Module;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 
 public class Help extends CommandModule{
 
@@ -32,25 +33,33 @@ public class Help extends CommandModule{
 		if(event.getMessageReceivedEvent() != null) member = event.getMessageReceivedEvent().getMember();
 
 		if(args.isEmpty()) {
+			
+			EmbedBuilder helpEmbedBuilder = new EmbedBuilder();
+			helpEmbedBuilder.setTitle("Commands available for " + member.getEffectiveName());
+			helpEmbedBuilder.setAuthor("Help");
+			helpEmbedBuilder.setColor(new Color(200, 0, 200));
+			
 			List<String> embedReplacement = new ArrayList<>();
 			embedReplacement.add("Commands available : ");
 
-			EmbedBuilder builder = new EmbedBuilder();
-			builder.setAuthor(getName());
-			builder.setTitle("Available Commands");
-			if(member != null) builder.setThumbnail(member.getUser().getEffectiveAvatarUrl());
+			if(member != null) helpEmbedBuilder.setThumbnail(member.getUser().getEffectiveAvatarUrl());
 
 			for(Module module : Demi.i.getActiveModules()) {
 				if(module instanceof CommandModule) {
 					CommandModule command = (CommandModule) module;
 					if(!command.canUseCommand(member)) continue;
 					embedReplacement.add(command.getName() + " | " + command.getUsage());
-					builder.addField(command.getName(), command.getUsage(), false);
+					helpEmbedBuilder.addField(command.getName(), command.getDescription() + "\n" + command.getUsage(), false);
 				}
 			}
-			COMMAND_OUTPUT.embed(builder.build(), embedReplacement);
+			COMMAND_OUTPUT.embed(helpEmbedBuilder.build(), embedReplacement);
 			return;
 		}
+		
+		
+		
+		
+		
 		String typedCommandName = args.remove(0);
 		boolean ModulesCommandLoaded = false;
 		for(Module module : Demi.i.getActiveModules()) if(module.getName().equals("Modules")) {ModulesCommandLoaded = true; break;}
