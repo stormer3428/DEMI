@@ -43,6 +43,7 @@ public class Help extends CommandModule{
 			for(Module module : Demi.i.getActiveModules()) {
 				if(module instanceof CommandModule) {
 					CommandModule command = (CommandModule) module;
+					if(!command.canUseCommand(member)) continue;
 					embedReplacement.add(command.getName() + " | " + command.getUsage());
 					builder.addField(command.getName(), command.getUsage(), false);
 				}

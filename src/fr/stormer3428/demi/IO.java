@@ -60,15 +60,8 @@ public class IO {
 	}
 
 	public final boolean fileCheck(boolean checkKeys) {
-		try {
-			fileSemaphore.acquire();
-		} catch (InterruptedException e1) {
-			DemiConsole.error("Internal error occured while aquiring semaphore (check)");
-			return false;
-		}
 		if(getFile() == null) {
 			DemiConsole.cancelled("Attempted to check integrity of null file, returning false");
-			fileSemaphore.release();
 			return false;
 		}
 		if(!(getFile().exists() && getFile().isFile())) {
@@ -80,7 +73,6 @@ public class IO {
 			} catch (IOException e) {
 				DemiConsole.error("Failed to create file " + getFileName());
 				handleTrace(e);
-				fileSemaphore.release();
 				return false;
 			}
 			DemiConsole.ok("Created file " + getFileName() + " successfully !");
@@ -94,7 +86,6 @@ public class IO {
 				addParameter(defaultKey.name(), defaultKey.defaultValue());
 			}
 		}
-		fileSemaphore.release();
 		return true;
 	}
 
