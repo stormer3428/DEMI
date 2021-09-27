@@ -18,6 +18,7 @@ import fr.stormer3428.demi.module.commands.FileEdit;
 import fr.stormer3428.demi.module.commands.Help;
 import fr.stormer3428.demi.module.commands.Leaderboard;
 import fr.stormer3428.demi.module.commands.Level;
+import fr.stormer3428.demi.module.commands.ListChannels;
 import fr.stormer3428.demi.module.commands.Modules;
 import fr.stormer3428.demi.module.commands.Reload;
 import fr.stormer3428.demi.module.commands.SetLevel;
@@ -67,6 +68,7 @@ public class Demi extends HasConfig{
 		registerModule(new Version()); //TODO make modules implement themselves
 		registerModule(new Leaderboard()); //TODO make modules implement themselves
 		registerModule(new CanUseCommand()); //TODO make modules implement themselves
+		registerModule(new ListChannels()); //TODO make modules implement themselves
 	}
 
 	public List<Module> getActiveModules(){
