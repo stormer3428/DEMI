@@ -1,5 +1,6 @@
 package fr.stormer3428.demi.module.commands;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import fr.stormer3428.demi.DemiCommandReceiveEvent;
 import fr.stormer3428.demi.MixedOutput;
 import fr.stormer3428.demi.Module;
 import fr.stormer3428.demi.module.LevelCalculator;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 
@@ -93,9 +95,19 @@ public class Level extends CommandModule{
 		int level = LEVEL_CALCULATOR.getLevelForExp(exp);
 		long expNextLevel = LEVEL_CALCULATOR.getExpForLevel(level + 1) - exp;
 		
-		OUTPUT.command(member.getEffectiveName() + " is currently level " + level + " with " + exp + " xp" + "\n" + "Exp until next level : " + expNextLevel + " xp");
+		EmbedBuilder levelEmbedBuilder = new EmbedBuilder();
+		levelEmbedBuilder.setTitle("Stats of member " + member.getEffectiveName());
+		levelEmbedBuilder.addField("Level", level + "", false);
+		levelEmbedBuilder.addField("XP remaining until level " + (level + 1), expNextLevel + "XP", false);
+		levelEmbedBuilder.addField("Total experience : ", exp + "XP", false);
+		levelEmbedBuilder.setAuthor("Level");
+		levelEmbedBuilder.setThumbnail(member.getUser().getEffectiveAvatarUrl());
+		levelEmbedBuilder.setColor(new Color(200, 0, 200));
 		
+		List<String> embedReplacement = new ArrayList<>();
+		embedReplacement.add(member.getEffectiveName() + " is currently level " + level + " with " + exp + " xp" + "\n" + "Exp until next level : " + expNextLevel + " xp");
 		
+		OUTPUT.embed(levelEmbedBuilder.build(), embedReplacement);
 	}
 
 	@Override
