@@ -15,6 +15,7 @@ public class UserBotFlagger extends Module{
 	private HashMap<Long, String> lastMessagesMap = new HashMap<>();
 	private HashMap<Long, Integer> lastMessagesAmountMap = new HashMap<>();
 	private int triggerthreshold;
+	private boolean hasToContainLink;
 
 
 	public UserBotFlagger() {
@@ -34,6 +35,9 @@ public class UserBotFlagger extends Module{
 		if(this.triggerthreshold == -1) return;
 		this.OUTPUT.trace("triggerthreshold : " + this.triggerthreshold, this.PRINT_STACK_TRACE);
 
+		hasToContainLink = CONFIG.get("hasToContainLink").equalsIgnoreCase("true");
+		this.OUTPUT.trace("hasToContainLink : " + this.hasToContainLink, this.PRINT_STACK_TRACE);
+		
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 
@@ -69,6 +73,10 @@ public class UserBotFlagger extends Module{
 		if(member.hasPermission(Permission.ADMINISTRATOR)) return;
 		Long id = member.getIdLong();
 		String message = event.getMessage().getContentRaw();
+		
+		//TODO
+		//event.getMessage().get
+		
 		if(!lastMessagesMap.containsKey(id)) {
 			lastMessagesMap.put(id, message);
 			lastMessagesAmountMap.put(id, 1);
