@@ -11,7 +11,6 @@ import fr.stormer3428.demi.Module;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.Message.Attachment;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -98,12 +97,15 @@ public class ImageLocker extends Module{
 		Message message = event.getMessage();
 		if(message.getEmbeds().size() > 0) return;
 
+		if(!message.getAttachments().isEmpty()) return;
+		
+		/*
 		List<Attachment> attachements = message.getAttachments();
 		
 		for(Attachment att : attachements) {
 			if(att.isImage()) return;
 			if(att.isVideo()) return;
-		}
+		}*/
 		OUTPUT.info("Message from member " + member.getEffectiveName() + " imagelocked");
 		message.delete().queue();
 	}
