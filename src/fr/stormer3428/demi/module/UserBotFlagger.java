@@ -6,22 +6,20 @@ import java.util.HashMap;
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class UserBotFlagger extends Module{
 
 	private HashMap<Long, String> lastMessagesMap = new HashMap<>();
+	private HashMap<Long, Long> lastMessagesChannelMap = new HashMap<>();
 	private HashMap<Long, Integer> lastMessagesAmountMap = new HashMap<>();
 	private int triggerthreshold;
-	private boolean hasToContainLink;
-
 
 	public UserBotFlagger() {
 		super(new File("userBotFlagger.cfg"));
 
-		CONFIG_KEYS.add(new Key("triggerthreshold", "3"));
+		CONFIG_KEYS.add(new Key("triggerthreshold", "5"));
 
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");
@@ -34,9 +32,6 @@ public class UserBotFlagger extends Module{
 		triggerthreshold = triggerthreshold();
 		if(this.triggerthreshold == -1) return;
 		this.OUTPUT.trace("triggerthreshold : " + this.triggerthreshold, this.PRINT_STACK_TRACE);
-
-		hasToContainLink = CONFIG.get("hasToContainLink").equalsIgnoreCase("true");
-		this.OUTPUT.trace("hasToContainLink : " + this.hasToContainLink, this.PRINT_STACK_TRACE);
 		
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
@@ -70,19 +65,24 @@ public class UserBotFlagger extends Module{
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		Member member = event.getMember();
-		if(member.hasPermission(Permission.ADMINISTRATOR)) return;
+		if(member.getUser() == null) return;
+		if(member.getUser().isBot()) return;
 		Long id = member.getIdLong();
 		String message = event.getMessage().getContentRaw();
-		
-		//TODO
-		//event.getMessage().get
+		if(message == null) return;
 		
 		if(!lastMessagesMap.containsKey(id)) {
 			lastMessagesMap.put(id, message);
+			lastMessagesChannelMap.put(id, event.getChannel().getIdLong());
 			lastMessagesAmountMap.put(id, 1);
 		}
+		
+		Long lastChannelId = lastMessagesChannelMap.get(id);
+		lastMessagesChannelMap.put(id, event.getChannel().getIdLong());
+		
+		OUTPUT.info("");
 		String lastMessage = lastMessagesMap.get(id);
-		if(lastMessage.equals(message)) {
+		if(lastMessage.equals(message) && event.getChannel().getIdLong() != lastChannelId) {
 			int amount = lastMessagesAmountMap.get(id);
 			amount ++;
 			if(amount >= triggerthreshold) {
