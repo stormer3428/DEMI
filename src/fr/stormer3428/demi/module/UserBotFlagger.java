@@ -79,8 +79,7 @@ public class UserBotFlagger extends Module{
 		
 		Long lastChannelId = lastMessagesChannelMap.get(id);
 		lastMessagesChannelMap.put(id, event.getChannel().getIdLong());
-		
-		OUTPUT.info("");
+
 		String lastMessage = lastMessagesMap.get(id);
 		if(lastMessage.equals(message) && event.getChannel().getIdLong() != lastChannelId) {
 			int amount = lastMessagesAmountMap.get(id);
