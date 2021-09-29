@@ -8,6 +8,7 @@ import java.util.Scanner;
 import fr.stormer3428.demi.module.Autorole;
 import fr.stormer3428.demi.module.DiscordCommandDispatcher;
 import fr.stormer3428.demi.module.ImageLocker;
+import fr.stormer3428.demi.module.InviteLogger;
 import fr.stormer3428.demi.module.LevelCalculator;
 import fr.stormer3428.demi.module.LevelRoleCalculator;
 import fr.stormer3428.demi.module.MessageLeveling;
@@ -59,6 +60,7 @@ public class Demi extends HasConfig{
 		registerModule(new MessageLevelingMultiplierRoles()); //TODO make modules implement themselves
 		registerModule(new ImageLocker()); //TODO make modules implement themselves
 		registerModule(new UserBotFlagger()); //TODO make modules implement themselves
+		registerModule(new InviteLogger()); //TODO make modules implement themselves
 		
 		registerModule(new Reload()); //TODO make modules implement themselves
 		registerModule(new FileEdit()); //TODO make modules implement themselves

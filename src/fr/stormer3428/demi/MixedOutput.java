@@ -197,4 +197,8 @@ public class MixedOutput {
 		for(String line : embedReplacement)
 			System.out.println("\033[38;5;226m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + line);
 	}
+
+	public String header() {
+		return mixedOutputHead;
+	}
 }
