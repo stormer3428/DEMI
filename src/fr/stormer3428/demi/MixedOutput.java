@@ -21,8 +21,20 @@ public class MixedOutput {
 	private String outputChannelID;
 	private boolean outputToChannel;
 	private boolean outputToConsole;
-	TextChannel textChannel;
+	private TextChannel textChannel;
 	private String mixedOutputHead;
+	
+	public TextChannel getTextChannel() {
+		return textChannel;
+	}
+	
+	public boolean isOutputToConsole() {
+		return outputToConsole;
+	}
+	
+	public boolean isOutputToChannel() {
+		return outputToChannel;
+	}
 
 	public MixedOutput(String channelID, boolean channel, boolean console, String header) {
 		if(io == null) {
