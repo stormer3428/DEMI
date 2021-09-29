@@ -44,6 +44,7 @@ public class InviteLogger extends Module{
 
 	@Override
 	public void onEnable() {
+		super.onEnable();
 		String channelIdString = CONFIG.get("inviteLoggingChannelId");
 		try {
 			inviteLoggingChannelId = Long.parseLong(channelIdString);
