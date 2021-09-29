@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.stormer3428.demi.Demi;
+import fr.stormer3428.demi.IO;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
 import net.dv8tion.jda.api.Permission;
@@ -17,15 +18,15 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class ImageLocker extends Module{
 
-	private ArrayList<Long> imageLockedChannels;
+	private IO IMAGE_LOCKED_DATABASE;
+	
 	private boolean exemptAdministrators;
-	private ArrayList<Long> exemptRoles;
-	private ArrayList<Long> exemptMembers;
+	private ArrayList<Long> exemptRoles = new ArrayList<>();
+	private ArrayList<Long> exemptMembers = new ArrayList<>();
 	
 	public ImageLocker() {
 		super(new File("ImageLocker.cfg"));
 
-		this.CONFIG_KEYS.add(new Key("imageLockedChannels", "[]"));
 		this.CONFIG_KEYS.add(new Key("exemptAdministrators", "true"));
 		this.CONFIG_KEYS.add(new Key("exemptRoles", "[]"));
 		this.CONFIG_KEYS.add(new Key("exemptMembers", "[]"));
@@ -75,6 +76,8 @@ public class ImageLocker extends Module{
 			return;
 		}
 		
+		this.IMAGE_LOCKED_DATABASE = new IO(new File("imageLockedChannels.demidb"), new ArrayList<>(), true);
+		
 		exemptAdministrators = CONFIG.get("exemptAdministrators").equalsIgnoreCase("true");
 
 		this.OUTPUT.ok("Successfully loaded all config parameters");
@@ -83,7 +86,7 @@ public class ImageLocker extends Module{
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		TextChannel channel = event.getChannel();
-		if(!imageLockedChannels.contains(channel.getIdLong())) return;
+		if(!IMAGE_LOCKED_DATABASE.getAllRaw().contains(channel.getId())) return;
 		if(exemptMembers.contains(event.getAuthor().getIdLong())) return;
 		Member member = Demi.jda.getGuildById(Demi.i.getServerID()).retrieveMember(event.getAuthor()).complete();
 		List<Role> memberRoles = member.getRoles();
