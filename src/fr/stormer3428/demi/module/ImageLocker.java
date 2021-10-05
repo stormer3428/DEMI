@@ -7,6 +7,7 @@ import java.util.List;
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.IO;
 import fr.stormer3428.demi.Key;
+import fr.stormer3428.demi.MixedOutput;
 import fr.stormer3428.demi.Module;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -23,13 +24,23 @@ public class ImageLocker extends Module{
 	private ArrayList<Long> exemptRoles = new ArrayList<>();
 	private ArrayList<Long> exemptMembers = new ArrayList<>();
 	
+	private MixedOutput LOG;
+	
 	public ImageLocker() {
 		super(new File("ImageLocker.cfg"));
 
-		this.CONFIG_KEYS.add(new Key("exemptAdministrators", "true"));
-		this.CONFIG_KEYS.add(new Key("exemptRoles", "[]"));
-		this.CONFIG_KEYS.add(new Key("exemptMembers", "[]"));
+		this.CONFIG_KEYS.add(new Key("exemptAdministrators", "true", 
+				"//Whether the module should ignore members with admin perms"));
+		
+		this.CONFIG_KEYS.add(new Key("exemptRoles", "[]", 
+				"//A list of role id's the bot will ignore"));
+		
+		this.CONFIG_KEYS.add(new Key("exemptMembers", "[]", 
+				"//A list of user id's the bot will ignore"));
 
+		this.CONFIG_KEYS.add(new Key("imageLockingLoggingChannelID", "CHANNEL_ID",
+				"//The id of the channel the logging should happen into"));
+		
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);
@@ -79,6 +90,18 @@ public class ImageLocker extends Module{
 		
 		exemptAdministrators = CONFIG.get("exemptAdministrators").equalsIgnoreCase("true");
 
+		String channelId = CONFIG.get("imageLockingLoggingChannelID");
+
+		TextChannel channel = Demi.jda.getGuildById(Demi.i.getServerID()).getTextChannelById(channelId);
+		if(channel == null) {
+			this.OUTPUT.error("Error, invalid channel id given (imageLockingLoggingChannelID)");
+			OUTPUT.error("Disabling module to prevent errors...");
+			Demi.disableModule(this);
+		}
+		this.OUTPUT.trace("imageLockingLoggingChannelID : " + channelId, this.PRINT_STACK_TRACE);
+
+		LOG = new MixedOutput(channelId, true, OUTPUT.isOutputToConsole(), "");
+		
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
 	
@@ -98,15 +121,9 @@ public class ImageLocker extends Module{
 		if(message.getEmbeds().size() > 0) return;
 
 		if(!message.getAttachments().isEmpty()) return;
-		
-		/*
-		List<Attachment> attachements = message.getAttachments();
-		
-		for(Attachment att : attachements) {
-			if(att.isImage()) return;
-			if(att.isVideo()) return;
-		}*/
-		OUTPUT.info("Message from member " + member.getEffectiveName() + " imagelocked");
+
+		LOG.info("Message from member " + member.getEffectiveName() + " imagelocked (" + channel.getAsMention() + ")\n"
+				+ "```\n" + message.getContentRaw() + "\n```");
 		message.delete().queue();
 	}
 	
