@@ -18,10 +18,10 @@ public abstract class HasConfig {
 	
 	public HasConfig(File file) {
 		this.file = file;
-		this.CONFIG_KEYS.add(new Key("printStackTrace", "true"));
-		this.CONFIG_KEYS.add(new Key("logToConsole", "true"));
-		this.CONFIG_KEYS.add(new Key("logToChannel", "false"));
-		this.CONFIG_KEYS.add(new Key("loggingChannelID", "ID HERE"));
+		this.CONFIG_KEYS.add(new Key("printStackTrace", "true", "// Detailled logging"));
+		this.CONFIG_KEYS.add(new Key("logToConsole", "true", "// Console logging (true/false)"));
+		this.CONFIG_KEYS.add(new Key("logToChannel", "false", "// Logging in channel (true/false)"));
+		this.CONFIG_KEYS.add(new Key("loggingChannelID", "ID HERE", "// Logging channel ID"));
 	}
 	
 	protected boolean initialConfigIOCreation() {

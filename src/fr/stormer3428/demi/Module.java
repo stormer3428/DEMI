@@ -192,7 +192,7 @@ public abstract class Module extends HasConfig{
 
 	public Module(File file) {
 		super(file);
-		this.CONFIG_KEYS.add(new Key("enabled", "false"));
+		this.CONFIG_KEYS.add(new Key("enabled", "false", "// Module status (enabled/disabled)"));
 	}
 
 	public List<String> getDependencies(){return new ArrayList<>();}

@@ -54,8 +54,8 @@ public class UserBotFlagger extends Module{
 
 		CONFIG_KEYS.add(new Key("mode", "ping",
 				"//The mode of the module : \n"
-						+ "//ping : Pings the roles in rolesToPing"
-						+ "//autoBan : Automatically bans the flagged members"
+						+ "//ping : Pings the roles in rolesToPing\n"
+						+ "//autoBan : Automatically bans the flagged members\n"
 						+ "//dual : Automatically ban and ping roles"));
 
 		CONFIG_KEYS.add(new Key("rolesToPing", "[]",
