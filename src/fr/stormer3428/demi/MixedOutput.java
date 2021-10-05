@@ -94,14 +94,14 @@ public class MixedOutput {
 						boolean clearBuffer = true;
 						
 						while(!list.isEmpty()) {
-							if(MixedOutput.this.textChannel == null) {
+							if(getTextChannel() == null) {
 								textChannelInit();
 								clearBuffer = false;
 								break;
 							}
 							String tempBuffer = "";
 							while(!list.isEmpty() && tempBuffer.length() + list.get(0).length() + 2 < 2000) tempBuffer = tempBuffer + "\n" +list.remove(0);
-							MixedOutput.this.textChannel.sendMessage(tempBuffer).complete();
+							getTextChannel().sendMessage(tempBuffer).complete();
 							tempBuffer = "";
 						}
 						if(clearBuffer) buffer = "";

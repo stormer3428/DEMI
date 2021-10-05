@@ -126,6 +126,7 @@ public class UserBotFlagger extends Module{
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		Member member = event.getMember();
+		if(member == null) return;
 		if(member.getUser() == null) return;
 		if(member.getUser().isBot()) return;
 		List<String> blacklistedUsersId = CONFIG.getList("blackListedUsers");
