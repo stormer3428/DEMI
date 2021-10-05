@@ -13,8 +13,8 @@ public class MixedOutput {
 
 	private static boolean enableBuffer;
 	static int bufferTimeoutMS;
-	static String buffer = "";
-	private static Thread bufferThread;
+	private String buffer = "";
+	private Thread bufferThread;
 
 	public boolean PRINT_STACK_TRACE;
 
