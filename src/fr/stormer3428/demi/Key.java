@@ -4,12 +4,16 @@ public class Key {
 	
 	private String name;
 	private String defaultValue;
-	private String defaultComment;
+	private String defaultComment = "";
 	
 	public Key(String name, String defaultValue, String defaultComment) {
+		this(name, defaultValue);
+		this.defaultComment = defaultComment;
+	}
+	
+	public Key(String name, String defaultValue) {
 		this.name = name;
 		this.defaultValue = defaultValue;
-		this.defaultComment = defaultComment;
 	}
 
 	public String name() {
