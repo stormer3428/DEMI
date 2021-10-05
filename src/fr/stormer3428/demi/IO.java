@@ -83,7 +83,7 @@ public class IO {
 				if(keys.contains(defaultKey.name())) continue;
 				DemiConsole.info("File " + getFileName() + " is missing the key " + defaultKey.name());
 				DemiConsole.action("Adding the missing key at the end of file");
-				addParameter(defaultKey);
+				addParameter(defaultKey.name(), defaultKey.defaultValue());
 			}
 		}
 		return true;
@@ -319,7 +319,7 @@ public class IO {
 		DemiConsole.ok("Parameter created !");
 		return true;
 	}
-	
+
 	public final boolean addParameter(String key, String value) {
 		try {
 			fileSemaphore.acquire();
@@ -351,66 +351,7 @@ public class IO {
 		}
 	}
 
-	public final boolean setParameter(Key key) {
-		if(getFile() == null) {
-			DemiConsole.cancelled("Attempted to edit parameter of null file, returning null");
-			return false;
-		}
-		if(!fileCheck()) {
-			DemiConsole.error("Failed to edit parameter " + key + " of file " + getFileName() + "(0)");
-			return false;
-		}
-		if(getKeys().contains(key.name())){
-			if(!editParameter(key.name(), key.defaultValue())) {
-				DemiConsole.error("Failed to edit parameter " + key + " of file " + getFileName() + "(1)");
-				return false;
-			}
-			return true;
-		}
-		DemiConsole.warning("Attempted to set unset parameter " + key + " in file " + getFileName());
-		DemiConsole.action("Creating parameter at the end of file...");
-		if(!addParameter(key)) {
-			DemiConsole.error("Failed to add parameter " + key + " in file " + getFile().getName());
-			return false;
-		}
-		DemiConsole.ok("Parameter created !");
-		return true;
-	}
 
-	public final boolean addParameter(Key key) {
-		try {
-			fileSemaphore.acquire();
-		} catch (InterruptedException e1) {
-			DemiConsole.error("Internal error occured while aquiring semaphore (add)");
-			return false;
-		}
-		
-		File inputFile = getFile();
-		File tempFile = new File(getFile().getName() + ".temp");
-		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));	BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
-
-			String currentLine;
-
-			while((currentLine = reader.readLine()) != null) {
-				writer.write(currentLine + System.getProperty("line.separator"));
-			}
-			writer.write(System.getProperty("line.separator"));
-			writer.write(key.defaultComment() + System.getProperty("line.separator"));
-			writer.write(key.name() + ":" + key.defaultValue() + System.getProperty("line.separator"));
-			writer.close(); 
-			reader.close(); 
-			inputFile.delete();
-			boolean success = tempFile.renameTo(inputFile);
-			fileSemaphore.release();
-			return success;
-		} catch (IOException e) {
-			DemiConsole.error("Caught an IO exception while attempting to add parameter ("+key+") in file ("+getFile().getName()+"), returning false");
-			handleTrace(e);
-			fileSemaphore.release();
-			return false;
-		}
-	}
-	
 	public final boolean editParameter(String key, String value) {
 		try {
 			fileSemaphore.acquire();
