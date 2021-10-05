@@ -53,8 +53,9 @@ public class MixedOutput {
 				Demi.i.OUTPUT.error("Unable to retrieve buffer timeout of MixedOutput, using default value (2000)");
 				handleTrace(e);
 			}
-			if(enableBuffer) startBufferThread();
+			
 		}
+		if(enableBuffer) startBufferThread();
 		this.outputChannelID = channelID;
 		this.outputToChannel = channel;
 		this.outputToConsole = console;
@@ -80,7 +81,7 @@ public class MixedOutput {
 
 	private void startBufferThread() {
 		if(bufferThread != null) return;
-		DemiConsole.info("Starting up buffer discord console sender");
+		DemiConsole.info("Starting up buffer discord console sender (" + outputChannelID + ", " + outputToChannel + ", " + outputToConsole + ")");
 		bufferThread = new Thread(new Runnable() {
 
 			@Override

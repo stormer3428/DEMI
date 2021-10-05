@@ -92,7 +92,7 @@ public class UserBotFlagger extends Module{
 		}
 		this.OUTPUT.trace("flagLoggingChannelID : " + channelId, this.PRINT_STACK_TRACE);
 
-		LOG = new MixedOutput(channelId, true, OUTPUT.isOutputToConsole(), OUTPUT.header());
+		LOG = new MixedOutput(channelId, true, OUTPUT.isOutputToConsole(), "");
 
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}
