@@ -72,7 +72,7 @@ public class CanUseCommand extends CommandModule{
 
 	@Override
 	public String getUsage() {
-		return "Usage : help";
+		return "Usage : " + getName() + " <command> userid";
 	}
 
 }
