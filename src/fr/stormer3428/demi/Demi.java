@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import fr.stormer3428.demi.module.AutoReply;
 import fr.stormer3428.demi.module.Autorole;
 import fr.stormer3428.demi.module.DiscordCommandDispatcher;
 import fr.stormer3428.demi.module.ImageLocker;
 import fr.stormer3428.demi.module.InviteLogger;
+import fr.stormer3428.demi.module.LetMeGoogleThat;
 import fr.stormer3428.demi.module.LevelCalculator;
 import fr.stormer3428.demi.module.LevelRoleCalculator;
 import fr.stormer3428.demi.module.MessageLeveling;
@@ -63,6 +65,8 @@ public class Demi extends HasConfig{
 		registerModule(new UserBotFlagger()); //TODO make modules implement themselves
 		registerModule(new InviteLogger()); //TODO make modules implement themselves
 		registerModule(new PotentialUnderageDetector()); //TODO make modules implement themselves
+		registerModule(new LetMeGoogleThat()); //TODO make modules implement themselves
+		registerModule(new AutoReply()); //TODO make modules implement themselves
 		
 		registerModule(new Reload()); //TODO make modules implement themselves
 		registerModule(new FileEdit()); //TODO make modules implement themselves
