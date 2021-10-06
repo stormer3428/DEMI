@@ -121,6 +121,7 @@ public class ImageLocker extends Module{
 		if(message.getEmbeds().size() > 0) return;
 
 		if(!message.getAttachments().isEmpty()) return;
+		if(message.getContentRaw().matches("(www|http:|https:)+[^\\s]+[\\w]")) return;
 
 		LOG.info("Message from member " + member.getEffectiveName() + " imagelocked (" + channel.getAsMention() + ")\n"
 				+ "```\n" + message.getContentRaw() + "\n```");
