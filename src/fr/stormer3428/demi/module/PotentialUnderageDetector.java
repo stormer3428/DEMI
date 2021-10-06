@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.stormer3428.demi.Demi;
+import fr.stormer3428.demi.IO;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.MixedOutput;
 import fr.stormer3428.demi.Module;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -16,6 +18,9 @@ public class PotentialUnderageDetector extends Module{
 
 	private long potentialUnderageLoggingChannelId;
 	private MixedOutput UNDERAGE_LOGGING_OUTPUT;
+
+	List<String> triggerRegexes = new ArrayList<>();
+	private IO TRIGGER_REGEXES_DATABASE;
 
 	public PotentialUnderageDetector() {
 		super(new File("PotentialUnderageDetector.cfg"));
@@ -66,21 +71,24 @@ public class PotentialUnderageDetector extends Module{
 		}
 
 		UNDERAGE_LOGGING_OUTPUT = new MixedOutput(potentialUnderageLoggingChannelId + "", OUTPUT.isOutputToConsole(), OUTPUT.header());
-		
+
+		this.TRIGGER_REGEXES_DATABASE = new IO(new File("PUDTriggerRegexes.demidb"), new ArrayList<>(), true);
+		triggerRegexes = TRIGGER_REGEXES_DATABASE.getAllRaw();
 	}
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+		Member member = event.getMember();
+		if(member == null) return;
+		if(member.getUser() == null) return;
+		if(member.getUser().isBot()) return;
 		String message = event.getMessage().getContentRaw();
-		List<Long> numbers = new ArrayList<>();
 
-		for(String s : message.split(" ")) try {
-			numbers.add(Long.parseLong(s));
-		} catch (NumberFormatException e) {}
-
-		for(long l : numbers) if(l <= 18) {
-			UNDERAGE_LOGGING_OUTPUT.info(event.getAuthor().getAsMention() + " : " + message + "\n" + event.getMessage().getJumpUrl());
-			break;
+		for(String regex : triggerRegexes) {
+			if(message.matches(regex)) {
+				UNDERAGE_LOGGING_OUTPUT.info(event.getAuthor().getAsMention() + " : " + message + "\n`" + event.getMessage().getJumpUrl() + "`");
+				break;
+			}
 		}
 	}
 }
