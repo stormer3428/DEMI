@@ -23,11 +23,16 @@ public abstract class CommandModule extends Module{
 		super(new File("commands/" + string + ".cfg"));
 		this.commandName = string;
 
-		this.CONFIG_KEYS.add(new Key("requireAdminPerms", "true"));
-		this.CONFIG_KEYS.add(new Key("requireRoles", "false"));
-		this.CONFIG_KEYS.add(new Key("requiredRoles", "[]"));
-		this.CONFIG_KEYS.add(new Key("whitelistEnabled", "false"));
-		this.CONFIG_KEYS.add(new Key("whitelist", "[]"));
+		this.CONFIG_KEYS.add(new Key("requireAdminPerms", "true",
+				"Whether the user should have admin perms to be able to use the command"));
+		this.CONFIG_KEYS.add(new Key("requireRoles", "false", 
+				"Whether the command will look if player has the required roles to be able to use the command"));
+		this.CONFIG_KEYS.add(new Key("requiredRoles", "[]",
+				"The roles required to be able to run the command"));
+		this.CONFIG_KEYS.add(new Key("whitelistEnabled", "false",
+				"Whether only the user should be in the whitelist to be able to use the command"));
+		this.CONFIG_KEYS.add(new Key("whitelist", "[]",
+				"The list of users who can use the command"));
 	}
 
 	@Override
