@@ -49,7 +49,9 @@ public class BanName extends CommandModule{
 				return;
 			}
 			String match = "";
-			for(String s : args) match = s + " ";
+			for(String s : args) match = " " + s;
+			match = match.replaceFirst(" ", "");
+			
 			Guild guild = Demi.jda.getGuildById(Demi.i.getServerID());
 			OUTPUT.command("Loading members for process...");
 			guild.loadMembers().onSuccess(successfullLoadConsumer(OUTPUT, match, senderId)).onError(failedLoadConsumer(OUTPUT));
@@ -90,10 +92,11 @@ public class BanName extends CommandModule{
 
 	private Consumer<? super List<Member>> successfullLoadConsumer(MixedOutput OUTPUT, String match, Long senderId) {return new Consumer<List<Member>>() {@Override public void accept(List<Member> members) {
 		OUTPUT.command("Finished loading members, processing...");
+		OUTPUT.command("Checking for names matching regex :```\n```"+match);
 		List<Member> matchs = new ArrayList<>();
 		List<Long> matchsId = new ArrayList<>();
 		for(Member member : members) {try {
-			if(!member.getEffectiveName().toLowerCase().matches(match) && !member.getUser().getName().toLowerCase().matches(match)) continue;
+			if(!member.getEffectiveName().matches(match) && !member.getUser().getName().matches(match)) continue;
 			matchs.add(member);
 		}catch (Exception e) {}}
 		OUTPUT.command("Found " + matchs.size() + " matches.");
@@ -104,7 +107,7 @@ public class BanName extends CommandModule{
 				OUTPUT.command(message);
 				message = "";
 			}
-			message = message + member.getEffectiveName() + "(" + member.getUser().getName() +")\n";
+			message = message + member.getEffectiveName() + "(" + member.getUser().getAsTag() +")\n";
 		}
 		if(!message.isEmpty()) {
 			OUTPUT.command(message);
