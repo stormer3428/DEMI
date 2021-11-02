@@ -1,6 +1,7 @@
 package fr.stormer3428.demi.module;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import fr.stormer3428.demi.MixedOutput;
 import fr.stormer3428.demi.Module;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -19,6 +21,7 @@ public class UserBotFlagger extends Module{
 	private HashMap<Long, String> lastMessagesMap = new HashMap<>();
 	private HashMap<Long, Long> lastMessagesChannelMap = new HashMap<>();
 	private HashMap<Long, Integer> lastMessagesAmountMap = new HashMap<>();
+	private HashMap<Long, List<Long>> lastMessagesIDsMap = new HashMap<>();
 
 	private static enum Mode{
 		Ping,
@@ -143,44 +146,61 @@ public class UserBotFlagger extends Module{
 			lastMessagesMap.put(id, message);
 			lastMessagesChannelMap.put(id, event.getChannel().getIdLong());
 			lastMessagesAmountMap.put(id, 1);
+			lastMessagesIDsMap.put(id, new ArrayList<>());
 		}
 
 		Long lastChannelId = lastMessagesChannelMap.get(id);
 		lastMessagesChannelMap.put(id, event.getChannel().getIdLong());
 
 		String lastMessage = lastMessagesMap.get(id);
-		if(lastMessage.equals(message) && event.getChannel().getIdLong() != lastChannelId) {
-			int amount = lastMessagesAmountMap.get(id);
-			amount ++;
-			if(amount >= triggerthreshold) {
-				String name = member.getEffectiveName();
-				LOG.action("Flagged member " + name + "(" + member.getAsMention() + ") as a user bot");
-				if(mode == Mode.Autoban || mode == Mode.Dual) {
-					member.ban(7).complete();
-					LOG.ok("banned member " + name + " and deleted last 7 days of message history");
-				}
-				if(mode == Mode.Ping || mode == Mode.Dual) {
-					String ping = "";
-					Guild guild = Demi.jda.getGuildById(Demi.i.getServerID());
-					for(String rolePingId : CONFIG.getList("rolesToPing")) {
-						Role role = guild.getRoleById(rolePingId);
-						if(role == null) {
-							OUTPUT.error("Invalid rolePing id! ("+rolePingId+")");
-							continue;
-						}
-						ping = role.getAsMention() + "\n";
+		if(lastMessage.equals(message)) {
+			lastMessagesIDsMap.get(id).add(event.getMessage().getIdLong());
+			
+			if(event.getChannel().getIdLong() != lastChannelId) {
+				
+				int amount = lastMessagesAmountMap.get(id);
+				amount ++;
+				lastMessagesAmountMap.put(id, amount);
+				
+				if(amount >= triggerthreshold) {
+					String name = member.getEffectiveName();
+					LOG.action("Flagged member " + name + "(" + member.getAsMention() + ") as a user bot");
+					
+					if(mode == Mode.Autoban || mode == Mode.Dual) {
+						member.ban(1).complete();
+						LOG.ok("banned member " + name + " and deleted last day of message history");
 					}
-					LOG.info(ping);
+					
+					if(mode == Mode.Ping || mode == Mode.Dual) {
+						String ping = "";
+						for(String rolePingId : CONFIG.getList("rolesToPing")) ping = rolePingId + "\n";
+						LOG.info(ping);
+					}
+					
+					LOG.info("Message that triggered the flag : \n" + lastMessage);
+					
+					int size = lastMessagesIDsMap.get(id).size();
+					Guild guild = Demi.jda.getGuildById(Demi.i.getServerID());
+					while(!lastMessagesIDsMap.get(id).isEmpty()) {
+						long msgid = lastMessagesIDsMap.get(id).remove(0);
+						for(TextChannel txtchn : guild.getTextChannels()) {
+							Message messagetdlt = txtchn.retrieveMessageById(msgid).complete();
+							if(messagetdlt == null) continue;
+							messagetdlt.delete().queue();
+							break;
+						}
+					}
+					LOG.info("deleted " + size + " message(s)");
+					
+					return;
 				}
-				LOG.info("Message that triggered the flag : \n"
-						+ lastMessage);
-				return;
 			}
-			lastMessagesAmountMap.put(id, amount);
 			return;
 		}
+		
 		lastMessagesMap.put(id, message);
 		lastMessagesAmountMap.put(id, 1);
+		lastMessagesIDsMap.put(id, new ArrayList<>());
 	}
 
 }
