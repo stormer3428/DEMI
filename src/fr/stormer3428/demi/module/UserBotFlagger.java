@@ -9,7 +9,6 @@ import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.MixedOutput;
 import fr.stormer3428.demi.Module;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
@@ -21,7 +20,7 @@ public class UserBotFlagger extends Module{
 	private HashMap<Long, String> lastMessagesMap = new HashMap<>();
 	private HashMap<Long, Long> lastMessagesChannelMap = new HashMap<>();
 	private HashMap<Long, Integer> lastMessagesAmountMap = new HashMap<>();
-	private HashMap<Long, List<Long>> lastMessagesIDsMap = new HashMap<>();
+	private HashMap<Long, List<Message>> lastMessagesIDsMap = new HashMap<>();
 
 	private static enum Mode{
 		Ping,
@@ -154,50 +153,43 @@ public class UserBotFlagger extends Module{
 
 		String lastMessage = lastMessagesMap.get(id);
 		if(lastMessage.equals(message)) {
-			lastMessagesIDsMap.get(id).add(event.getMessage().getIdLong());
+			lastMessagesIDsMap.get(id).add(event.getMessage());
+
+			int amount = lastMessagesAmountMap.get(id);
+			if(event.getChannel().getIdLong() != lastChannelId) amount ++;
+			lastMessagesAmountMap.put(id, amount);
 			
-			if(event.getChannel().getIdLong() != lastChannelId) {
-				
-				int amount = lastMessagesAmountMap.get(id);
-				amount ++;
-				lastMessagesAmountMap.put(id, amount);
-				
-				if(amount >= triggerthreshold) {
-					String name = member.getEffectiveName();
-					LOG.action("Flagged member " + name + "(" + member.getAsMention() + ") as a user bot");
-					
-					if(mode == Mode.Autoban || mode == Mode.Dual) {
-						member.ban(1).complete();
-						LOG.ok("banned member " + name + " and deleted last day of message history");
-					}
-					
-					if(mode == Mode.Ping || mode == Mode.Dual) {
-						String ping = "";
-						for(String rolePingId : CONFIG.getList("rolesToPing")) ping = rolePingId + "\n";
-						LOG.info(ping);
-					}
-					
-					LOG.info("Message that triggered the flag : \n" + lastMessage);
-					
-					int size = lastMessagesIDsMap.get(id).size();
-					Guild guild = Demi.jda.getGuildById(Demi.i.getServerID());
-					while(!lastMessagesIDsMap.get(id).isEmpty()) {
-						long msgid = lastMessagesIDsMap.get(id).remove(0);
-						for(TextChannel txtchn : guild.getTextChannels()) {
-							Message messagetdlt = txtchn.retrieveMessageById(msgid).complete();
-							if(messagetdlt == null) continue;
-							messagetdlt.delete().queue();
-							break;
-						}
-					}
-					LOG.info("deleted " + size + " message(s)");
-					
-					return;
+			if(amount >= triggerthreshold) {
+				String name = member.getEffectiveName();
+				LOG.action("Flagged member " + name + "(" + member.getAsMention() + ") as a user bot");
+
+				if(mode == Mode.Autoban || mode == Mode.Dual) {
+					member.ban(1).complete();
+					LOG.ok("banned member " + name + " and deleted last day of message history");
 				}
+
+				if(mode == Mode.Ping || mode == Mode.Dual) {
+					String ping = "";
+					for(String rolePingId : CONFIG.getList("rolesToPing")) ping = rolePingId + "\n";
+					LOG.info(ping);
+				}
+
+				LOG.info("Message that triggered the flag : \n" + lastMessage);
+
+				int size = lastMessagesIDsMap.get(id).size();
+
+				while(!lastMessagesIDsMap.get(id).isEmpty()) {
+					Message messagetdlt = lastMessagesIDsMap.get(id).remove(0);
+					messagetdlt.delete().queue();
+				}
+				LOG.info("deleted " + size + " message(s)");
+
+				return;
 			}
+
 			return;
 		}
-		
+
 		lastMessagesMap.put(id, message);
 		lastMessagesAmountMap.put(id, 1);
 		lastMessagesIDsMap.put(id, new ArrayList<>());
