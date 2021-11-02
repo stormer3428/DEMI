@@ -29,10 +29,10 @@ public class MessageLeveling extends Module{
 	public MessageLeveling() {
 		super(new File("level/messageLeveling.cfg"));
 
-		this.CONFIG_KEYS.add(new Key("expIncreaseCooldownMS", "60000"));
-		this.CONFIG_KEYS.add(new Key("enableExpIncreaseCooldownMS", "true"));
-		this.CONFIG_KEYS.add(new Key("expPerMessage", "75"));
-		this.CONFIG_KEYS.add(new Key("expPerMessageVariation", "50"));
+		this.CONFIG_KEYS.add(new Key("enableExpIncreaseCooldownMS", "true", "whether leveling via messaging should have a cooldown"));
+		this.CONFIG_KEYS.add(new Key("expIncreaseCooldownMS", "60000", "the cooldown in milliseconds between each exp increase"));
+		this.CONFIG_KEYS.add(new Key("expPerMessage", "75", "the minimum amount of exp awarded per message sent"));
+		this.CONFIG_KEYS.add(new Key("expPerMessageVariation", "50", "the maximum amount that is given at random, if expperMessage is set to 75 and expPerMessageVariation to 50, the amount of exp will be between 75 and 125 (75 + 50)"));
 
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");
