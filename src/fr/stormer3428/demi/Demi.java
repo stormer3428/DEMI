@@ -16,6 +16,7 @@ import fr.stormer3428.demi.module.LevelRoleCalculator;
 import fr.stormer3428.demi.module.MessageLeveling;
 import fr.stormer3428.demi.module.MessageLevelingMultiplierRoles;
 import fr.stormer3428.demi.module.PotentialUnderageDetector;
+import fr.stormer3428.demi.module.RoleHierarchy;
 import fr.stormer3428.demi.module.UserBotFlagger;
 import fr.stormer3428.demi.module.commands.BanName;
 import fr.stormer3428.demi.module.commands.CanUseCommand;
@@ -67,6 +68,7 @@ public class Demi extends HasConfig{
 		registerModule(new PotentialUnderageDetector()); //TODO make modules implement themselves
 		registerModule(new LetMeGoogleThat()); //TODO make modules implement themselves
 		registerModule(new AutoReply()); //TODO make modules implement themselves
+		registerModule(new RoleHierarchy()); //TODO make modules implement themselves
 		
 		registerModule(new Reload()); //TODO make modules implement themselves
 		registerModule(new FileEdit()); //TODO make modules implement themselves
