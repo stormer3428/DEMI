@@ -48,7 +48,8 @@ public class BanName extends CommandModule{
 				OUTPUT.command("i need a name to search members with");
 				return;
 			}
-			String match = args.remove(0);
+			String match = "";
+			for(String s : args) match = s + " ";
 			Guild guild = Demi.jda.getGuildById(Demi.i.getServerID());
 			OUTPUT.command("Loading members for process...");
 			guild.loadMembers().onSuccess(successfullLoadConsumer(OUTPUT, match, senderId)).onError(failedLoadConsumer(OUTPUT));
@@ -92,18 +93,18 @@ public class BanName extends CommandModule{
 		List<Member> matchs = new ArrayList<>();
 		List<Long> matchsId = new ArrayList<>();
 		for(Member member : members) {try {
-			if(!member.getEffectiveName().toLowerCase().contains(match) /*&& !member.getUser().getName().toLowerCase().contains(match)*/) continue;
+			if(!member.getEffectiveName().toLowerCase().matches(match) && !member.getUser().getName().toLowerCase().matches(match)) continue;
 			matchs.add(member);
 		}catch (Exception e) {}}
 		OUTPUT.command("Found " + matchs.size() + " matches.");
 		String message = "";
 		for(Member member : matchs) {
 			matchsId.add(member.getIdLong());
-			if(message.length() + member.getEffectiveName().length() > 1000) {
+			if(message.length() + member.getEffectiveName().length() + member.getUser().getName().length() + 2 > 1000) {
 				OUTPUT.command(message);
 				message = "";
 			}
-			message = message + member.getEffectiveName() + "\n";
+			message = message + member.getEffectiveName() + "(" + member.getUser().getName() +")\n";
 		}
 		if(!message.isEmpty()) {
 			OUTPUT.command(message);
