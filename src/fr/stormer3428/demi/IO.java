@@ -20,12 +20,13 @@ public class IO {
 	public static List<IO> all = new ArrayList<>();
 	public static List<String> defaultHeaders = new ArrayList<>();
 	private List<Key> defaultKeys = new ArrayList<>();
+	private String defaultFileString = "";
 
 	private Semaphore fileSemaphore = new Semaphore(1);
 
 	static {
-		defaultHeaders.add("#");
 		defaultHeaders.add("//");
+		defaultHeaders.add("#");
 	}
 
 	private File file;
@@ -33,12 +34,13 @@ public class IO {
 	private List<String> commentLinesHeaders = new ArrayList<>();
 	private boolean printStackTrace;
 
-	public IO(File file, List<Key> defaultKeys, boolean printStackTrace, List<String> commentLinesHeaders) {
+	public IO(File file, List<Key> defaultKeys, boolean printStackTrace, List<String> commentLinesHeaders, String defaultFileString) {
 		if(file == null) {
 			DemiConsole.error("Attempted to create an IO interface for a null file!");
 			DemiConsole.warning("Cancelled messages will be thrown whenever this IO is called");
 			return;
 		}
+		this.defaultFileString = defaultFileString;
 		this.commentLinesHeaders = commentLinesHeaders;
 		this.printStackTrace = printStackTrace;
 		this.file = file;
@@ -51,9 +53,14 @@ public class IO {
 		else DemiConsole.error("Failed to pass file check");
 	}
 
+	public IO(File file, List<Key> defaultKeys, boolean printStackTrace, List<String> defaultHeaders) {
+		this(file, defaultKeys, printStackTrace, defaultHeaders, "");
+	}
+	
 	public IO(File file, List<Key> defaultKeys, boolean printStackTrace) {
 		this(file, defaultKeys, printStackTrace, defaultHeaders);
 	}
+
 
 	public final boolean fileCheck() {
 		return fileCheck(false);
@@ -70,6 +77,11 @@ public class IO {
 			try {
 				getFile().getAbsoluteFile().getParentFile().mkdir();
 				getFile().createNewFile();
+				System.out.println("Writing default string");
+				System.out.println(defaultFileString);
+				BufferedWriter writer = new BufferedWriter(new FileWriter(getFile()));
+				writer.write(defaultFileString);
+				writer.close();
 			} catch (IOException e) {
 				DemiConsole.error("Failed to create file " + getFileName());
 				handleTrace(e);
@@ -319,7 +331,7 @@ public class IO {
 		DemiConsole.ok("Parameter created !");
 		return true;
 	}
-	
+
 	public final boolean addParameter(String key, String value) {
 		try {
 			fileSemaphore.acquire();
@@ -384,7 +396,7 @@ public class IO {
 			DemiConsole.error("Internal error occured while aquiring semaphore (add)");
 			return false;
 		}
-		
+
 		File inputFile = getFile();
 		File tempFile = new File(getFile().getName() + ".temp");
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));	BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))){
@@ -395,7 +407,7 @@ public class IO {
 				writer.write(currentLine + System.getProperty("line.separator"));
 			}
 			writer.write(System.getProperty("line.separator"));
-			writer.write(key.defaultComment() + System.getProperty("line.separator"));
+			writer.write((commentLinesHeaders.isEmpty() ? "\\" : commentLinesHeaders.get(0)) + " " + key.defaultComment() + System.getProperty("line.separator"));
 			writer.write(key.name() + ":" + key.defaultValue() + System.getProperty("line.separator"));
 			writer.close(); 
 			reader.close(); 
@@ -410,7 +422,7 @@ public class IO {
 			return false;
 		}
 	}
-	
+
 	public final boolean editParameter(String key, String value) {
 		try {
 			fileSemaphore.acquire();
@@ -419,7 +431,7 @@ public class IO {
 			return false;
 		}
 		//DemiConsole.action("Starting writing for " + key + " " + value);
-		
+
 		File inputFile = getFile();
 		File tempFile = new File(getFile().getName() + ".temp");
 		try {
@@ -446,8 +458,8 @@ public class IO {
 			reader.close(); 
 			inputFile.delete();
 			tempFile.renameTo(inputFile);
-			
-			
+
+
 		} catch (IOException e) {
 			DemiConsole.error("Caught an IO exception while attempting to edit parameter ("+key+") in file ("+getFile().getName()+"), returning false");
 			handleTrace(e);
@@ -457,7 +469,7 @@ public class IO {
 
 
 		//DemiConsole.ok("Finished writing for " + key + " " + value);
-		
+
 		fileSemaphore.release();
 		return true;
 	}
@@ -469,7 +481,7 @@ public class IO {
 			DemiConsole.error("Internal error occured while aquiring semaphore (remove)");
 			return false;
 		}
-		
+
 		File inputFile = givenFile;
 		File tempFile = new File(givenFile.getName() + ".temp");
 

@@ -28,9 +28,9 @@ public class Autorole extends Module{
 	public Autorole() {
 		super(new File("autorole.cfg"));
 		
-		this.CONFIG_KEYS.add(new Key("cooldown", "300000"));
-		this.CONFIG_KEYS.add(new Key("roles", "[]"));
-		this.CONFIG_KEYS.add(new Key("listensToBots", "false"));
+		this.CONFIG_KEYS.add(new Key("cooldown", "300000", "The cooldown between each application of the autoroles"));
+		this.CONFIG_KEYS.add(new Key("roles", "[]", "an array of the id's of the roles to automatically apply"));
+		this.CONFIG_KEYS.add(new Key("listensToBots", "false", "should autoroles be applied to bots"));
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");
 		Demi.disableModule(this);

@@ -33,6 +33,31 @@ public abstract class CommandModule extends Module{
 				"Whether only the user should be in the whitelist to be able to use the command"));
 		this.CONFIG_KEYS.add(new Key("whitelist", "[]",
 				"The list of users who can use the command"));
+		
+		this.defaultFileString = this.defaultFileString + "\r\n"
+				+ "//		--------------------------\r\n"
+				+ "//      COMMAND MODULE PERMISSIONS\r\n"
+				+ "//		--------------------------\r\n"
+				+ "\r\n"
+				+ "// Whether the user should have admin perms to be able to use the command\r\n"
+				+ "requireAdminPerms:true\r\n"
+				+ "\r\n"
+				+ "// Command requires roles\r\n"
+				+ "requireRoles:false\r\n"
+				+ "\r\n"
+				+ "// Required roles\r\n"
+				+ "requiredRoles:[]\r\n"
+				+ "\r\n"
+				+ "// Whitelist status\r\n"
+				+ "whitelistEnabled:false\r\n"
+				+ "\r\n"
+				+ "// Whitelisted users [userID1,userID2]\r\n"
+				+ "whitelist:[]\r\n"
+				+ "\r\n"
+				+ "//		-------------------------\r\n"
+				+ "//      COMMAND SPECIFIC SETTINGS\r\n"
+				+ "//		-------------------------\r\n"
+				+ "\r\n";
 	}
 
 	@Override

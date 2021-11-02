@@ -11,19 +11,32 @@ public abstract class HasConfig {
 	public IO CONFIG;
 	private File file;
 	protected List<Key> CONFIG_KEYS = new ArrayList<>();
+	protected String defaultFileString = ""
+			+ "// Console logging (true/false)\r\n"
+			+ "logToConsole: true\r\n"
+			+ "\r\n"
+			+ "// Logging in channel (true/false)\r\n"
+			+ "logToChannel: false\r\n"
+			+ "\r\n"
+			+ "// Logging channel ID\r\n"
+			+ "loggingChannelID: ID HERE\r\n"
+			+ "\r\n"
+			+ "// Detailled logging\r\n"
+			+ "printStackTrace: true\r\n"
+			+ "\r\n";
 	protected String LOGGING_CHANNEL_ID;
 	protected boolean LOG_TO_CHANNEL = false;
 
 	public boolean PRINT_STACK_TRACE;
-	
+
 	public HasConfig(File file) {
 		this.file = file;
-		this.CONFIG_KEYS.add(new Key("printStackTrace", "true", "// Detailled logging"));
-		this.CONFIG_KEYS.add(new Key("logToConsole", "true", "// Console logging (true/false)"));
-		this.CONFIG_KEYS.add(new Key("logToChannel", "false", "// Logging in channel (true/false)"));
-		this.CONFIG_KEYS.add(new Key("loggingChannelID", "ID HERE", "// Logging channel ID"));
+		this.CONFIG_KEYS.add(new Key("printStackTrace", "true", "Detailled logging"));
+		this.CONFIG_KEYS.add(new Key("logToConsole", "true", "Console logging (true/false)"));
+		this.CONFIG_KEYS.add(new Key("logToChannel", "false", "Logging in channel (true/false)"));
+		this.CONFIG_KEYS.add(new Key("loggingChannelID", "ID HERE", "Logging channel ID"));
 	}
-	
+
 	protected boolean initialConfigIOCreation() {
 		int configIoRetry = 0;
 		while (configIoRetry < CONFIGIORETRY) {
@@ -39,13 +52,13 @@ public abstract class HasConfig {
 				configIoRetry++;
 			}else break;
 		}
-		
+
 		if(this.CONFIG == null) {
 			DemiConsole.error("Failed to create main config IO");
 			DemiConsole.error("The main config IO is essential to allow DEMI to work, process will terminate");
 			return false;
 		}
-		
+
 		this.PRINT_STACK_TRACE = this.CONFIG.get("printStackTrace").equalsIgnoreCase("true");
 		this.LOGGING_CHANNEL_ID = this.CONFIG.get("loggingChannelID");
 		this.LOG_TO_CHANNEL = this.CONFIG.get("logToChannel").equalsIgnoreCase("true");
@@ -55,7 +68,7 @@ public abstract class HasConfig {
 
 	protected boolean createConfigIO() {
 		DemiConsole.action("Creating Config IO...");
-		this.CONFIG = new IO(this.file, this.CONFIG_KEYS, this.PRINT_STACK_TRACE, IO.defaultHeaders);
+		this.CONFIG = new IO(this.file, this.CONFIG_KEYS, this.PRINT_STACK_TRACE, IO.defaultHeaders, defaultFileString);
 		if(this.CONFIG == null) {
 			DemiConsole.error("Failed to create Main Config IO!");
 			return false;
@@ -63,7 +76,7 @@ public abstract class HasConfig {
 		DemiConsole.ok("Main Config IO created");
 		return true;
 	}
-	
+
 	protected abstract void handleTrace(Exception e);
-	
+
 }
