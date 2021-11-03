@@ -14,7 +14,7 @@ public class CD extends CommandModule{
 
 	public static final String ERROR_OUTSIDE_ROOT_DIR = "Illegal WD, outside of root WD";
 	
-	private static final File rootDir = new java.io.File(Demi.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
+	private static final File rootDir = new File(Demi.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
 	private HashMap<Long, File> WDs = new HashMap<>();
 	
 	public CD() {
@@ -67,10 +67,17 @@ public class CD extends CommandModule{
 
 		//OUTPUT.command("newPath :" + newPath);
 		//OUTPUT.command("WD :" + WD);
-		
+
 		while (newPath.startsWith("../")) {
 			WD = WD.getParentFile();
 			newPath = newPath.replaceFirst("\\.\\./", "");
+			//OUTPUT.command("newPath :" + newPath);
+			//OUTPUT.command("WD :" + WD.getAbsolutePath());
+		}
+		
+		while (newPath.startsWith("..")) {
+			WD = WD.getParentFile();
+			newPath = newPath.replaceFirst("\\.\\.", "");
 			//OUTPUT.command("newPath :" + newPath);
 			//OUTPUT.command("WD :" + WD.getAbsolutePath());
 		}
