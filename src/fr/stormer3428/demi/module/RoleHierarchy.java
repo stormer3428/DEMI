@@ -33,7 +33,7 @@ public class RoleHierarchy extends Module{
 					}
 				}
 				if(!has) return false;
-				
+
 			}
 			return true;
 		}
@@ -71,7 +71,7 @@ public class RoleHierarchy extends Module{
 				parents.add(Long.parseLong(s) + "");
 			} catch (NumberFormatException e) {}
 			if(parents.isEmpty()) continue;
-			
+
 			List<String> parentsCopy = new ArrayList<>();
 			parentsCopy.addAll(parents);
 			rules.add(new HierarchyRule(id, parentsCopy));
