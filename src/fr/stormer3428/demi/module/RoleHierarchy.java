@@ -57,7 +57,7 @@ public class RoleHierarchy extends Module{
 
 	private void updateRules() {
 		rules.clear();
-
+		String output = "";
 		for(String key : HIERARCHY_DATABASE.getKeys()) {
 			long id = -1;
 			try {
@@ -75,11 +75,11 @@ public class RoleHierarchy extends Module{
 			List<String> parentsCopy = new ArrayList<>();
 			parentsCopy.addAll(parents);
 			rules.add(new HierarchyRule(id, parentsCopy));
-			String output = "Hierarchy rule loaded (`role "+id+" : , requiredParents : [";
+			output = output + "\n" + "`role "+id+" : requiredParents : [";
 			while (!parents.isEmpty()) output = output + parents.remove(0) + (parents.isEmpty() ? "" : ",");
-			output = output +"]`)";
-			OUTPUT.info(output);
+			output = output +"]`";
 		}
+		OUTPUT.info(output);
 	}
 
 	private IO HIERARCHY_DATABASE;
