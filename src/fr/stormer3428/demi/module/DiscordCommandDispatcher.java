@@ -61,7 +61,7 @@ public class DiscordCommandDispatcher extends Module{
 		if(this.prefix != null && !this.prefix.isEmpty() && message.getContentRaw() != null && message.getContentRaw().startsWith(this.prefix)) {
 
 			String raw = message.getContentRaw().replace(this.prefix, "");
-			String cmd = raw.split(" ", 2)[0].toLowerCase();
+			String cmd = raw.split(" ", 2)[0];
 			String[] argsArray = message.getContentRaw().replace(this.prefix + cmd, "").split(" ");
 			ArrayList<String> args = new ArrayList<>();
 
@@ -74,7 +74,7 @@ public class DiscordCommandDispatcher extends Module{
 			for(Module module : Demi.i.getActiveModules()) {
 				threads.add(new Thread(new Runnable() {
 					@Override public void run() {
-						module.onCommand(new DemiCommandReceiveEvent(event, cmd, args, new MixedOutput(event.getTextChannel().getId(), false, "")));
+						module.onCommand(new DemiCommandReceiveEvent(event, cmd.toLowerCase(), args, new MixedOutput(event.getTextChannel().getId(), false, "")));
 					}
 				}));
 			}
