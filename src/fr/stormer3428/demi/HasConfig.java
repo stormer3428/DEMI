@@ -13,16 +13,16 @@ public abstract class HasConfig {
 	protected List<Key> CONFIG_KEYS = new ArrayList<>();
 	protected String defaultFileString = ""
 			+ "// Console logging (true/false)\r\n"
-			+ "logToConsole: true\r\n"
+			+ "logToConsole:true\r\n"
 			+ "\r\n"
 			+ "// Logging in channel (true/false)\r\n"
-			+ "logToChannel: false\r\n"
+			+ "logToChannel:false\r\n"
 			+ "\r\n"
 			+ "// Logging channel ID\r\n"
-			+ "loggingChannelID: ID HERE\r\n"
+			+ "loggingChannelID:ID HERE\r\n"
 			+ "\r\n"
 			+ "// Detailled logging\r\n"
-			+ "printStackTrace: true\r\n"
+			+ "printStackTrace:true\r\n"
 			+ "\r\n";
 	protected String LOGGING_CHANNEL_ID;
 	protected boolean LOG_TO_CHANNEL = false;

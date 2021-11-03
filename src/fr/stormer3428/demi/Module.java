@@ -195,7 +195,7 @@ public abstract class Module extends HasConfig{
 		this.CONFIG_KEYS.add(new Key("enabled", "false", "Module status (enabled/disabled)"));
 		this.defaultFileString = ""
 				+ "// Module status (enabled/disabled)\r\n"
-				+ "enabled: false\r\n"
+				+ "enabled:false\r\n"
 				+ "\r\n" 
 		+ this.defaultFileString;
 	}
