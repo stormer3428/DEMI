@@ -30,6 +30,7 @@ import fr.stormer3428.demi.module.commands.Reload;
 import fr.stormer3428.demi.module.commands.SetLevel;
 import fr.stormer3428.demi.module.commands.Version;
 import fr.stormer3428.demi.module.directoryHandler.CD;
+import fr.stormer3428.demi.module.directoryHandler.LS;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -70,7 +71,10 @@ public class Demi extends HasConfig{
 		registerModule(new LetMeGoogleThat()); //TODO make modules implement themselves
 		registerModule(new AutoReply()); //TODO make modules implement themselves
 		registerModule(new RoleHierarchy()); //TODO make modules implement themselves
+
 		registerModule(new CD()); //TODO make modules implement themselves
+		registerModule(new LS()); //TODO make modules implement themselves
+		
 		
 		registerModule(new Reload()); //TODO make modules implement themselves
 		registerModule(new FileEdit()); //TODO make modules implement themselves
