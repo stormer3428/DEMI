@@ -187,7 +187,7 @@ public class MixedOutput {
 		if(this.outputToConsole)  System.out.println("\033[38;5;226m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + message + "\033[38;5;7m");
 		if(!this.outputToChannel) return;
 
-		getTextChannel().sendMessage("```" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + message + "```" + "\n").queue();
+		getTextChannel().sendMessage("```" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + message + "```" + "\n").queue();
 	}
 
 	public void embed(MessageEmbed embed, List<String> embedReplacement) {
