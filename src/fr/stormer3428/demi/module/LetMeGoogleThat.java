@@ -110,6 +110,8 @@ public class LetMeGoogleThat extends Module{
 		searchWords.add("what is");
 		searchWords.add("who is");
 		searchWords.add("why");
+		searchWords.add("does");
+		searchWords.add("is");
 
 		uselessEnders.add("for me");
 		uselessEnders.add("please");
