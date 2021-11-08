@@ -87,7 +87,7 @@ public class CD extends CommandModule{
 		//OUTPUT.command("newDirectoryPath :" + newDirectoryPath);
 
 		String absWDPath = newWD.getAbsolutePath();
-		if(isInRootFolder(absWDPath)) {
+		if(!isInRootFolder(absWDPath)) {
 			OUTPUT.command("Outside of root");
 			rootFormat(newWD, WDid);
 			return;
@@ -105,12 +105,12 @@ public class CD extends CommandModule{
 		OUTPUT.command(getWDStringFromRoot(WDid) + " $");
 	}
 
-	public boolean isInRootFolder(String absWDPath) {
-		return !absWDPath.startsWith(rootDir.getAbsolutePath());
+	public boolean isInRootFolder(String path) {
+		return path.startsWith(rootDir.getAbsolutePath());
 	}
 
 	public boolean isInRootFolder(File file) {
-		return !file.getAbsolutePath().startsWith(rootDir.getAbsolutePath());
+		return isInRootFolder(file.getAbsolutePath());
 	}
 
 	public String rootFormat(File file) {
@@ -152,7 +152,7 @@ public class CD extends CommandModule{
 	}
 	
 	public File getFileFromWD(String path, long id) {
-		File file = new File(WDs.get(id).getAbsolutePath() + "/" + path);
+		File file = new File(getWD(id).getAbsolutePath() + "/" + path);
 		if(isInRootFolder(file)) return file;
 		return null;
 	}
