@@ -61,6 +61,10 @@ public class IO {
 		this(file, defaultKeys, printStackTrace, defaultHeaders);
 	}
 
+	public void destroy() {
+		all.remove(this);
+	}
+	
 
 	public final boolean fileCheck() {
 		return fileCheck(false);
