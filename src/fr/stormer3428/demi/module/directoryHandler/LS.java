@@ -50,7 +50,8 @@ public class LS extends CommandModule{
 	
 	@Override
 	protected void runCommand(DemiCommandReceiveEvent event) {
-		File WD = CD.getWD(event.getMessageReceivedEvent().getAuthor().getIdLong());
+		Long WDid = event.getMessageReceivedEvent() == null ? 0 : event.getMessageReceivedEvent().getAuthor().getIdLong();
+		File WD = CD.getWD(WDid);
 		File[] files = WD.listFiles();
 		String ls = "<==========Folders==========>";
 		for (File file : files) if(file.isDirectory()) ls = ls + "\n - " + file.getName();
