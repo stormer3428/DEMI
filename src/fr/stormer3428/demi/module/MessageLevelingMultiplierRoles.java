@@ -60,11 +60,6 @@ public class MessageLevelingMultiplierRoles extends Module{
 			Demi.disableModule(this);
 		}
 	}
-	
-	@Override
-	public String getName() {
-		return "MessageLevelingMultiplierRoles";
-	}
 
 	@Override
 	public String getDescription() {

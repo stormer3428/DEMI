@@ -45,11 +45,6 @@ public class LevelCalculator extends Module{
 	}
 
 	@Override
-	public String getName() {
-		return "LevelCalculator";
-	}
-
-	@Override
 	public String getDescription() {
 		return "The module responsible for computing how much exp a level should require";
 	}

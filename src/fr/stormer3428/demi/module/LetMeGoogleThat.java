@@ -73,11 +73,6 @@ public class LetMeGoogleThat extends Module{
 		}
 
 	}
-	
-	@Override
-	public String getName() {
-		return "LetMeGoogleThat";
-	}
 
 	@Override
 	public String getDescription() {

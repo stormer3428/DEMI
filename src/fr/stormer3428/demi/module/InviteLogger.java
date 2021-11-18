@@ -33,11 +33,6 @@ public class InviteLogger extends Module{
 	}
 
 	@Override
-	public String getName() {
-		return "InviteLogger";
-	}
-
-	@Override
 	public String getDescription() {
 		return "InviteLogger is a module that simply logs which invite was used whenever a member joins the server";
 	}

@@ -128,11 +128,6 @@ public class AutoReply extends Module{
 	}
 
 	@Override
-	public String getName() {
-		return "AutoReply";
-	}
-
-	@Override
 	public String getDescription() {
 		return "AutoReply is a module that will simply make demy autoreply to certain regexes in the config";
 	}

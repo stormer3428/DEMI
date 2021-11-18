@@ -48,11 +48,6 @@ public class LevelRoleCalculator extends Module{
 	}
 
 	@Override
-	public String getName() {
-		return "LevelRoleCalculator";
-	}
-
-	@Override
 	public String getDescription() {
 		return "A module that handle the computation needed to know what role should be given for what level";
 	}

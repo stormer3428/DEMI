@@ -106,11 +106,6 @@ public class RoleHierarchy extends Module{
 	}
 
 	@Override
-	public String getName() {
-		return "RoleHierarchy";
-	}
-
-	@Override
 	public String getDescription() {
 		return getName() + " is a module that will create a hierarchy between roles, for exepmle if you want roles to only be accessible to nitro boosters, you make the nitro booster role parent to the roles you want to be exclusive";
 	}

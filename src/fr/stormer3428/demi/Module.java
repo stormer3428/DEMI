@@ -208,7 +208,7 @@ public abstract class Module extends HasConfig{
 		return activeModules.containsAll(getDependencies()) && (!countSoftDependencies || activeModules.containsAll(getSoftDependencies()));
 	}
 
-	public abstract String getName();
+	public String getName() {return getClass().getName();};
 	public abstract String getDescription();
 
 	public boolean enabled() {

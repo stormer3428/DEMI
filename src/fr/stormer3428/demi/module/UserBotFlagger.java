@@ -116,11 +116,6 @@ public class UserBotFlagger extends Module{
 	}
 
 	@Override
-	public String getName() {
-		return "UserBotFlagger";
-	}
-
-	@Override
 	public String getDescription() {
 		return "A module that automatically flags bots that sends the exact same message in multiple channels and bans them automatically";
 	}

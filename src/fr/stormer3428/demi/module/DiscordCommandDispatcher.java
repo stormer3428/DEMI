@@ -30,11 +30,6 @@ public class DiscordCommandDispatcher extends Module{
 	}
 
 	@Override
-	public String getName() {
-		return "DiscordCommandDispatcher";
-	}
-
-	@Override
 	public String getDescription() {
 		return "A primary module that handle the detection and dispatching of commands coming from discord to all other modules";
 	}

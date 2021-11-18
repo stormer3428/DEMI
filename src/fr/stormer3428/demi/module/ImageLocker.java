@@ -47,11 +47,6 @@ public class ImageLocker extends Module{
 	}
 
 	@Override
-	public String getName() {
-		return "ImageLocker";
-	}
-
-	@Override
 	public String getDescription() {
 		return "A module that locks certain channels to only allow messages that contain an image or file";
 	}

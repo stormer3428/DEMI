@@ -54,11 +54,6 @@ public class MessageLeveling extends Module{
 	}
 
 	@Override
-	public String getName() {
-		return "MessageLeveling";
-	}
-
-	@Override
 	public String getDescription() {
 		return "The module that handles leveling up upon sending messages \n"
 				+ "the way the exp variation works is simple with the variation set to 150 and the base set to 100 for exemple, the amount of exp given will be from 100 all the way up to 250";

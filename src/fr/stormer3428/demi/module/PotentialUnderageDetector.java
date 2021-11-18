@@ -33,11 +33,6 @@ public class PotentialUnderageDetector extends Module{
 	}
 
 	@Override
-	public String getName() {
-		return "PotentialUnderageDetector";
-	}
-
-	@Override
 	public String getDescription() {
 		return "PotentialUnderageDetector is a module that will log any messages containing a number under 18 so that mods can manually check the messages out in case a persone mentionned being underage";
 	}

@@ -37,11 +37,6 @@ public class Autorole extends Module{
 	}
 
 	@Override
-	public String getName() {
-		return "Autorole";
-	}
-
-	@Override
 	public String getDescription() {
 		return "A module that automatically add roles whenever a user sends a message with a cooldown to avoid spending too much resources  on it."
 				+ "This can be used as a mean to check whether a member has a verified account as having a role bypasses the requirement for having a verified account."
