@@ -61,6 +61,10 @@ public class IO {
 		this(file, defaultKeys, printStackTrace, defaultHeaders);
 	}
 
+	public void destroy() {
+		all.remove(this);
+	}
+	
 
 	public final boolean fileCheck() {
 		return fileCheck(false);
@@ -278,8 +282,10 @@ public class IO {
 		for(String sortedKey : sortedKeySet) sortedAll.put(sortedKey, unsortedAll.get(sortedKey));
 		return sortedAll;
 	}
-
 	public final ArrayList<String> getAllRaw(){
+		return getAllRaw(true);
+	}
+	public final ArrayList<String> getAllRaw(boolean ignoreCommentLines){
 		if(getFile() == null) {
 			DemiConsole.cancelled("Attempted to retrieve raw version of null file, returning null");
 			return null;
@@ -300,7 +306,7 @@ public class IO {
 		}
 		ArrayList<String> keys = new ArrayList<>();
 		for(String line : lines){
-			if(isCommentLine(line)) continue;
+			if(isCommentLine(line) && ignoreCommentLines) continue;
 			keys.add(line);
 		}
 		return keys;

@@ -8,7 +8,6 @@ import fr.stormer3428.demi.CommandModule;
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.DemiCommandReceiveEvent;
 import fr.stormer3428.demi.MixedOutput;
-import net.dv8tion.jda.api.entities.User;
 
 public class CD extends CommandModule{
 
@@ -55,15 +54,15 @@ public class CD extends CommandModule{
 	protected void runCommand(DemiCommandReceiveEvent event) {
 		List<String> args = event.getArgs();
 		MixedOutput OUTPUT = event.getOutput();
-		User user = event.getMessageReceivedEvent().getAuthor();
+		Long WDid = event.getMessageReceivedEvent() == null ? 0 : event.getMessageReceivedEvent().getAuthor().getIdLong();
 		if(args.isEmpty()) {
-			//OUTPUT.command("getWD(user.getIdLong())" + getWD(user.getIdLong()));
-			OUTPUT.command(getWDStringFromRoot(user.getIdLong()) + " $");
+			//OUTPUT.command("getWD(WDid)" + getWD(WDid));
+			OUTPUT.command(getWDStringFromRoot(WDid) + " $");
 			return;
 		}
 		
 		String newPath = args.remove(0);
-		File WD = getWD(user.getIdLong());
+		File WD = getWD(WDid);
 
 		//OUTPUT.command("newPath :" + newPath);
 		//OUTPUT.command("WD :" + WD);
@@ -88,23 +87,30 @@ public class CD extends CommandModule{
 		//OUTPUT.command("newDirectoryPath :" + newDirectoryPath);
 
 		String absWDPath = newWD.getAbsolutePath();
-		String absRootPath = rootDir.getAbsolutePath();
-		if(!absWDPath.startsWith(absRootPath)) {
+		if(!isInRootFolder(absWDPath)) {
 			OUTPUT.command("Outside of root");
-			rootFormat(newWD, user.getIdLong());
+			rootFormat(newWD, WDid);
 			return;
 		}
 		if(!newWD.exists()) {
-			OUTPUT.command("Path does not exist (" + (rootFormat(newWD, user.getIdLong())) + ")");
+			OUTPUT.command("Path does not exist (" + (rootFormat(newWD, WDid)) + ")");
 			return;
 		}
 		if(!newWD.isDirectory()) {
-			OUTPUT.command("Not a directory (" + (rootFormat(newWD, user.getIdLong())) + ")");
+			OUTPUT.command("Not a directory (" + (rootFormat(newWD, WDid)) + ")");
 			return;
 		}
 		
-		WDs.put(user.getIdLong(), newWD);
-		OUTPUT.command(getWDStringFromRoot(user.getIdLong()) + " $");
+		WDs.put(WDid, newWD);
+		OUTPUT.command(getWDStringFromRoot(WDid) + " $");
+	}
+
+	public boolean isInRootFolder(String path) {
+		return path.startsWith(rootDir.getAbsolutePath());
+	}
+
+	public boolean isInRootFolder(File file) {
+		return isInRootFolder(file.getAbsolutePath());
 	}
 
 	public String rootFormat(File file) {
@@ -137,6 +143,18 @@ public class CD extends CommandModule{
 	@Override
 	public String getUsage() {
 		return "CD <newDir>";
+	}
+	
+	public File getFileFromRoot(String path) {
+		File file = new File(rootDir.getAbsolutePath() + "/" + path);
+		if(isInRootFolder(file)) return file;
+		return null;
+	}
+	
+	public File getFileFromWD(String path, long id) {
+		File file = new File(getWD(id).getAbsolutePath() + "/" + path);
+		if(isInRootFolder(file)) return file;
+		return null;
 	}
 
 }

@@ -29,6 +29,7 @@ import fr.stormer3428.demi.module.commands.Modules;
 import fr.stormer3428.demi.module.commands.Reload;
 import fr.stormer3428.demi.module.commands.SetLevel;
 import fr.stormer3428.demi.module.commands.Version;
+import fr.stormer3428.demi.module.directoryHandler.CAT;
 import fr.stormer3428.demi.module.directoryHandler.CD;
 import fr.stormer3428.demi.module.directoryHandler.LS;
 import net.dv8tion.jda.api.JDA;
@@ -74,6 +75,7 @@ public class Demi extends HasConfig{
 
 		registerModule(new CD()); //TODO make modules implement themselves
 		registerModule(new LS()); //TODO make modules implement themselves
+		registerModule(new CAT()); //TODO make modules implement themselves
 		
 		
 		registerModule(new Reload()); //TODO make modules implement themselves
@@ -282,7 +284,7 @@ public class Demi extends HasConfig{
 		}
 	}
 
-	private String discordBotToken() {
+	public String discordBotToken() {
 		return this.CONFIG.get("discordBotToken");
 	}
 
