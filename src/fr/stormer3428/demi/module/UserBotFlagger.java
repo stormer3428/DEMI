@@ -135,6 +135,7 @@ public class UserBotFlagger extends Module{
 		Long id = member.getIdLong();
 		String message = event.getMessage().getContentRaw();
 		if(message == null) return;
+		if(message.isEmpty()) return;
 
 		if(!lastMessagesMap.containsKey(id)) {
 			lastMessagesMap.put(id, message);

@@ -25,11 +25,6 @@ public class CD extends CommandModule{
 	}
 
 	@Override
-	public String getName() {
-		return "CD";
-	}
-
-	@Override
 	public String getDescription() {
 		return "CD is the module that will handle the current working directory, on its own it doesn't do anything, it is intended for other modules to use";
 	}

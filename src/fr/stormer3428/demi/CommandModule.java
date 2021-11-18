@@ -141,11 +141,6 @@ public abstract class CommandModule extends Module{
 			return null;
 		}
 	}
-
-	@Override
-	public String getName() {
-		return this.commandName;
-	}
 	
 	public List<String> getAliases(){
 		return this.aliases;
