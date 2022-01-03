@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -190,13 +191,12 @@ public class MixedOutput {
 		getTextChannel().sendMessage("```" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + message + "```" + "\n").queue();
 	}
 
-	public void embed(MessageEmbed embed, List<String> embedReplacement) {
+	public Message embed(MessageEmbed embed, List<String> embedReplacement) {
+		Message r = null;
 		if(this.outputToChannel) {
-
-			getTextChannel().sendMessage(embed).queue();
+			r = getTextChannel().sendMessage(embed).complete();
 		}
-		if(!this.outputToConsole) return;
-		for(String line : embedReplacement)
-			System.out.println("\033[38;5;226m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + line);
+		if(this.outputToConsole) for(String line : embedReplacement) System.out.println("\033[38;5;226m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + line);
+		return r;
 	}
 }
