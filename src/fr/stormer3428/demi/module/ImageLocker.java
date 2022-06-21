@@ -81,7 +81,7 @@ public class ImageLocker extends Module{
 			return;
 		}
 		
-		this.IMAGE_LOCKED_DATABASE = new IO(new File("imageLockedChannels.demidb"), new ArrayList<>(), true);
+		this.IMAGE_LOCKED_DATABASE = new IO(new File("imageLockedChannels.conf"), new ArrayList<>(), true);
 		
 		exemptAdministrators = CONFIG.get("exemptAdministrators").equalsIgnoreCase("true");
 

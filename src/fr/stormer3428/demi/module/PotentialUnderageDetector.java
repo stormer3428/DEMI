@@ -67,7 +67,7 @@ public class PotentialUnderageDetector extends Module{
 
 		UNDERAGE_LOGGING_OUTPUT = new MixedOutput(potentialUnderageLoggingChannelId + "", OUTPUT.isOutputToConsole(), OUTPUT.header());
 
-		this.TRIGGER_REGEXES_DATABASE = new IO(new File("PUDTriggerRegexes.demidb"), new ArrayList<>(), true);
+		this.TRIGGER_REGEXES_DATABASE = new IO(new File("pudtriggerregexes.conf"), new ArrayList<>(), true);
 		triggerRegexes = TRIGGER_REGEXES_DATABASE.getAllRaw();
 	}
 

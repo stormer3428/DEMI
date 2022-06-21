@@ -63,7 +63,7 @@ public class UserBotFlagger extends Module{
 				"The mode of the module : \n"
 						+ "//ping : Pings the roles in rolesToPing\n"
 						+ "//autoBan : Automatically bans the flagged members\n"
-						+ "//autobanateveryone : Automatically bans the flagged members if the message contains \"@everyone\"\n"
+						+ "//autoban : Automatically bans the flagged members if the message contains \"@everyone\"\n"
 						+ "//dual : Automatically ban and ping roles"));
 
 		CONFIG_KEYS.add(new Key("rolesToPing", "[]",
