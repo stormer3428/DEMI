@@ -11,7 +11,7 @@ import fr.stormer3428.demi.Module;
 public class Modules extends CommandModule{
 
 	public Modules() {
-		super("Modules");
+		super("modules");
 
 		this.aliases.add("mdls");
 		this.aliases.add("md");

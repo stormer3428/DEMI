@@ -93,7 +93,7 @@ public class RoleHierarchy extends Module{
 	private long lastWiped = System.currentTimeMillis();
 
 	public RoleHierarchy() {
-		super(new File("RoleHierarchy.cfg"));
+		super(new File("rolehierarchy.conf"));
 
 		this.CONFIG_KEYS.add(new Key("blankShot", "true", "true = dry-run, false = normal runtime"));
 

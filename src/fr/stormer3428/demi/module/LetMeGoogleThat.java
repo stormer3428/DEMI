@@ -17,7 +17,7 @@ public class LetMeGoogleThat extends Module{
 	private List<Long> whitelist = new ArrayList<>();
 	
 	public LetMeGoogleThat() {
-		super(new File("LetMeGoogleThat.cfg"));
+		super(new File("letmegooglethat.conf"));
 
 		CONFIG_KEYS.add(new Key("whitelistEnabled", "true", 
 				"//Whether i should reply to a limited amount of user or not"));
@@ -40,7 +40,7 @@ public class LetMeGoogleThat extends Module{
 		if(this.whitelist.isEmpty()) {
 			if(this.whitelistEnabled) {
 				this.OUTPUT.warning("whitelistEnabled was set to true but no whitelist was set");
-				this.OUTPUT.cancelled("disabming module");
+				this.OUTPUT.cancelled("disabling module");
 				this.whitelistEnabled = false;
 				Demi.disableModule(this);
 				return;

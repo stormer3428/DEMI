@@ -19,7 +19,7 @@ public class Level extends CommandModule{
 	private LevelCalculator LEVEL_CALCULATOR;
 	
 	public Level() {
-		super("Level");
+		super("level");
 
 		this.aliases.add("lvl");
 

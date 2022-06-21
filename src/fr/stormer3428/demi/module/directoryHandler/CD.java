@@ -17,7 +17,7 @@ public class CD extends CommandModule{
 	private HashMap<Long, File> WDs = new HashMap<>();
 	
 	public CD() {
-		super("CD");
+		super("cd");
 		
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");

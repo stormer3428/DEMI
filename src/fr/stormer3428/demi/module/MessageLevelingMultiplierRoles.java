@@ -15,7 +15,7 @@ public class MessageLevelingMultiplierRoles extends Module{
 	private HashMap<Long, Float> roleMultipliers = new HashMap<>();
 	
 	public MessageLevelingMultiplierRoles() {
-		super(new File("level/messageLevelingMultiplierRoles.cfg"));
+		super(new File("level/messagelevelingmultiplierroles.conf"));
 
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");
@@ -26,7 +26,7 @@ public class MessageLevelingMultiplierRoles extends Module{
 	public void onEnable() {
 		super.onEnable();
 
-		this.ROLE_MULTIPLIERS = new IO(new File("level/multiplierRoles" + Demi.i.getServerID() + ".demidb"), new ArrayList<>(), true);
+		this.ROLE_MULTIPLIERS = new IO(new File("level/multiplierroles" + Demi.i.getServerID() + ".conf"), new ArrayList<>(), true);
 
 		List<String> roleIDs = this.ROLE_MULTIPLIERS.getKeys();
 		for(String roleID : roleIDs) {

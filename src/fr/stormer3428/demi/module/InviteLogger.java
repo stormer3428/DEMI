@@ -23,7 +23,7 @@ public class InviteLogger extends Module{
 	private MixedOutput INVITE_LOGGING_OUTPUT;
 
 	public InviteLogger() {
-		super(new File("inviteLogger.cfg"));
+		super(new File("invitelogger.conf"));
 
 		this.CONFIG_KEYS.add(new Key("inviteLoggingChannelId", "ID_HERE"));
 

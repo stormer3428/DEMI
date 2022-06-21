@@ -36,7 +36,7 @@ public class LevelRoleCalculator extends Module{
 	private boolean keepOnlyLatestRole;
 
 	public LevelRoleCalculator() {
-		super(new File("level/levelRoleCalculator.cfg"));
+		super(new File("level/levelrolecalculator.conf"));
 
 		this.CONFIG_KEYS.add(new Key("enableCache", "false"));
 		this.CONFIG_KEYS.add(new Key("keepOnlyLatestRole", "true"));
@@ -63,7 +63,7 @@ public class LevelRoleCalculator extends Module{
 		if(this.COOLDOWN == -1) return;
 		this.OUTPUT.trace("cooldown : " + this.COOLDOWN, this.PRINT_STACK_TRACE);
 
-		this.ROLES_DATABASE = new IO(new File("level/levelRolesdb" + Demi.i.getServerID() + ".cfg"), new ArrayList<>(), true);
+		this.ROLES_DATABASE = new IO(new File("level/levelrolesdb" + Demi.i.getServerID() + ".conf"), new ArrayList<>(), true);
 		
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}

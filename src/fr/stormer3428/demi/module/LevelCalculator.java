@@ -31,7 +31,7 @@ public class LevelCalculator extends Module{
 	}
 	
 	public LevelCalculator() {
-		super(new File("level/levelCalculator.cfg"));
+		super(new File("level/levelcalculator.conf"));
 
 		this.CONFIG_KEYS.add(new Key("levelIncreasePow", "1.05"));
 		this.CONFIG_KEYS.add(new Key("levelBase", "500"));

@@ -7,7 +7,7 @@ import fr.stormer3428.demi.DemiCommandReceiveEvent;
 public class Reload extends CommandModule{
 
 	public Reload() {
-		super("Reload");
+		super("reload");
 
 		this.aliases.add("rl");
 		

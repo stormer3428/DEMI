@@ -34,7 +34,7 @@ public class Leaderboard extends CommandModule{
 	private LevelCalculator LEVEL_CALCULATOR;
 
 	public Leaderboard() {
-		super("Leaderboard");
+		super("leaderboard");
 
 		this.aliases.add("ldb");
 

@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.entities.Member;
 public class CanUseCommand extends CommandModule{
 
 	public CanUseCommand() {
-		super("CanUseCommand");
+		super("canusecommand");
 
 		this.aliases.add("cuc");
 

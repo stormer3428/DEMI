@@ -27,7 +27,7 @@ public class MessageLeveling extends Module{
 	private MessageLevelingMultiplierRoles MULTIPLIER_ROLES;
 	
 	public MessageLeveling() {
-		super(new File("level/messageLeveling.cfg"));
+		super(new File("level/messageleveling.conf"));
 
 		this.CONFIG_KEYS.add(new Key("enableExpIncreaseCooldownMS", "true", "whether leveling via messaging should have a cooldown"));
 		this.CONFIG_KEYS.add(new Key("expIncreaseCooldownMS", "60000", "the cooldown in milliseconds between each exp increase"));

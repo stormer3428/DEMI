@@ -25,7 +25,7 @@ public class AutoReply extends Module{
 	private IO AUTOREPLY_DATABASE;
 
 	public AutoReply() {
-		super(new File("AutoReply.cfg"));
+		super(new File("autoreply.conf"));
 
 		this.CONFIG_KEYS.add(new Key("requireRoles", "false", 
 				"Whether the module will look if player has the required roles before replying"));
@@ -80,7 +80,7 @@ public class AutoReply extends Module{
 			}
 		}
 
-		this.AUTOREPLY_DATABASE = new IO(new File("autoreply.demidb"), new ArrayList<>(), true);
+		this.AUTOREPLY_DATABASE = new IO(new File("autoreplies.conf"), new ArrayList<>(), true);
 		autoReplies = AUTOREPLY_DATABASE.getAll();
 
 		OUTPUT.ok("Succesfully loaded all regexes");

@@ -23,7 +23,7 @@ public class PotentialUnderageDetector extends Module{
 	private IO TRIGGER_REGEXES_DATABASE;
 
 	public PotentialUnderageDetector() {
-		super(new File("PotentialUnderageDetector.cfg"));
+		super(new File("potentialunderagedetector.conf"));
 
 		this.CONFIG_KEYS.add(new Key("potentialUnderageLoggingChannelId", "ID_HERE"));
 

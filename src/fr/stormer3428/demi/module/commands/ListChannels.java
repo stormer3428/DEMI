@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.GuildChannel;
 public class ListChannels extends CommandModule{
 
 	public ListChannels() {
-		super("ListChannels");
+		super("listchannels");
 
 		this.aliases.add("lc");
 

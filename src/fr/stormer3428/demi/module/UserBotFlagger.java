@@ -45,7 +45,7 @@ public class UserBotFlagger extends Module{
 	private MixedOutput LOG;
 
 	public UserBotFlagger() {
-		super(new File("userBotFlagger.cfg"));
+		super(new File("userbotflagger.conf"));
 
 		CONFIG_KEYS.add(new Key("triggerthreshold", "5", 
 				"The threshold of the number of identical messages sent in different channels needed for the modul to flag a member as a bot and autoban them"));

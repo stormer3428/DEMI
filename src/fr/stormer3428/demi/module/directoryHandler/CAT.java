@@ -16,7 +16,7 @@ public class CAT extends CommandModule{
 	private CD CD;
 
 	public CAT() {
-		super("CAT");
+		super("cat");
 
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");

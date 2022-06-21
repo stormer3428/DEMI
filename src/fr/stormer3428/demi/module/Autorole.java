@@ -26,7 +26,7 @@ public class Autorole extends Module{
 	private long lastWiped = System.currentTimeMillis();
 
 	public Autorole() {
-		super(new File("autorole.cfg"));
+		super(new File("autorole.conf"));
 		
 		this.CONFIG_KEYS.add(new Key("cooldown", "300000", "The cooldown between each application of the autoroles"));
 		this.CONFIG_KEYS.add(new Key("roles", "[]", "an array of the id's of the roles to automatically apply"));

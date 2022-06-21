@@ -49,7 +49,7 @@ public class MixedOutput {
 			keys.add(new Key("printStackTrace", "true"));
 			keys.add(new Key("enableBuffer", "true"));
 			keys.add(new Key("bufferTimeoutMS", "2000"));
-			io = new IO(new File("MixedOutput.cfg"), keys, true);
+			io = new IO(new File("mixedoutput.conf"), keys, true);
 
 			enableBuffer = io.get("enableBuffer").equalsIgnoreCase("true");
 

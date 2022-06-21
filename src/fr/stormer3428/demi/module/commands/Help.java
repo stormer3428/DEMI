@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.Member;
 public class Help extends CommandModule{
 
 	public Help() {
-		super("Help");
+		super("help");
 
 		this.aliases.add("?");
 		this.aliases.add("h");

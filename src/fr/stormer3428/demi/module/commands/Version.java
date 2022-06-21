@@ -7,7 +7,7 @@ import fr.stormer3428.demi.DemiCommandReceiveEvent;
 public class Version extends CommandModule{
 
 	public Version() {
-		super("Version");
+		super("version");
 
 		this.aliases.add("ver");
 		this.aliases.add("v");

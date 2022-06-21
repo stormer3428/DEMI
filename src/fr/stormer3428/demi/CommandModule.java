@@ -20,7 +20,7 @@ public abstract class CommandModule extends Module{
 	protected String commandName;
 
 	public CommandModule(String string) {
-		super(new File("commands/" + string + ".cfg"));
+		super(new File("commands/" + string + ".conf"));
 		this.commandName = string;
 
 		this.CONFIG_KEYS.add(new Key("requireAdminPerms", "true",

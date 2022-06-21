@@ -255,7 +255,7 @@ public class Demi extends HasConfig{
 	}
 
 	public Demi() {
-		super(new File("config.cfg"));
+		super(new File("demi.conf"));
 		this.CONFIG_KEYS.add(new Key("discordBotToken", "TOKEN_HERE"));
 		this.CONFIG_KEYS.add(new Key("debugMode", "false"));
 		this.CONFIG_KEYS.add(new Key("debugIDs", "[]"));
@@ -421,14 +421,14 @@ public class Demi extends HasConfig{
 	}
 
 	public File findConfigFileByName(String givenFileName) {
-		String fileName = givenFileName.replace(".cfg", "");
+		String fileName = givenFileName.replace(".conf", "");
 		File parentFolder = Demi.i.CONFIG.getFile().getAbsoluteFile().getParentFile();
 		List<File> files = recursiveFileSearch(parentFolder, 5);
 		for(File configFile : files) {
-			if(configFile.getName().replace(".cfg", "").equals(fileName)) return configFile;
+			if(configFile.getName().replace(".conf", "").equals(fileName)) return configFile;
 		}
 		for(File configFile : files) {
-			if(configFile.getName().replace(".cfg", "").equalsIgnoreCase(fileName)) return configFile;
+			if(configFile.getName().replace(".conf", "").equalsIgnoreCase(fileName)) return configFile;
 		}
 		return null;
 	}
@@ -445,7 +445,7 @@ public class Demi extends HasConfig{
 				recursiveFileSearch(files, file, recursion - 1);
 				continue;
 			}
-			if(file.getName().endsWith(".cfg") || file.getName().endsWith(".demidb")) files.add(file);
+			if(file.getName().endsWith(".conf")) files.add(file);
 		}
 		return files;
 	}

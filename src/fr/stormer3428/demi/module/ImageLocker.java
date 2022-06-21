@@ -27,7 +27,7 @@ public class ImageLocker extends Module{
 	private MixedOutput LOG;
 	
 	public ImageLocker() {
-		super(new File("ImageLocker.cfg"));
+		super(new File("imagelocker.conf"));
 
 		this.CONFIG_KEYS.add(new Key("exemptAdministrators", "true", 
 				"//Whether the module should ignore members with admin perms"));

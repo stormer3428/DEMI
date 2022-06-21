@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 public class FileEdit extends CommandModule{
 
 	public FileEdit() {
-		super("FileEdit");
+		super("fileedit");
 
 		this.aliases.add("fedit");
 		this.aliases.add("filed");

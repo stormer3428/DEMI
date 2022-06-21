@@ -17,7 +17,7 @@ public class BanName extends CommandModule{
 	private HashMap<Long, List<Long>> query = new HashMap<>();
 	
 	public BanName() {
-		super("BanName");
+		super("banname");
 
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");

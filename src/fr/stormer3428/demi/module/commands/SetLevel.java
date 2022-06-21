@@ -18,7 +18,7 @@ public class SetLevel extends CommandModule{
 	private LevelCalculator LEVEL_CALCULATOR;
 
 	public SetLevel() {
-		super("SetLevel");
+		super("setlevel");
 
 		this.aliases.add("slvl");
 		this.aliases.add("setlvl");

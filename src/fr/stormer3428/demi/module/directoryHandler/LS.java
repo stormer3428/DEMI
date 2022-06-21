@@ -14,7 +14,7 @@ public class LS extends CommandModule{
 	private CD CD;
 	
 	public LS() {
-		super("LS");
+		super("ls");
 
 		aliases.add("DIR");
 		aliases.add("VDIR");

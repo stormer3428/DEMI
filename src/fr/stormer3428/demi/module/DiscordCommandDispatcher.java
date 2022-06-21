@@ -19,7 +19,7 @@ public class DiscordCommandDispatcher extends Module{
 	private boolean acceptFromDiscordBots;
 
 	public DiscordCommandDispatcher() {
-		super(new File("discordCommandDispatcher.cfg"));
+		super(new File("discordcommanddispatcher.conf"));
 
 		this.CONFIG_KEYS.add(new Key("prefix", "?"));
 		this.CONFIG_KEYS.add(new Key("acceptCommandsFromDiscordBots", "false"));
