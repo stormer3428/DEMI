@@ -8,7 +8,7 @@ import java.util.List;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 public class MixedOutput {
 
@@ -49,7 +49,7 @@ public class MixedOutput {
 			keys.add(new Key("printStackTrace", "true"));
 			keys.add(new Key("enableBuffer", "true"));
 			keys.add(new Key("bufferTimeoutMS", "2000"));
-			io = new IO(new File("mixedoutput.conf"), keys, true);
+			io = new IO(new File("conf/mixedoutput.conf"), keys, true);
 
 			enableBuffer = io.get("enableBuffer").equalsIgnoreCase("true");
 

@@ -80,7 +80,7 @@ public class AutoReply extends Module{
 			}
 		}
 
-		this.AUTOREPLY_DATABASE = new IO(new File("autoreplies.conf"), new ArrayList<>(), true);
+		this.AUTOREPLY_DATABASE = new IO(new File("conf/autoreplies.conf"), new ArrayList<>(), true);
 		autoReplies = AUTOREPLY_DATABASE.getAll();
 
 		OUTPUT.ok("Succesfully loaded all regexes");

@@ -3,3 +3,5 @@ config.cfg
 *.cfg
 *.demidb
 *.jar
+*.class
+/target/

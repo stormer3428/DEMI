@@ -1,15 +1,8 @@
 package fr.stormer3428.demi;
 
-import net.dv8tion.jda.api.events.DisconnectEvent;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.GatewayPingEvent;
-import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.RawGatewayEvent;
-import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.ReconnectedEvent;
-import net.dv8tion.jda.api.events.ResumedEvent;
-import net.dv8tion.jda.api.events.ShutdownEvent;
-import net.dv8tion.jda.api.events.StatusChangeEvent;
 import net.dv8tion.jda.api.events.UpdateEvent;
 import net.dv8tion.jda.api.events.channel.ChannelCreateEvent;
 import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
@@ -94,9 +87,6 @@ import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceDeafenEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceGuildDeafenEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceGuildMuteEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMuteEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceRequestToSpeakEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSelfDeafenEvent;
@@ -105,7 +95,6 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceStreamEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSuppressEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceVideoEvent;
-import net.dv8tion.jda.api.events.http.HttpRequestEvent;
 import net.dv8tion.jda.api.events.interaction.GenericAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
@@ -120,7 +109,6 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import net.dv8tion.jda.api.events.message.MessageBulkDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
@@ -187,12 +175,6 @@ public class RawListener extends ListenerAdapter{
 
 
 	@Override
-	public void onDisconnect(DisconnectEvent event) {try {
-
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onDisconnect(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
-	}
-
-	@Override
 	public void onException(ExceptionEvent event) {try {
 
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onException(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
@@ -202,12 +184,6 @@ public class RawListener extends ListenerAdapter{
 	public void onGatewayPing(GatewayPingEvent event) {try {
 
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGatewayPing(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
-	}
-
-	@Override
-	public void onGenericEvent(GenericEvent event) {try {
-
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGenericEvent(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
 	}
 
 	@Override
@@ -563,24 +539,6 @@ public class RawListener extends ListenerAdapter{
 	}
 
 	@Override
-	public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {try {
-
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceJoin(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
-	}
-
-	@Override
-	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {try {
-
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceLeave(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
-	}
-
-	@Override
-	public void onGuildVoiceMove(GuildVoiceMoveEvent event) {try {
-
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceMove(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
-	}
-
-	@Override
 	public void onGuildVoiceMute(GuildVoiceMuteEvent event) {try {
 
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceMute(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
@@ -614,12 +572,6 @@ public class RawListener extends ListenerAdapter{
 	public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event) {try {
 
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onGuildVoiceUpdate(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
-	}
-
-	@Override
-	public void onHttpRequest(HttpRequestEvent event) {try {
-
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onHttpRequest(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
 	}
 
 	@Override
@@ -695,24 +647,6 @@ public class RawListener extends ListenerAdapter{
 	}
 
 	@Override
-	public void onReady(ReadyEvent event) {try {
-
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onReady(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
-	}
-
-	@Override
-	public void onReconnected(ReconnectedEvent event) {try {
-
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onReconnected(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
-	}
-
-	@Override
-	public void onResumed(ResumedEvent event) {try {
-
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onResumed(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
-	}
-
-	@Override
 	public void onRoleCreate(RoleCreateEvent event) {try {
 
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleCreate(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
@@ -782,18 +716,6 @@ public class RawListener extends ListenerAdapter{
 	public void onSelfUpdateVerified(SelfUpdateVerifiedEvent event) {try {
 
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onSelfUpdateVerified(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
-	}
-
-	@Override
-	public void onShutdown(ShutdownEvent event) {try {
-
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onShutdown(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
-	}
-
-	@Override
-	public void onStatusChange(StatusChangeEvent event) {try {
-
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onStatusChange(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
 	}
 
 	@Override
@@ -1095,10 +1017,6 @@ public class RawListener extends ListenerAdapter{
 	@Override
 	public void onRoleUpdateIcon(RoleUpdateIconEvent event) {try {
 		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onRoleUpdateIcon(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
-	}
-	@Override
-	public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {try {
-		for(Module module : Demi.i.getActiveModules()) {new Thread(new Runnable() {@Override public void run() {module.onSelectMenuInteraction(event);}}).start();}}catch (Exception e) {e.printStackTrace();}
 	}
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {try {

@@ -7,10 +7,10 @@ import fr.stormer3428.demi.CommandModule;
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.DemiCommandReceiveEvent;
 import fr.stormer3428.demi.MixedOutput;
-import net.dv8tion.jda.api.entities.Category;
-import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.channel.concrete.Category;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 
 public class ListChannels extends CommandModule{
 

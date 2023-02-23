@@ -11,11 +11,11 @@ import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.IO;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
-import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -63,7 +63,7 @@ public class LevelRoleCalculator extends Module{
 		if(this.COOLDOWN == -1) return;
 		this.OUTPUT.trace("cooldown : " + this.COOLDOWN, this.PRINT_STACK_TRACE);
 
-		this.ROLES_DATABASE = new IO(new File("level/levelrolesdb" + Demi.i.getServerID() + ".conf"), new ArrayList<>(), true);
+		this.ROLES_DATABASE = new IO(new File("conf/level/levelrolesdb" + Demi.i.getServerID() + ".conf"), new ArrayList<>(), true);
 		
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}

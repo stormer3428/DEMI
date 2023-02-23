@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import fr.stormer3428.demi.Demi;
@@ -16,7 +17,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class UserBotFlagger extends Module{
@@ -97,7 +98,7 @@ public class UserBotFlagger extends Module{
 		}
 		triggerRegexes.clear();
 		if(mode == Mode.AutobanTriggerWord || mode == Mode.DualTriggerWord) {
-			TRIGGER_REGEXES_DATABASE = new IO(new File("userbotflaggertriggerregexes.conf"), new ArrayList<>(), true, IO.defaultHeaders, ""
+			TRIGGER_REGEXES_DATABASE = new IO(new File("conf/userbotflaggertriggerregexes.conf"), new ArrayList<>(), true, IO.defaultHeaders, ""
 					+ "// This file is meant to host all trigger regexes for the userbotflagger module\n"
 					+ "\n// You have to put here a regex per line"
 					+ "\n// /!\\ IMPORTANT /!\\"
@@ -236,7 +237,7 @@ public class UserBotFlagger extends Module{
 			//LOG.ok("Banned member <@" + member.getIdLong() + "> (" + name + ")");
 			status = "Autobanned";
 			embedReplacement.add("User was autobanned");
-			member.ban(0, "Flagged as an user bot by DEMI").complete();
+			member.ban(7, TimeUnit.DAYS).complete();
 		}
 
 		if(mode == Mode.Ping || mode == Mode.Dual) {

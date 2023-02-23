@@ -114,7 +114,7 @@ public class RoleHierarchy extends Module{
 	public void onEnable() {
 		super.onEnable();
 
-		this.HIERARCHY_DATABASE = new IO(new File("rolehierarchy" + Demi.i.getServerID() + ".conf"), new ArrayList<>(), true);
+		this.HIERARCHY_DATABASE = new IO(new File("conf/rolehierarchy" + Demi.i.getServerID() + ".conf"), new ArrayList<>(), true);
 
 		this.enableCheckCooldownMS = this.CONFIG.get("enableCheckCooldownMS").equalsIgnoreCase("true");
 		this.OUTPUT.trace("enableCheckCooldownMS : " + this.enableCheckCooldownMS, this.PRINT_STACK_TRACE);

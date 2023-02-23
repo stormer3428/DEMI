@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -82,7 +82,7 @@ public class ImageLocker extends Module{
 			return;
 		}
 		
-		this.IMAGE_LOCKED_DATABASE = new IO(new File("imagelockedchannels.conf"), new ArrayList<>(), true);
+		this.IMAGE_LOCKED_DATABASE = new IO(new File("conf/imagelockedchannels.conf"), new ArrayList<>(), true);
 		
 		exemptAdministrators = CONFIG.get("exemptAdministrators").equalsIgnoreCase("true");
 

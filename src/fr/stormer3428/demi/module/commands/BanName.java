@@ -3,6 +3,7 @@ package fr.stormer3428.demi.module.commands;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import fr.stormer3428.demi.CommandModule;
@@ -75,7 +76,7 @@ public class BanName extends CommandModule{
 		for(Long id : list) {
 			Member member = guild.retrieveMemberById(id).complete();
 			OUTPUT.command("Banned " + member.getEffectiveName());
-			member.ban(7).complete();
+			member.ban(7, TimeUnit.DAYS).complete();
 		}
 	}
 

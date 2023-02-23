@@ -26,7 +26,7 @@ public class MessageLevelingMultiplierRoles extends Module{
 	public void onEnable() {
 		super.onEnable();
 
-		this.ROLE_MULTIPLIERS = new IO(new File("level/multiplierroles" + Demi.i.getServerID() + ".conf"), new ArrayList<>(), true);
+		this.ROLE_MULTIPLIERS = new IO(new File("conf/level/multiplierroles" + Demi.i.getServerID() + ".conf"), new ArrayList<>(), true);
 
 		List<String> roleIDs = this.ROLE_MULTIPLIERS.getKeys();
 		for(String roleID : roleIDs) {

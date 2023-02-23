@@ -101,7 +101,7 @@ public class LevelCalculator extends Module{
 			this.OUTPUT.warning("Members already in the database will level up normally");
 		}
 
-		this.LEVEL_DATABASE = new IO(new File("level/leveldb" + Demi.i.getServerID() + ".conf"), new ArrayList<>(), true);
+		this.LEVEL_DATABASE = new IO(new File("conf/level/leveldb" + Demi.i.getServerID() + ".conf"), new ArrayList<>(), true);
 
 		this.OUTPUT.ok("Successfully loaded all config parameters");
 	}

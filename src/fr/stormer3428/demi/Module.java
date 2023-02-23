@@ -4,15 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.dv8tion.jda.api.events.DisconnectEvent;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.GatewayPingEvent;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.RawGatewayEvent;
-import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.ReconnectedEvent;
-import net.dv8tion.jda.api.events.ResumedEvent;
-import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.StatusChangeEvent;
 import net.dv8tion.jda.api.events.UpdateEvent;
 import net.dv8tion.jda.api.events.channel.ChannelCreateEvent;
@@ -98,9 +93,6 @@ import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceDeafenEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceGuildDeafenEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceGuildMuteEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMuteEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceRequestToSpeakEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSelfDeafenEvent;
@@ -124,7 +116,6 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import net.dv8tion.jda.api.events.message.MessageBulkDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
@@ -152,6 +143,8 @@ import net.dv8tion.jda.api.events.self.SelfUpdateAvatarEvent;
 import net.dv8tion.jda.api.events.self.SelfUpdateMFAEvent;
 import net.dv8tion.jda.api.events.self.SelfUpdateNameEvent;
 import net.dv8tion.jda.api.events.self.SelfUpdateVerifiedEvent;
+import net.dv8tion.jda.api.events.session.ReadyEvent;
+import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.events.stage.GenericStageInstanceEvent;
 import net.dv8tion.jda.api.events.stage.StageInstanceCreateEvent;
 import net.dv8tion.jda.api.events.stage.StageInstanceDeleteEvent;
@@ -246,7 +239,6 @@ public abstract class Module extends HasConfig{
 	}
 
 
-	public void onDisconnect(DisconnectEvent event) {}
 	public void onException(ExceptionEvent event) {}
 	public void onGatewayPing(GatewayPingEvent event) {}
 	public void onGenericEvent(GenericEvent event){}
@@ -308,9 +300,6 @@ public abstract class Module extends HasConfig{
 	public void onGuildVoiceDeafen(GuildVoiceDeafenEvent event){}
 	public void onGuildVoiceGuildDeafen(GuildVoiceGuildDeafenEvent event){}
 	public void onGuildVoiceGuildMute(GuildVoiceGuildMuteEvent event){}
-	public void onGuildVoiceJoin(GuildVoiceJoinEvent event){}
-	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event){}
-	public void onGuildVoiceMove(GuildVoiceMoveEvent event){}
 	public void onGuildVoiceMute(GuildVoiceMuteEvent event){}
 	public void onGuildVoiceSelfDeafen(GuildVoiceSelfDeafenEvent event){}
 	public void onGuildVoiceSelfMute(GuildVoiceSelfMuteEvent event){}
@@ -331,10 +320,6 @@ public abstract class Module extends HasConfig{
 	public void onPermissionOverrideUpdate(PermissionOverrideUpdateEvent event){}
 	public void onRawGateway(RawGatewayEvent event){}
 	public void onReady(ReadyEvent event){}
-	public void onReconnect(ReconnectedEvent event){}
-	public void onReconnected(ReconnectedEvent event){}
-	public void onResume(ResumedEvent event){}
-	public void onResumed(ResumedEvent event){}
 	public void onRoleCreate(RoleCreateEvent event){}
 	public void onRoleDelete(RoleDeleteEvent event){}
 	public void onRoleUpdateColor(RoleUpdateColorEvent event){}
@@ -417,7 +402,6 @@ public abstract class Module extends HasConfig{
 	public void onMessageReactionRemoveEmoji(MessageReactionRemoveEmojiEvent event){}
 	public void onModalInteraction(ModalInteractionEvent event){}
 	public void onRoleUpdateIcon(RoleUpdateIconEvent event){}
-	public void onSelectMenuInteraction(SelectMenuInteractionEvent event){}
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event){}
 	public void onStageInstanceCreate(StageInstanceCreateEvent event){}
 	public void onStageInstanceDelete(StageInstanceDeleteEvent event){}

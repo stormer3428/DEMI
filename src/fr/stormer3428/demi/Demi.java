@@ -26,12 +26,14 @@ import fr.stormer3428.demi.module.commands.Leaderboard;
 import fr.stormer3428.demi.module.commands.Level;
 import fr.stormer3428.demi.module.commands.ListChannels;
 import fr.stormer3428.demi.module.commands.Modules;
+import fr.stormer3428.demi.module.commands.RadioLink;
 import fr.stormer3428.demi.module.commands.Reload;
 import fr.stormer3428.demi.module.commands.SetLevel;
 import fr.stormer3428.demi.module.commands.Version;
 import fr.stormer3428.demi.module.directoryHandler.CAT;
 import fr.stormer3428.demi.module.directoryHandler.CD;
 import fr.stormer3428.demi.module.directoryHandler.LS;
+import fr.stormer3428.demi.module.music.DemiRadio;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -76,7 +78,9 @@ public class Demi extends HasConfig{
 		registerModule(new CD()); //TODO make modules implement themselves
 		registerModule(new LS()); //TODO make modules implement themselves
 		registerModule(new CAT()); //TODO make modules implement themselves
-		
+
+		registerModule(new DemiRadio()); //TODO make modules implement themselves
+		registerModule(new RadioLink()); //TODO make modules implement themselves
 		
 		registerModule(new Reload()); //TODO make modules implement themselves
 		registerModule(new FileEdit()); //TODO make modules implement themselves
@@ -322,6 +326,9 @@ public class Demi extends HasConfig{
 
 		JDABuilder builder = JDABuilder.createDefault(discordBotToken());
 		builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
+		builder.enableIntents(GatewayIntent.MESSAGE_CONTENT);
+		builder.enableIntents(GatewayIntent.GUILD_INVITES);
+		builder.enableIntents(GatewayIntent.GUILD_MODERATION);
 		builder.setRequestTimeoutRetry(true);
 
 		try{
@@ -368,7 +375,7 @@ public class Demi extends HasConfig{
 		}else DemiConsole.cancelled("Core module set to not print stack trace");
 	}
 
-	protected Guild getGuild() {
+	public Guild getGuild() {
 		return jda.getGuildById(SERVER_ID);
 	}
 
