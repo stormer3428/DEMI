@@ -12,7 +12,7 @@ import fr.stormer3428.demi.Module;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class PotentialUnderageDetector extends Module{
 
@@ -23,7 +23,7 @@ public class PotentialUnderageDetector extends Module{
 	private IO TRIGGER_REGEXES_DATABASE;
 
 	public PotentialUnderageDetector() {
-		super(new File("potentialunderagedetector.conf"));
+		super(new File("conf/potentialunderagedetector.conf"));
 
 		this.CONFIG_KEYS.add(new Key("potentialUnderageLoggingChannelId", "ID_HERE"));
 
@@ -72,7 +72,8 @@ public class PotentialUnderageDetector extends Module{
 	}
 
 	@Override
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+	public void onMessageReceived(MessageReceivedEvent event) {
+		if(!event.isFromGuild()) return;
 		Member member = event.getMember();
 		if(member == null) return;
 		if(member.getUser() == null) return;

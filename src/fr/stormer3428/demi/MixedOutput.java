@@ -194,7 +194,7 @@ public class MixedOutput {
 	public Message embed(MessageEmbed embed, List<String> embedReplacement) {
 		Message r = null;
 		if(this.outputToChannel) {
-			r = getTextChannel().sendMessage(embed).complete();
+			r = getTextChannel().sendMessageEmbeds(embed).complete();
 		}
 		if(this.outputToConsole) for(String line : embedReplacement) System.out.println("\033[38;5;226m"+"" + (this.mixedOutputHead.isEmpty() ? "" : "[" + this.mixedOutputHead + "]") + " " + line);
 		return r;

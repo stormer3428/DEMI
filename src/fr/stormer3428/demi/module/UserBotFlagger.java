@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class UserBotFlagger extends Module{
 
@@ -51,7 +51,7 @@ public class UserBotFlagger extends Module{
 	private MixedOutput LOG;
 
 	public UserBotFlagger() {
-		super(new File("userbotflagger.conf"));
+		super(new File("conf/userbotflagger.conf"));
 
 		CONFIG_KEYS.add(new Key("triggerthreshold", "5", 
 				"The threshold of the number of identical messages sent in different channels needed for the modul to flag a member as a bot and autoban them"));
@@ -160,7 +160,8 @@ public class UserBotFlagger extends Module{
 	}
 
 	@Override
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+	public void onMessageReceived(MessageReceivedEvent event) {
+		if(!event.isFromGuild()) return;
 		Member member = event.getMember();
 		if(member == null) return;
 		if(member.getUser() == null) return;
@@ -261,7 +262,7 @@ public class UserBotFlagger extends Module{
 
 		Message m = null;
 		if(loggingMessageMap.containsKey(id)) {
-			m = loggingMessageMap.get(id).editMessage(builder.build()).complete();
+			m = loggingMessageMap.get(id).editMessageEmbeds(builder.build()).complete();
 		}else m = LOG.embed(builder.build(), embedReplacement);
 		if(m != null) loggingMessageMap.put(id, m);
 	}

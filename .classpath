@@ -6,6 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/eclipse/JDA-4.2.1_253-withDependencies.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stormer/Documents/Jars/JDA/JDA-5.0.0-alpha.17-withDependencies.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

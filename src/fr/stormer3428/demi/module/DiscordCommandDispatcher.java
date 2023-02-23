@@ -19,7 +19,7 @@ public class DiscordCommandDispatcher extends Module{
 	private boolean acceptFromDiscordBots;
 
 	public DiscordCommandDispatcher() {
-		super(new File("discordcommanddispatcher.conf"));
+		super(new File("conf/discordcommanddispatcher.conf"));
 
 		this.CONFIG_KEYS.add(new Key("prefix", "?"));
 		this.CONFIG_KEYS.add(new Key("acceptCommandsFromDiscordBots", "false"));
@@ -69,7 +69,7 @@ public class DiscordCommandDispatcher extends Module{
 			for(Module module : Demi.i.getActiveModules()) {
 				threads.add(new Thread(new Runnable() {
 					@Override public void run() {
-						module.onCommand(new DemiCommandReceiveEvent(event, cmd.toLowerCase(), args, new MixedOutput(event.getTextChannel().getId(), false, "")));
+						module.onCommand(new DemiCommandReceiveEvent(event, cmd.toLowerCase(), args, new MixedOutput(event.getChannel().getId(), false, "")));
 					}
 				}));
 			}

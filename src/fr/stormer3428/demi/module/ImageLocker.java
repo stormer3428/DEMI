@@ -14,7 +14,8 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class ImageLocker extends Module{
 
@@ -27,7 +28,7 @@ public class ImageLocker extends Module{
 	private MixedOutput LOG;
 	
 	public ImageLocker() {
-		super(new File("imagelocker.conf"));
+		super(new File("conf/imagelocker.conf"));
 
 		this.CONFIG_KEYS.add(new Key("exemptAdministrators", "true", 
 				"//Whether the module should ignore members with admin perms"));
@@ -101,8 +102,9 @@ public class ImageLocker extends Module{
 	}
 	
 	@Override
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		TextChannel channel = event.getChannel();
+	public void onMessageReceived(MessageReceivedEvent event) {
+		if(!event.isFromGuild()) return;
+		GuildMessageChannelUnion channel = event.getGuildChannel();
 		if(!IMAGE_LOCKED_DATABASE.getAllRaw().contains(channel.getId())) return;
 		if(exemptMembers.contains(event.getAuthor().getIdLong())) return;
 		Member member = Demi.jda.getGuildById(Demi.i.getServerID()).retrieveMember(event.getAuthor()).complete();

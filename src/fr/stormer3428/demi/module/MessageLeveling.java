@@ -10,7 +10,7 @@ import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class MessageLeveling extends Module{
 
@@ -27,7 +27,7 @@ public class MessageLeveling extends Module{
 	private MessageLevelingMultiplierRoles MULTIPLIER_ROLES;
 	
 	public MessageLeveling() {
-		super(new File("level/messageleveling.conf"));
+		super(new File("conf/level/messageleveling.conf"));
 
 		this.CONFIG_KEYS.add(new Key("enableExpIncreaseCooldownMS", "true", "whether leveling via messaging should have a cooldown"));
 		this.CONFIG_KEYS.add(new Key("expIncreaseCooldownMS", "60000", "the cooldown in milliseconds between each exp increase"));
@@ -131,7 +131,8 @@ public class MessageLeveling extends Module{
 	}
 
 	@Override
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+	public void onMessageReceived(MessageReceivedEvent event) {
+		if(!event.isFromGuild()) return;
 		updateCooldownCache();
 		if(event.getAuthor().isBot()) return;
 		String memberUID = event.getAuthor().getId();

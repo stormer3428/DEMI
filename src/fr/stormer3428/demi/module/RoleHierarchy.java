@@ -10,7 +10,7 @@ import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class RoleHierarchy extends Module{
 
@@ -93,7 +93,7 @@ public class RoleHierarchy extends Module{
 	private long lastWiped = System.currentTimeMillis();
 
 	public RoleHierarchy() {
-		super(new File("rolehierarchy.conf"));
+		super(new File("conf/rolehierarchy.conf"));
 
 		this.CONFIG_KEYS.add(new Key("blankShot", "true", "true = dry-run, false = normal runtime"));
 
@@ -145,7 +145,8 @@ public class RoleHierarchy extends Module{
 	}
 
 	@Override
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+	public void onMessageReceived(MessageReceivedEvent event) {
+		if(!event.isFromGuild()) return;
 		updateCooldownCache();
 		if(event.getAuthor().isBot()) return;
 		String memberUID = event.getAuthor().getId();

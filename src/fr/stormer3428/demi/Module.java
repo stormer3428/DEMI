@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.stormer3428.demi.module.LevelRoleCalculator;
 import net.dv8tion.jda.api.events.DisconnectEvent;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.GatewayPingEvent;
@@ -16,50 +15,31 @@ import net.dv8tion.jda.api.events.ResumedEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.StatusChangeEvent;
 import net.dv8tion.jda.api.events.UpdateEvent;
-import net.dv8tion.jda.api.events.channel.category.CategoryCreateEvent;
-import net.dv8tion.jda.api.events.channel.category.CategoryDeleteEvent;
-import net.dv8tion.jda.api.events.channel.category.GenericCategoryEvent;
-import net.dv8tion.jda.api.events.channel.category.update.CategoryUpdateNameEvent;
-import net.dv8tion.jda.api.events.channel.category.update.CategoryUpdatePermissionsEvent;
-import net.dv8tion.jda.api.events.channel.category.update.CategoryUpdatePositionEvent;
-import net.dv8tion.jda.api.events.channel.category.update.GenericCategoryUpdateEvent;
-import net.dv8tion.jda.api.events.channel.priv.PrivateChannelCreateEvent;
-import net.dv8tion.jda.api.events.channel.priv.PrivateChannelDeleteEvent;
-import net.dv8tion.jda.api.events.channel.store.GenericStoreChannelEvent;
-import net.dv8tion.jda.api.events.channel.store.StoreChannelCreateEvent;
-import net.dv8tion.jda.api.events.channel.store.StoreChannelDeleteEvent;
-import net.dv8tion.jda.api.events.channel.store.update.GenericStoreChannelUpdateEvent;
-import net.dv8tion.jda.api.events.channel.store.update.StoreChannelUpdateNameEvent;
-import net.dv8tion.jda.api.events.channel.store.update.StoreChannelUpdatePermissionsEvent;
-import net.dv8tion.jda.api.events.channel.store.update.StoreChannelUpdatePositionEvent;
-import net.dv8tion.jda.api.events.channel.text.GenericTextChannelEvent;
-import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
-import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
-import net.dv8tion.jda.api.events.channel.text.update.GenericTextChannelUpdateEvent;
-import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdateNSFWEvent;
-import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdateNameEvent;
-import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdateNewsEvent;
-import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdateParentEvent;
-import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdatePermissionsEvent;
-import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdatePositionEvent;
-import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdateSlowmodeEvent;
-import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdateTopicEvent;
-import net.dv8tion.jda.api.events.channel.voice.GenericVoiceChannelEvent;
-import net.dv8tion.jda.api.events.channel.voice.VoiceChannelCreateEvent;
-import net.dv8tion.jda.api.events.channel.voice.VoiceChannelDeleteEvent;
-import net.dv8tion.jda.api.events.channel.voice.update.GenericVoiceChannelUpdateEvent;
-import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateBitrateEvent;
-import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateNameEvent;
-import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateParentEvent;
-import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdatePermissionsEvent;
-import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdatePositionEvent;
-import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateUserLimitEvent;
-import net.dv8tion.jda.api.events.emote.EmoteAddedEvent;
-import net.dv8tion.jda.api.events.emote.EmoteRemovedEvent;
-import net.dv8tion.jda.api.events.emote.GenericEmoteEvent;
-import net.dv8tion.jda.api.events.emote.update.EmoteUpdateNameEvent;
-import net.dv8tion.jda.api.events.emote.update.EmoteUpdateRolesEvent;
-import net.dv8tion.jda.api.events.emote.update.GenericEmoteUpdateEvent;
+import net.dv8tion.jda.api.events.channel.ChannelCreateEvent;
+import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
+import net.dv8tion.jda.api.events.channel.GenericChannelEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateArchiveTimestampEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateArchivedEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateAutoArchiveDurationEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateBitrateEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateInvitableEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateLockedEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateNSFWEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateNameEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateParentEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdatePositionEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateRegionEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateSlowmodeEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateTopicEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateTypeEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateUserLimitEvent;
+import net.dv8tion.jda.api.events.channel.update.GenericChannelUpdateEvent;
+import net.dv8tion.jda.api.events.emoji.EmojiAddedEvent;
+import net.dv8tion.jda.api.events.emoji.EmojiRemovedEvent;
+import net.dv8tion.jda.api.events.emoji.GenericEmojiEvent;
+import net.dv8tion.jda.api.events.emoji.update.EmojiUpdateNameEvent;
+import net.dv8tion.jda.api.events.emoji.update.EmojiUpdateRolesEvent;
+import net.dv8tion.jda.api.events.emoji.update.GenericEmojiUpdateEvent;
 import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.api.events.guild.GuildAvailableEvent;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
@@ -76,15 +56,16 @@ import net.dv8tion.jda.api.events.guild.invite.GuildInviteCreateEvent;
 import net.dv8tion.jda.api.events.guild.invite.GuildInviteDeleteEvent;
 import net.dv8tion.jda.api.events.guild.member.GenericGuildMemberEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberUpdateEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GenericGuildMemberUpdateEvent;
+import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateAvatarEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTimeEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdatePendingEvent;
+import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateTimeOutEvent;
 import net.dv8tion.jda.api.events.guild.override.GenericPermissionOverrideEvent;
 import net.dv8tion.jda.api.events.guild.override.PermissionOverrideCreateEvent;
 import net.dv8tion.jda.api.events.guild.override.PermissionOverrideDeleteEvent;
@@ -104,10 +85,10 @@ import net.dv8tion.jda.api.events.guild.update.GuildUpdateLocaleEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateMFALevelEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateMaxMembersEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateMaxPresencesEvent;
+import net.dv8tion.jda.api.events.guild.update.GuildUpdateNSFWLevelEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNotificationLevelEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateOwnerEvent;
-import net.dv8tion.jda.api.events.guild.update.GuildUpdateRegionEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateRulesChannelEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateSplashEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateSystemChannelEvent;
@@ -121,40 +102,39 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMuteEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceRequestToSpeakEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSelfDeafenEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSelfMuteEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceStreamEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSuppressEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceVideoEvent;
 import net.dv8tion.jda.api.events.http.HttpRequestEvent;
+import net.dv8tion.jda.api.events.interaction.GenericAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.ApplicationCommandUpdatePrivilegesEvent;
+import net.dv8tion.jda.api.events.interaction.command.ApplicationUpdatePrivilegesEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.GenericContextInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.GenericPrivilegeUpdateEvent;
+import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import net.dv8tion.jda.api.events.message.MessageBulkDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageEmbedEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
-import net.dv8tion.jda.api.events.message.guild.GenericGuildMessageEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageEmbedEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveAllEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEmoteEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
-import net.dv8tion.jda.api.events.message.priv.GenericPrivateMessageEvent;
-import net.dv8tion.jda.api.events.message.priv.PrivateMessageDeleteEvent;
-import net.dv8tion.jda.api.events.message.priv.PrivateMessageEmbedEvent;
-import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.priv.PrivateMessageUpdateEvent;
-import net.dv8tion.jda.api.events.message.priv.react.GenericPrivateMessageReactionEvent;
-import net.dv8tion.jda.api.events.message.priv.react.PrivateMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.priv.react.PrivateMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveAllEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEmoteEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEmojiEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.role.GenericRoleEvent;
 import net.dv8tion.jda.api.events.role.RoleCreateEvent;
@@ -162,16 +142,36 @@ import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.events.role.update.GenericRoleUpdateEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdateColorEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdateHoistedEvent;
+import net.dv8tion.jda.api.events.role.update.RoleUpdateIconEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdateMentionableEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdateNameEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdatePermissionsEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdatePositionEvent;
 import net.dv8tion.jda.api.events.self.GenericSelfUpdateEvent;
 import net.dv8tion.jda.api.events.self.SelfUpdateAvatarEvent;
-import net.dv8tion.jda.api.events.self.SelfUpdateEmailEvent;
 import net.dv8tion.jda.api.events.self.SelfUpdateMFAEvent;
 import net.dv8tion.jda.api.events.self.SelfUpdateNameEvent;
 import net.dv8tion.jda.api.events.self.SelfUpdateVerifiedEvent;
+import net.dv8tion.jda.api.events.stage.GenericStageInstanceEvent;
+import net.dv8tion.jda.api.events.stage.StageInstanceCreateEvent;
+import net.dv8tion.jda.api.events.stage.StageInstanceDeleteEvent;
+import net.dv8tion.jda.api.events.stage.update.GenericStageInstanceUpdateEvent;
+import net.dv8tion.jda.api.events.stage.update.StageInstanceUpdatePrivacyLevelEvent;
+import net.dv8tion.jda.api.events.stage.update.StageInstanceUpdateTopicEvent;
+import net.dv8tion.jda.api.events.sticker.GenericGuildStickerEvent;
+import net.dv8tion.jda.api.events.sticker.GuildStickerAddedEvent;
+import net.dv8tion.jda.api.events.sticker.GuildStickerRemovedEvent;
+import net.dv8tion.jda.api.events.sticker.update.GenericGuildStickerUpdateEvent;
+import net.dv8tion.jda.api.events.sticker.update.GuildStickerUpdateAvailableEvent;
+import net.dv8tion.jda.api.events.sticker.update.GuildStickerUpdateDescriptionEvent;
+import net.dv8tion.jda.api.events.sticker.update.GuildStickerUpdateNameEvent;
+import net.dv8tion.jda.api.events.sticker.update.GuildStickerUpdateTagsEvent;
+import net.dv8tion.jda.api.events.thread.GenericThreadEvent;
+import net.dv8tion.jda.api.events.thread.ThreadHiddenEvent;
+import net.dv8tion.jda.api.events.thread.ThreadRevealedEvent;
+import net.dv8tion.jda.api.events.thread.member.GenericThreadMemberEvent;
+import net.dv8tion.jda.api.events.thread.member.ThreadMemberJoinEvent;
+import net.dv8tion.jda.api.events.thread.member.ThreadMemberLeaveEvent;
 import net.dv8tion.jda.api.events.user.GenericUserEvent;
 import net.dv8tion.jda.api.events.user.UserActivityEndEvent;
 import net.dv8tion.jda.api.events.user.UserActivityStartEvent;
@@ -185,7 +185,7 @@ import net.dv8tion.jda.api.events.user.update.UserUpdateFlagsEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
 
-@SuppressWarnings({"deprecation", "rawtypes", "unused"})
+@SuppressWarnings({"rawtypes"})
 public abstract class Module extends HasConfig{
 
 	protected MixedOutput OUTPUT;
@@ -236,7 +236,7 @@ public abstract class Module extends HasConfig{
 	}
 	
 	public static Module softLoad(String moduleName, MixedOutput OUTPUT) {
-		OUTPUT.info("Attempting to hook into softDependency LevelRoleCalculator...");
+		OUTPUT.info("Attempting to hook into softDependency " + moduleName +"...");
 		for(Module module : Demi.i.getActiveModules()) if(module.getName().equals(moduleName)) {
 			OUTPUT.ok("Hook into softDependency " + moduleName +" successful");
 			return module;
@@ -245,49 +245,26 @@ public abstract class Module extends HasConfig{
 		return null;
 	}
 
-	
-	public void onCategoryCreate(CategoryCreateEvent event) {}
-	public void onCategoryDelete(CategoryDeleteEvent event){}
-	public void onCategoryUpdateName(CategoryUpdateNameEvent event){}
-	public void onCategoryUpdatePermissions(CategoryUpdatePermissionsEvent event){}
-	public void onCategoryUpdatePosition(CategoryUpdatePositionEvent event){}
-	public void onDisconnect(DisconnectEvent event){}
-	public void onEmoteAdded(EmoteAddedEvent event){}
-	public void onEmoteRemoved(EmoteRemovedEvent event){}
-	public void onEmoteUpdateName(EmoteUpdateNameEvent event){}
-	public void onEmoteUpdateRoles(EmoteUpdateRolesEvent event){}
-	public void onException(ExceptionEvent event){}
-	public void onGatewayPing(GatewayPingEvent event){}
-	public void onGenericCategory(GenericCategoryEvent event){}
-	public void onGenericCategoryUpdate(GenericCategoryUpdateEvent event){}
-	public void onGenericEmote(GenericEmoteEvent event){}
-	public void onGenericEmoteUpdate(GenericEmoteUpdateEvent event){}
+
+	public void onDisconnect(DisconnectEvent event) {}
+	public void onException(ExceptionEvent event) {}
+	public void onGatewayPing(GatewayPingEvent event) {}
 	public void onGenericEvent(GenericEvent event){}
 	public void onGenericGuild(GenericGuildEvent event){}
 	public void onGenericGuildInvite(GenericGuildInviteEvent event){}
 	public void onGenericGuildMember(GenericGuildMemberEvent event){}
 	public void onGenericGuildMemberUpdate(GenericGuildMemberUpdateEvent event){}
-	public void onGenericGuildMessage(GenericGuildMessageEvent event){}
-	public void onGenericGuildMessageReaction(GenericGuildMessageReactionEvent event){}
 	public void onGenericGuildUpdate(GenericGuildUpdateEvent event){}
 	public void onGenericGuildVoice(GenericGuildVoiceEvent event){}
 	public void onGenericMessage(GenericMessageEvent event){}
 	public void onGenericMessageReaction(GenericMessageReactionEvent event){}
 	public void onGenericPermissionOverride(GenericPermissionOverrideEvent event){}
-	public void onGenericPrivateMessage(GenericPrivateMessageEvent event){}
-	public void onGenericPrivateMessageReaction(GenericPrivateMessageReactionEvent event){}
 	public void onGenericRole(GenericRoleEvent event){}
 	public void onGenericRoleUpdate(GenericRoleUpdateEvent event){}
 	public void onGenericSelfUpdate(GenericSelfUpdateEvent event){}
-	public void onGenericStoreChannel(GenericStoreChannelEvent event){}
-	public void onGenericStoreChannelUpdate(GenericStoreChannelUpdateEvent event){}
-	public void onGenericTextChannel(GenericTextChannelEvent event){}
-	public void onGenericTextChannelUpdate(GenericTextChannelUpdateEvent event){}
 	public void onGenericUpdate(UpdateEvent<?, ?> event){}
 	public void onGenericUser(GenericUserEvent event){}
 	public void onGenericUserPresence(GenericUserPresenceEvent event){}
-	public void onGenericVoiceChannel(GenericVoiceChannelEvent event){}
-	public void onGenericVoiceChannelUpdate(GenericVoiceChannelUpdateEvent event){}
 	public void onGuildAvailable(GuildAvailableEvent event){}
 	public void onGuildBan(GuildBanEvent event){}
 	public void onGuildInviteCreate(GuildInviteCreateEvent event){}
@@ -295,7 +272,6 @@ public abstract class Module extends HasConfig{
 	public void onGuildJoin(GuildJoinEvent event){}
 	public void onGuildLeave(GuildLeaveEvent event){}
 	public void onGuildMemberJoin(GuildMemberJoinEvent event){}
-	public void onGuildMemberLeave(GuildMemberLeaveEvent event){}
 	public void onGuildMemberRemove(GuildMemberRemoveEvent event){}
 	public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event){}
 	public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event){}
@@ -303,14 +279,6 @@ public abstract class Module extends HasConfig{
 	public void onGuildMemberUpdateBoostTime(GuildMemberUpdateBoostTimeEvent event){}
 	public void onGuildMemberUpdateNickname(GuildMemberUpdateNicknameEvent event){}
 	public void onGuildMemberUpdatePending(GuildMemberUpdatePendingEvent event){}
-	public void onGuildMessageDelete(GuildMessageDeleteEvent event){}
-	public void onGuildMessageEmbed(GuildMessageEmbedEvent event){}
-	public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event){}
-	public void onGuildMessageReactionRemove(GuildMessageReactionRemoveEvent event){}
-	public void onGuildMessageReactionRemoveAll(GuildMessageReactionRemoveAllEvent event){}
-	public void onGuildMessageReactionRemoveEmote(GuildMessageReactionRemoveEmoteEvent event){}
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event){}
-	public void onGuildMessageUpdate(GuildMessageUpdateEvent event){}
 	public void onGuildReady(GuildReadyEvent event){}
 	public void onGuildTimeout(GuildTimeoutEvent event){}
 	public void onGuildUnavailable(GuildUnavailableEvent event){}
@@ -332,7 +300,6 @@ public abstract class Module extends HasConfig{
 	public void onGuildUpdateName(GuildUpdateNameEvent event){}
 	public void onGuildUpdateNotificationLevel(GuildUpdateNotificationLevelEvent event){}
 	public void onGuildUpdateOwner(GuildUpdateOwnerEvent event){}
-	public void onGuildUpdateRegion(GuildUpdateRegionEvent event){}
 	public void onGuildUpdateRulesChannel(GuildUpdateRulesChannelEvent event){}
 	public void onGuildUpdateSplash(GuildUpdateSplashEvent event){}
 	public void onGuildUpdateSystemChannel(GuildUpdateSystemChannelEvent event){}
@@ -357,20 +324,11 @@ public abstract class Module extends HasConfig{
 	public void onMessageReactionAdd(MessageReactionAddEvent event){}
 	public void onMessageReactionRemove(MessageReactionRemoveEvent event){}
 	public void onMessageReactionRemoveAll(MessageReactionRemoveAllEvent event){}
-	public void onMessageReactionRemoveEmote(MessageReactionRemoveEmoteEvent event){}
 	public void onMessageReceived(MessageReceivedEvent event){}
 	public void onMessageUpdate(MessageUpdateEvent event){}
 	public void onPermissionOverrideCreate(PermissionOverrideCreateEvent event){}
 	public void onPermissionOverrideDelete(PermissionOverrideDeleteEvent event){}
 	public void onPermissionOverrideUpdate(PermissionOverrideUpdateEvent event){}
-	public void onPrivateChannelCreate(PrivateChannelCreateEvent event){}
-	public void onPrivateChannelDelete(PrivateChannelDeleteEvent event){}
-	public void onPrivateMessageDelete(PrivateMessageDeleteEvent event){}
-	public void onPrivateMessageEmbed(PrivateMessageEmbedEvent event){}
-	public void onPrivateMessageReactionAdd(PrivateMessageReactionAddEvent event){}
-	public void onPrivateMessageReactionRemove(PrivateMessageReactionRemoveEvent event){}
-	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event){}
-	public void onPrivateMessageUpdate(PrivateMessageUpdateEvent event){}
 	public void onRawGateway(RawGatewayEvent event){}
 	public void onReady(ReadyEvent event){}
 	public void onReconnect(ReconnectedEvent event){}
@@ -386,27 +344,11 @@ public abstract class Module extends HasConfig{
 	public void onRoleUpdatePermissions(RoleUpdatePermissionsEvent event){}
 	public void onRoleUpdatePosition(RoleUpdatePositionEvent event){}
 	public void onSelfUpdateAvatar(SelfUpdateAvatarEvent event){}
-	public void onSelfUpdateEmail(SelfUpdateEmailEvent event){}
 	public void onSelfUpdateMFA(SelfUpdateMFAEvent event){}
 	public void onSelfUpdateName(SelfUpdateNameEvent event){}
 	public void onSelfUpdateVerified(SelfUpdateVerifiedEvent event){}
 	public void onShutdown(ShutdownEvent event){}
 	public void onStatusChange(StatusChangeEvent event){}
-	public void onStoreChannelCreate(StoreChannelCreateEvent event){}
-	public void onStoreChannelDelete(StoreChannelDeleteEvent event){}
-	public void onStoreChannelUpdateName(StoreChannelUpdateNameEvent event){}
-	public void onStoreChannelUpdatePermissions(StoreChannelUpdatePermissionsEvent event){}
-	public void onStoreChannelUpdatePosition(StoreChannelUpdatePositionEvent event){}
-	public void onTextChannelCreate(TextChannelCreateEvent event){}
-	public void onTextChannelDelete(TextChannelDeleteEvent event){}
-	public void onTextChannelUpdateName(TextChannelUpdateNameEvent event){}
-	public void onTextChannelUpdateNews(TextChannelUpdateNewsEvent event){}
-	public void onTextChannelUpdateNSFW(TextChannelUpdateNSFWEvent event){}
-	public void onTextChannelUpdateParent(TextChannelUpdateParentEvent event){}
-	public void onTextChannelUpdatePermissions(TextChannelUpdatePermissionsEvent event){}
-	public void onTextChannelUpdatePosition(TextChannelUpdatePositionEvent event){}
-	public void onTextChannelUpdateSlowmode(TextChannelUpdateSlowmodeEvent event){}
-	public void onTextChannelUpdateTopic(TextChannelUpdateTopicEvent event){}
 	public void onUnavailableGuildJoined(UnavailableGuildJoinedEvent event){}
 	public void onUnavailableGuildLeave(UnavailableGuildLeaveEvent event){}
 	public void onUserActivityEnd(UserActivityEndEvent event){}
@@ -419,13 +361,74 @@ public abstract class Module extends HasConfig{
 	public void onUserUpdateFlags(UserUpdateFlagsEvent event){}
 	public void onUserUpdateName(UserUpdateNameEvent event){}
 	public void onUserUpdateOnlineStatus(UserUpdateOnlineStatusEvent event){}
-	public void onVoiceChannelCreate(VoiceChannelCreateEvent event){}
-	public void onVoiceChannelDelete(VoiceChannelDeleteEvent event){}
-	public void onVoiceChannelUpdateBitrate(VoiceChannelUpdateBitrateEvent event){}
-	public void onVoiceChannelUpdateName(VoiceChannelUpdateNameEvent event){}
-	public void onVoiceChannelUpdateParent(VoiceChannelUpdateParentEvent event){}
-	public void onVoiceChannelUpdatePermissions(VoiceChannelUpdatePermissionsEvent event){}
-	public void onVoiceChannelUpdatePosition(VoiceChannelUpdatePositionEvent event){}
-	public void onVoiceChannelUpdateUserLimit(VoiceChannelUpdateUserLimitEvent event){}
+	public void onApplicationCommandUpdatePrivileges(ApplicationCommandUpdatePrivilegesEvent event){}
+	public void onApplicationUpdatePrivileges(ApplicationUpdatePrivilegesEvent event){}
+	public void onButtonInteraction(ButtonInteractionEvent event){}
+	public void onChannelCreate(ChannelCreateEvent event){}
+	public void onChannelDelete(ChannelDeleteEvent event){}
+	public void onChannelUpdateArchived(ChannelUpdateArchivedEvent event){}
+	public void onChannelUpdateArchiveTimestamp(ChannelUpdateArchiveTimestampEvent event){}
+	public void onChannelUpdateAutoArchiveDuration(ChannelUpdateAutoArchiveDurationEvent event){}
+	public void onChannelUpdateBitrate(ChannelUpdateBitrateEvent event){}
+	public void onChannelUpdateInvitable(ChannelUpdateInvitableEvent event){}
+	public void onChannelUpdateLocked(ChannelUpdateLockedEvent event){}
+	public void onChannelUpdateName(ChannelUpdateNameEvent event){}
+	public void onChannelUpdateNSFW(ChannelUpdateNSFWEvent event){}
+	public void onChannelUpdateParent(ChannelUpdateParentEvent event){}
+	public void onChannelUpdatePosition(ChannelUpdatePositionEvent event){}
+	public void onChannelUpdateRegion(ChannelUpdateRegionEvent event){}
+	public void onChannelUpdateSlowmode(ChannelUpdateSlowmodeEvent event){}
+	public void onChannelUpdateTopic(ChannelUpdateTopicEvent event){}
+	public void onChannelUpdateType(ChannelUpdateTypeEvent event){}
+	public void onChannelUpdateUserLimit(ChannelUpdateUserLimitEvent event){}
+	public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event){}
+	public void onEmojiAdded(EmojiAddedEvent event){}
+	public void onEmojiRemoved(EmojiRemovedEvent event){}
+	public void onEmojiUpdateName(EmojiUpdateNameEvent event){}
+	public void onEmojiUpdateRoles(EmojiUpdateRolesEvent event){}
+	public void onGenericAutoCompleteInteraction(GenericAutoCompleteInteractionEvent event){}
+	public void onGenericChannel(GenericChannelEvent event){}
+	public void onGenericChannelUpdate(GenericChannelUpdateEvent<?> event){}
+	public void onGenericCommandInteraction(GenericCommandInteractionEvent event){}
+	public void onGenericComponentInteractionCreate(GenericComponentInteractionCreateEvent event){}
+	public void onGenericContextInteraction(GenericContextInteractionEvent<?> event){}
+	public void onGenericEmoji(GenericEmojiEvent event){}
+	public void onGenericEmojiUpdate(GenericEmojiUpdateEvent event){}
+	public void onGenericGuildSticker(GenericGuildStickerEvent event){}
+	public void onGenericGuildStickerUpdate(GenericGuildStickerUpdateEvent event){}
+	public void onGenericInteractionCreate(GenericInteractionCreateEvent event){}
+	public void onGenericPrivilegeUpdate(GenericPrivilegeUpdateEvent event){}
+	public void onGenericStageInstance(GenericStageInstanceEvent event){}
+	public void onGenericStageInstanceUpdate(GenericStageInstanceUpdateEvent event){}
+	public void onGenericThread(GenericThreadEvent event){}
+	public void onGenericThreadMember(GenericThreadMemberEvent event){}
+	public void onGuildMemberUpdateAvatar(GuildMemberUpdateAvatarEvent event){}
+	public void onGuildMemberUpdateTimeOut(GuildMemberUpdateTimeOutEvent event){}
+	public void onGuildStickerAdded(GuildStickerAddedEvent event){}
+	public void onGuildStickerRemoved(GuildStickerRemovedEvent event){}
+	public void onGuildStickerUpdateAvailable(GuildStickerUpdateAvailableEvent event){}
+	public void onGuildStickerUpdateDescription(GuildStickerUpdateDescriptionEvent event){}
+	public void onGuildStickerUpdateName(GuildStickerUpdateNameEvent event){}
+	public void onGuildStickerUpdateTags(GuildStickerUpdateTagsEvent event){}
+	public void onGuildUpdateNSFWLevel(GuildUpdateNSFWLevelEvent event){}
+	public void onGuildVoiceRequestToSpeak(GuildVoiceRequestToSpeakEvent event){}
+	public void onGuildVoiceVideo(GuildVoiceVideoEvent event){}
+	public void onMessageContextInteraction(MessageContextInteractionEvent event){}
+	public void onMessageReactionRemoveEmoji(MessageReactionRemoveEmojiEvent event){}
+	public void onModalInteraction(ModalInteractionEvent event){}
+	public void onRoleUpdateIcon(RoleUpdateIconEvent event){}
+	public void onSelectMenuInteraction(SelectMenuInteractionEvent event){}
+	public void onSlashCommandInteraction(SlashCommandInteractionEvent event){}
+	public void onStageInstanceCreate(StageInstanceCreateEvent event){}
+	public void onStageInstanceDelete(StageInstanceDeleteEvent event){}
+	public void onStageInstanceUpdatePrivacyLevel(StageInstanceUpdatePrivacyLevelEvent event){}
+	public void onStageInstanceUpdateTopic(StageInstanceUpdateTopicEvent event){}
+	public void onThreadHidden(ThreadHiddenEvent event){}
+	public void onThreadMemberJoin(ThreadMemberJoinEvent event){}
+	public void onThreadMemberLeave(ThreadMemberLeaveEvent event){}
+	public void onThreadRevealed(ThreadRevealedEvent event){}
+	public void onUserContextInteraction(UserContextInteractionEvent event){}
+	
 	public boolean onCommand(DemiCommandReceiveEvent event){return false;}
+
 }

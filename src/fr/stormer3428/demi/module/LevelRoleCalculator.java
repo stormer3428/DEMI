@@ -16,8 +16,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class LevelRoleCalculator extends Module{
 
@@ -36,7 +36,7 @@ public class LevelRoleCalculator extends Module{
 	private boolean keepOnlyLatestRole;
 
 	public LevelRoleCalculator() {
-		super(new File("level/levelrolecalculator.conf"));
+		super(new File("conf/level/levelrolecalculator.conf"));
 
 		this.CONFIG_KEYS.add(new Key("enableCache", "false"));
 		this.CONFIG_KEYS.add(new Key("keepOnlyLatestRole", "true"));
@@ -69,7 +69,9 @@ public class LevelRoleCalculator extends Module{
 	}
 
 	@Override
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event){
+	public void onMessageReceived(MessageReceivedEvent event) {
+		if(!event.isFromGuild()) return;
+		GuildMessageChannelUnion channel = event.getGuildChannel();
 		if(System.currentTimeMillis() - this.lastWiped > cooldown()){
 			this.lastWiped = System.currentTimeMillis();
 			this.cooldownSet.clear();
@@ -78,7 +80,6 @@ public class LevelRoleCalculator extends Module{
 		Message message = event.getMessage();
 		if(message.getChannel().getType() != ChannelType.TEXT) return;
 
-		TextChannel channel = event.getChannel();
 		if(channel == null) return;
 		Guild guild = event.getGuild();
 		if(!guild.getId().equals(Demi.i.getServerID())) return;

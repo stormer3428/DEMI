@@ -15,7 +15,7 @@ public class MessageLevelingMultiplierRoles extends Module{
 	private HashMap<Long, Float> roleMultipliers = new HashMap<>();
 	
 	public MessageLevelingMultiplierRoles() {
-		super(new File("level/messagelevelingmultiplierroles.conf"));
+		super(new File("conf/level/messagelevelingmultiplierroles.conf"));
 
 		if(initialConfigIOCreation()) return;
 		this.OUTPUT.warning("Disabling module to prevent errors");

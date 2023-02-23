@@ -14,8 +14,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Autorole extends Module{
 
@@ -26,7 +26,7 @@ public class Autorole extends Module{
 	private long lastWiped = System.currentTimeMillis();
 
 	public Autorole() {
-		super(new File("autorole.conf"));
+		super(new File("conf/autorole.conf"));
 		
 		this.CONFIG_KEYS.add(new Key("cooldown", "300000", "The cooldown between each application of the autoroles"));
 		this.CONFIG_KEYS.add(new Key("roles", "[]", "an array of the id's of the roles to automatically apply"));
@@ -60,7 +60,9 @@ public class Autorole extends Module{
 	}
 
 	@Override
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event){
+	public void onMessageReceived(MessageReceivedEvent event) {
+		if(!event.isFromGuild()) return;
+		GuildMessageChannelUnion channel = event.getGuildChannel();
 		if(System.currentTimeMillis() - this.lastWiped > cooldown()){
 			this.lastWiped = System.currentTimeMillis();
 			this.cooldownSet.clear();
@@ -69,7 +71,6 @@ public class Autorole extends Module{
 		Message message = event.getMessage();
 		if(message.getChannel().getType() != ChannelType.TEXT) return;
 
-		TextChannel channel = event.getChannel();
 		if(channel == null) return;
 		Guild guild = event.getGuild();
 		if(!guild.getId().equals(Demi.i.getServerID())) return;

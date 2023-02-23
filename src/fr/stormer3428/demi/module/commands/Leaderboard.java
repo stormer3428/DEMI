@@ -191,7 +191,7 @@ public class Leaderboard extends CommandModule{
 				.setThumbnail("https://mir-s3-cdn-cf.behance.net/project_modules/disp/c3c4d331234507.564a1d23db8f9.gif")
 				.setColor(new Color(150, 0, 200));
 		TextChannel channel = OUTPUT.getTextChannel();
-		Message loading = channel.sendMessage(loadingBuilder.build()).complete();
+		Message loading = channel.sendMessageEmbeds(loadingBuilder.build()).complete();
 		
 		EmbedBuilder ldbBuilder = new EmbedBuilder();
 		int count = 1;
@@ -240,7 +240,7 @@ public class Leaderboard extends CommandModule{
 		ldbBuilder.setThumbnail(Demi.jda.getGuildById(Demi.i.getServerID()).getIconUrl());
 		ldbBuilder.setColor(new Color(200, 0, 200));
 		
-		channel.sendMessage(ldbBuilder.build()).queue(deleteOnFinish(loading));
+		channel.sendMessageEmbeds(ldbBuilder.build()).queue(deleteOnFinish(loading));
 	}
 
 	static final Consumer<Message> deleteOnFinish(Message message){

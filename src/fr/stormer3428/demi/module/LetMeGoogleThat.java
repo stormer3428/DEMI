@@ -8,8 +8,8 @@ import java.util.Random;
 import fr.stormer3428.demi.Demi;
 import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class LetMeGoogleThat extends Module{
 
@@ -17,7 +17,7 @@ public class LetMeGoogleThat extends Module{
 	private List<Long> whitelist = new ArrayList<>();
 	
 	public LetMeGoogleThat() {
-		super(new File("letmegooglethat.conf"));
+		super(new File("conf/letmegooglethat.conf"));
 
 		CONFIG_KEYS.add(new Key("whitelistEnabled", "true", 
 				"//Whether i should reply to a limited amount of user or not"));
@@ -123,8 +123,9 @@ public class LetMeGoogleThat extends Module{
 	}
 
 	@Override
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		TextChannel channel = event.getChannel();
+	public void onMessageReceived(MessageReceivedEvent event) {
+		if(!event.isFromGuild()) return;
+		GuildMessageChannelUnion channel = event.getGuildChannel();
 		if(channel == null) return;
 		if(whitelistEnabled && !whitelist.contains(event.getMember().getIdLong())) return;
 		

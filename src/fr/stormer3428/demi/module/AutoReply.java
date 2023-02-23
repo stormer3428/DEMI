@@ -11,8 +11,8 @@ import fr.stormer3428.demi.Key;
 import fr.stormer3428.demi.Module;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class AutoReply extends Module{
 
@@ -25,7 +25,7 @@ public class AutoReply extends Module{
 	private IO AUTOREPLY_DATABASE;
 
 	public AutoReply() {
-		super(new File("autoreply.conf"));
+		super(new File("conf/autoreply.conf"));
 
 		this.CONFIG_KEYS.add(new Key("requireRoles", "false", 
 				"Whether the module will look if player has the required roles before replying"));
@@ -142,13 +142,12 @@ public class AutoReply extends Module{
 		}
 		return true;
 	}
-
+	
 	@Override
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		TextChannel channel = event.getChannel();
-		if(channel == null) return;
+	public void onMessageReceived(MessageReceivedEvent event) {
+		if(!event.isFromGuild()) return;
+		GuildMessageChannelUnion channel = event.getGuildChannel();
 		Member member = event.getMember();
-		if(member == null) return;
 		if(!shouldReply(member)) return;
 
 		String message = event.getMessage().getContentRaw();
