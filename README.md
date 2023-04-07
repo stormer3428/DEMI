@@ -23,11 +23,6 @@ Type `=help` to display the list of commands, bot admins need to be defined in t
 
 
 # File structure
-.
-├── conf
-├── demi.jar
-├── demi.conf
-└── libs
 
 - `conf` has all the config files for DEMI's submodules
 - `demi.jar` is the main program
