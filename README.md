@@ -31,6 +31,6 @@ Type `=help` to display the list of commands, bot admins need to be defined in t
 
 
 # Post Scriptum
-- DEMI is female
+- DEMI is a woman (yes this bot has a sex)
 - We recommend running DEMI on Linux
 
