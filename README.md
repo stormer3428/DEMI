@@ -14,6 +14,7 @@ Lightweight and easy to configure, DEMI has unique features to protect your Disc
 # Installation
 
 Download the latest jar (or compile it yourself) then run it in a terminal
+Copy `demi.conf.example` -> `demi.conf`
 Example : `java -Xmx1G -jar demi.jar`
 
 
