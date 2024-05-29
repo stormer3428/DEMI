@@ -1,7 +1,3 @@
-#
-# THIS README ISNT FINISHED YET; DOCS ARE BEING PUSHED AS SOON AS THEY ARE AVAILABLE
-#
-
 # DEMI
 A custom self-hostable bot. 
 Lightweight and easy to configure, DEMI has unique features to protect your Discord server.
